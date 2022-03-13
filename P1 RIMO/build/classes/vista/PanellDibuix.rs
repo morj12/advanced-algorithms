@@ -1,0 +1,2 @@
+vista.ProcesPintat
+vista.PanellDibuix

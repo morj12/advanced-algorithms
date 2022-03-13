@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="P1_RIMO">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/P1_RIMO.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
