@@ -1,9 +1,9 @@
-package principal;
+package main;
 
-import control.Complexity;
-import control.Controller;
+import controller.Complexity;
+import controller.Controller;
 import model.Model;
-import vista.View;
+import view.View;
 
 import javax.swing.*;
 

@@ -1,2 +1,2 @@
-vista.PaintProcess
-vista.CustomChartPanel
+view.PaintProcess
+view.CustomChartPanel

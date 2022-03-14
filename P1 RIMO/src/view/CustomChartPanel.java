@@ -1,4 +1,4 @@
-package vista;
+package view;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -6,8 +6,8 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import javax.swing.*;
 
-import control.Complexity;
-import principal.ErrorWriter;
+import controller.Complexity;
+import main.ErrorWriter;
 import model.Model;
 import model.TimePoint;
 import org.jfree.chart.ChartFactory;
@@ -23,23 +23,18 @@ public class CustomChartPanel extends JPanel {
     private final Model model;
     private final View view;
     protected final int FPS = 24;
-//    private final PaintProcess paintProcess;
     private final JFreeChart chartInfo;
     private final XYSeries linearSeries;
     private final XYSeries quadraticSeries;
     private final XYSeries logarithmicSeries;
     private final ArrayList<TimePoint>[] pointLists;
     private final XYSeriesCollection dataset;
-
-    // TODO: change chartpanel dependence from view to here
     private ChartPanel chartPanel;
 
     public CustomChartPanel(int width, int height, Model model, View view) {
         this.model = model;
         this.view = view;
         this.setPreferredSize(new Dimension(width, height));
-//        paintProcess = new PaintProcess(this);
-//        paintProcess.start();
         this.chartInfo = ChartFactory.createXYLineChart(null, "Iterations", "Time(ms)", null, PlotOrientation.VERTICAL, true, true, false);
         this.pointLists = this.model.getPointLists();
         this.linearSeries = new XYSeries(Complexity.LINEAR.toString());
@@ -50,8 +45,12 @@ public class CustomChartPanel extends JPanel {
         dataset.addSeries(quadraticSeries);
         dataset.addSeries(logarithmicSeries);
 
+        this.chartPanel = new ChartPanel(chartInfo);
+        this.chartPanel.setPopupMenu(null);
+        this.add(chartPanel);
+
         Runnable r = () -> {
-            Timer t = new Timer(10, (ActionEvent e) -> {
+            Timer t = new Timer(1000/FPS, (ActionEvent e) -> {
                 repaint();
             });
             t.start();
@@ -86,35 +85,6 @@ public class CustomChartPanel extends JPanel {
             }
         }
         ((XYPlot) chartInfo.getPlot()).setDataset(dataset);
-        view.add(new ChartPanel(chartInfo));
     }
 }
 
-class PaintProcess extends Thread {
-
-    private final CustomChartPanel panel;
-
-    public PaintProcess(CustomChartPanel panel) {
-        this.panel = panel;
-    }
-
-    public void run() {
-        long time = System.nanoTime();
-        long interval = 1000000000L / panel.FPS;
-        while (true) {
-            if ((System.nanoTime() - time) > interval) {
-                panel.repaint();
-                time = System.nanoTime();
-                espera(interval / 2000000);
-            }
-        }
-    }
-
-    private void espera(long t) {
-        try {
-            Thread.sleep(t);
-        } catch (Exception e) {
-            ErrorWriter.writeError(e);
-        }
-    }
-}

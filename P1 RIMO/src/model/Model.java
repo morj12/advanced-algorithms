@@ -2,9 +2,9 @@ package model;
 
 import java.util.ArrayList;
 
-import control.Complexity;
-import principal.Main;
-import principal.Notifiable;
+import controller.Complexity;
+import main.Main;
+import main.Notifiable;
 
 public class Model implements Notifiable {
 

@@ -1,4 +1,4 @@
-package principal;
+package main;
 
 public interface Notifiable {
 

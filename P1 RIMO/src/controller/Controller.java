@@ -1,10 +1,10 @@
-package control;
+package controller;
 
 import static model.Model.STOPS;
 import model.TimePoint;
-import principal.Main;
-import principal.ErrorWriter;
-import principal.Notifiable;
+import main.Main;
+import main.ErrorWriter;
+import main.Notifiable;
 
 public class Controller extends Thread implements Notifiable {
 

@@ -1,4 +1,4 @@
-package vista;
+package view;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -8,10 +8,10 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import control.Complexity;
-import principal.Main;
-import principal.ErrorWriter;
-import principal.Notifiable;
+import controller.Complexity;
+import main.Main;
+import main.ErrorWriter;
+import main.Notifiable;
 
 public class View extends JFrame implements ActionListener, Notifiable, ChangeListener {
 
