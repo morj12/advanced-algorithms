@@ -15,7 +15,7 @@ public class Model implements Notifiable {
         this.main = main;
         pointLists = (ArrayList<TimePoint>[]) new ArrayList[3];
         for (int i = 0; i < pointLists.length; i++) {
-            pointLists[i] = new ArrayList();
+            pointLists[i] = new ArrayList<>();
         }
     }
 
