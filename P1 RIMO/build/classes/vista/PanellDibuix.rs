@@ -1,2 +1,2 @@
-vista.ProcesPintat
-vista.PanellDibuix
+vista.PaintProcess
+vista.CustomChartPanel

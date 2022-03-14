@@ -9,9 +9,9 @@ import java.util.Date;
 
 // Classe per homogeneitzar els errors.
 
-public class MeuError {
+public class ErrorWriter {
 
-    static public void informaError(Exception ex) {
+    static public void writeError(Exception ex) {
         Writer writer = new StringWriter();
         PrintWriter printWriter = new PrintWriter(writer);
         ex.printStackTrace(printWriter);
@@ -20,7 +20,7 @@ public class MeuError {
         try {
             FileWriter fr = new FileWriter("logs.txt", true);
             BufferedWriter br = new BufferedWriter(fr);
-            br.write("********************** Error date: " + (new Date()).toString());
+            br.write("********************** Error date: " + (new Date()));
             br.newLine();
             br.write(slogs);
             br.write("********************** End error report");

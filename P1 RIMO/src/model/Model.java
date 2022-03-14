@@ -1,44 +1,42 @@
 package model;
 
 import java.util.ArrayList;
-import principal.Principal;
-import principal.PerEsdeveniments;
-import static vista.Vista.FUNCION_0;
-import static vista.Vista.FUNCION_1;
-import static vista.Vista.FUNCION_2;
 
-public class Model implements PerEsdeveniments {
+import control.Complexity;
+import principal.Main;
+import principal.Notifiable;
 
-    private Principal prog;
-    private ArrayList<Punt>[] listas;
+public class Model implements Notifiable {
 
-    public static final int[] N = {1, 20, 35};
+    private Main main;
+    private ArrayList<TimePoint>[] pointLists;
 
-    public Model(Principal p) {
-        prog = p;
-        listas = (ArrayList<Punt>[]) new ArrayList[3];
-        for (int i = 0; i < listas.length; i++) {
-            listas[i] = new ArrayList();
+    public static final int[] STOPS = {1, 5, 10, 15, 20, 25, 30, 35};
+
+    public Model(Main main) {
+        this.main = main;
+        pointLists = (ArrayList<TimePoint>[]) new ArrayList[3];
+        for (int i = 0; i < pointLists.length; i++) {
+            pointLists[i] = new ArrayList();
         }
     }
 
-    public void meterPunt(Punt p) {
-        int id = p.getId();
-        listas[id].add(p);
+    public void addPoint(TimePoint timePoint) {
+        int id = timePoint.getAlgoIndex();
+        pointLists[id].add(timePoint);
     }
 
-    public ArrayList<Punt>[] getLists() {
-        return listas;
+    public ArrayList<TimePoint>[] getPointLists() {
+        return pointLists;
     }
 
     @Override
-    public void notificar(String s) {
-        if (s.equals(FUNCION_0)) {
-            listas[0].clear();
-        } else if (s.equals(FUNCION_1)) {
-            listas[1].clear();
-        } else if (s.equals(FUNCION_2)) {
-            listas[2].clear();
+    public void notify(String s) {
+        Complexity complexity = Complexity.valueOf(s);
+        switch (complexity) {
+            case LINEAR -> pointLists[0].clear();
+            case QUADRATIC -> pointLists[1].clear();
+            case LOGARITHMIC -> pointLists[2].clear();
         }
     }
 }
