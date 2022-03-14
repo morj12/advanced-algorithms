@@ -11,8 +11,6 @@ public class Model implements Notifiable {
     private Main main;
     private ArrayList<TimePoint>[] pointLists;
 
-    public static final int[] STOPS = {1, 5, 10, 15, 20, 25, 30, 35};
-
     public Model(Main main) {
         this.main = main;
         pointLists = (ArrayList<TimePoint>[]) new ArrayList[3];
