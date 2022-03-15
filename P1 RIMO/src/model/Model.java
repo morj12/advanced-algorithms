@@ -19,9 +19,8 @@ public class Model implements Notifiable {
         }
     }
 
-    public void addPoint(TimePoint timePoint) {
-        int id = timePoint.getAlgoIndex();
-        pointLists[id].add(timePoint);
+    public void addPoint(TimePoint timePoint, int algoIndex) {
+        pointLists[algoIndex].add(timePoint);
     }
 
     public ArrayList<TimePoint>[] getPointLists() {

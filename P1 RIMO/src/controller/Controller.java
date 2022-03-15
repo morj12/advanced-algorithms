@@ -8,13 +8,13 @@ import model.TimePoint;
 public class Controller extends Thread implements Notifiable {
 
     private final Main main;
-    private final int algo_index;
+    private final int algoIndex;
     private boolean execute;
 
 
     public Controller(Main main, int algo_index) {
         this.main = main;
-        this.algo_index = algo_index;
+        this.algoIndex = algo_index;
         this.execute = true;
     }
 
@@ -22,14 +22,14 @@ public class Controller extends Thread implements Notifiable {
         TimePoint p = null;
 
         for (int i = 0; execute && i < 35; i++) {
-            p = switch (algo_index) {
+            p = switch (algoIndex) {
                 case 0 -> linearStep(i);
                 case 1 -> quadraticStep(i);
                 case 2 -> logarithmicStep(i);
                 default -> p;
             };
             if (execute) {
-                main.getModel().addPoint(p);
+                main.getModel().addPoint(p, algoIndex);
             }
         }
     }
@@ -38,7 +38,7 @@ public class Controller extends Thread implements Notifiable {
         long time = System.currentTimeMillis();
         for (int i = 0; execute && i <= iterations; i++) step(5, 0);
         time = System.currentTimeMillis() - time;
-        return new TimePoint(algo_index, time, iterations);
+        return new TimePoint(time, iterations);
     }
 
     private TimePoint quadraticStep(int iterations) {
@@ -49,14 +49,14 @@ public class Controller extends Thread implements Notifiable {
             }
         }
         time = System.currentTimeMillis() - time;
-        return new TimePoint(algo_index, time, iterations);
+        return new TimePoint(time, iterations);
     }
 
     private TimePoint logarithmicStep(int iterations) {
         long time = System.currentTimeMillis();
         for (int i = 1; execute && i <= iterations; i *= 2) step(5, 0);
         time = System.currentTimeMillis() - time;
-        return new TimePoint(algo_index, time, iterations);
+        return new TimePoint(time, iterations);
     }
 
     private void step(long m, int n) {

@@ -4,18 +4,12 @@ public class TimePoint {
 
     private final long time;
     private final int stopNumber;
-    private final int algoIndex;
-    
-    public TimePoint(int algoIndex, long time, int stopNumber) {
-        this.algoIndex = algoIndex;
+
+    public TimePoint(long time, int stopNumber) {
         this.time = time;
         this.stopNumber = stopNumber;
     }
-    
-    public int getAlgoIndex() {
-        return algoIndex;
-    }
-    
+
     public long getTime() {
         return time;
     }
@@ -23,9 +17,12 @@ public class TimePoint {
     public int getStopNumber() {
         return stopNumber;
     }
-    
+
     @Override
     public String toString() {
-        return "id:" + algoIndex + ", temps:" + time + ", n:" + stopNumber;
+        return "TimePoint{" +
+                "time=" + time +
+                ", stopNumber=" + stopNumber +
+                '}';
     }
 }
