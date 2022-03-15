@@ -13,7 +13,7 @@ public class Model implements Notifiable {
 
     public Model(Main main) {
         this.main = main;
-        pointLists = (ArrayList<TimePoint>[]) new ArrayList[3];
+        pointLists = (ArrayList<TimePoint>[]) new ArrayList[Complexity.values().length];
         for (int i = 0; i < pointLists.length; i++) {
             pointLists[i] = new ArrayList<>();
         }

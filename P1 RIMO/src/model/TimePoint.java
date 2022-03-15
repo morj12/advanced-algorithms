@@ -3,26 +3,26 @@ package model;
 public class TimePoint {
 
     private final long time;
-    private final int stopNumber;
+    private final int iterations;
 
-    public TimePoint(long time, int stopNumber) {
+    public TimePoint(long time, int iterations) {
         this.time = time;
-        this.stopNumber = stopNumber;
+        this.iterations = iterations;
     }
 
     public long getTime() {
         return time;
     }
     
-    public int getStopNumber() {
-        return stopNumber;
+    public int getIterations() {
+        return iterations;
     }
 
     @Override
     public String toString() {
         return "TimePoint{" +
                 "time=" + time +
-                ", stopNumber=" + stopNumber +
+                ", stopNumber=" + iterations +
                 '}';
     }
 }

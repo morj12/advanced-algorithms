@@ -20,7 +20,6 @@ public class Controller extends Thread implements Notifiable {
 
     public void run() {
         TimePoint p;
-
         for (int i = 0; execute && i < 35; i++) {
             p = switch (algoIndex) {
                 case 0 -> linearStep(i);

@@ -17,10 +17,10 @@ public class Main implements Notifiable {
         Construcció de l'esquema MVC
      */
     public static void main(String[] args) {
-        new Main().inicio();
+        new Main().start();
     }
 
-    private void inicio() {
+    private void start() {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
@@ -39,7 +39,6 @@ public class Main implements Notifiable {
      */
     @Override
     public void notify(String s) {
-
         Complexity type = Complexity.valueOf(s);
         int algo_index = -1;
         switch (type) {
@@ -47,7 +46,6 @@ public class Main implements Notifiable {
             case QUADRATIC -> algo_index = 1;
             case LOGARITHMIC -> algo_index = 2;
         }
-
         if (controller[algo_index] == null) {
             controller[algo_index] = new Controller(this, algo_index);
             controller[algo_index].notify("START");

@@ -77,7 +77,7 @@ public class CustomChartPanel extends JPanel {
                 dataset.getSeries(i).clear();
             }
             for (int j = 0; j < pointLists[i].size(); j++) {
-                int x = pointLists[i].get(j).getStopNumber();
+                int x = pointLists[i].get(j).getIterations();
                 long y = pointLists[i].get(j).getTime();
                 switch (i) {
                     case 0 -> linearSeries.add(x, y);
