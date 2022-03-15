@@ -77,16 +77,12 @@ public class CustomChartPanel extends JPanel {
                 dataset.getSeries(i).clear();
             }
             for (int j = 0; j < pointLists[i].size(); j++) {
+                int x = pointLists[i].get(j).getStopNumber();
+                long y = pointLists[i].get(j).getTime();
                 switch (i) {
-                    case 0 -> linearSeries.add(
-                            pointLists[i].get(j).getStopNumber(),
-                            pointLists[i].get(j).getTime());
-                    case 1 -> quadraticSeries.add(
-                            pointLists[i].get(j).getStopNumber(),
-                            pointLists[i].get(j).getTime());
-                    default -> logarithmicSeries.add(
-                            pointLists[i].get(j).getStopNumber(),
-                            pointLists[i].get(j).getTime());
+                    case 0 -> linearSeries.add(x, y);
+                    case 1 -> quadraticSeries.add(x, y);
+                    default -> logarithmicSeries.add(x, y);
                 }
             }
         }
