@@ -19,14 +19,14 @@ public class Controller extends Thread implements Notifiable {
     }
 
     public void run() {
-        TimePoint p = null;
+        TimePoint p;
 
         for (int i = 0; execute && i < 35; i++) {
             p = switch (algoIndex) {
                 case 0 -> linearStep(i);
                 case 1 -> quadraticStep(i);
                 case 2 -> logarithmicStep(i);
-                default -> p;
+                default -> null;
             };
             if (execute) {
                 main.getModel().addPoint(p, algoIndex);
