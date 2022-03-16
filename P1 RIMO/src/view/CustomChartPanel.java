@@ -33,7 +33,7 @@ public class CustomChartPanel extends JPanel {
 
     private void initComponents() {
         this.chartInfo = ChartFactory.createXYLineChart(
-                null,
+                "Computational costs comparison",
                 "Iterations",
                 "Time(ms)",
                 null,
