@@ -7,15 +7,24 @@ import main.Notifiable;
 
 public class Model implements Notifiable {
 
+    private static Model instance;
+
     private Main main;
     private ArrayList<TimePoint>[] pointLists;
 
-    public Model(Main main) {
+    private Model(Main main) {
         this.main = main;
         pointLists = (ArrayList<TimePoint>[]) new ArrayList[Complexity.values().length];
         for (int i = 0; i < pointLists.length; i++) {
             pointLists[i] = new ArrayList<>();
         }
+    }
+
+    public static Model getInstance(Main main) {
+        if (instance == null) {
+            instance = new Model(main);
+        }
+        return instance;
     }
 
     public void addPoint(TimePoint timePoint, int algoIndex) {

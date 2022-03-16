@@ -11,6 +11,8 @@ import java.util.Arrays;
 
 public class View extends JFrame implements ActionListener {
 
+    private static View instance;
+
     private final Main main;
     private JPanel buttonsPanel;
     private JButton[] buttons = {
@@ -19,8 +21,8 @@ public class View extends JFrame implements ActionListener {
             new JButton(Complexity.LOGARITHMIC.toString())
     };
 
-    public View(String s, Main main) {
-        super(s);
+    private View(Main main) {
+        this.setTitle("Computational costs");
         this.main = main;
         this.getContentPane().setLayout(new BorderLayout());
         buttonsPanel = new JPanel();
@@ -32,6 +34,13 @@ public class View extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
+    }
+
+    public static View getInstance(Main main) {
+        if (instance == null) {
+            instance = new View(main);
+        }
+        return instance;
     }
 
     public void showGUI() {

@@ -5,13 +5,21 @@ import main.Notifiable;
 
 public class Controller implements Notifiable {
 
+    private static Controller instance;
+
     private final Main main;
     private Algorithm[] algorithms;
 
-
-    public Controller(Main main) {
+    private Controller(Main main) {
         this.main = main;
         this.algorithms = new Algorithm[Complexity.values().length];
+    }
+
+    public static Controller getInstance(Main main) {
+        if (instance == null) {
+            instance = new Controller(main);
+        }
+        return instance;
     }
 
     public void tryExecuteAlgorithm(Complexity complexity) {
@@ -28,4 +36,5 @@ public class Controller implements Notifiable {
     @Override
     public void notify(String s) {
     }
+
 }

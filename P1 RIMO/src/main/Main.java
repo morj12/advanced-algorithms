@@ -23,9 +23,9 @@ public class Main implements Notifiable {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        model = new Model(this);
-        singleController = new Controller(this);
-        view = new View("Práctica 1 RIMO", this);
+        model = Model.getInstance(this);
+        singleController = Controller.getInstance(this);
+        view = View.getInstance(this);
         view.showGUI();
     }
 
