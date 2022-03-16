@@ -24,9 +24,13 @@ public class Controller implements Notifiable {
 
     public void tryExecuteAlgorithm(Complexity complexity) {
         if (algorithms[complexity.ordinal()] == null) {
-            algorithms[complexity.ordinal()] = new Algorithm(this, Complexity.values()[complexity.ordinal()]);
+            // If the algorithm is executed
+            algorithms[complexity.ordinal()] = new Algorithm(
+                    this,
+                    Complexity.values()[complexity.ordinal()]);
             algorithms[complexity.ordinal()].start();
         } else {
+            // If the algorithm is executing or has finished
             main.notify("restart:" + complexity.name());
             algorithms[complexity.ordinal()].stopAlgorithm();
             algorithms[complexity.ordinal()] = null;

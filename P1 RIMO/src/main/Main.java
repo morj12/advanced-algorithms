@@ -37,7 +37,9 @@ public class Main implements Notifiable {
             // Add new point to the model
             String pointInfo = s.substring(9);
             String[] parts = pointInfo.split(",");
-            TimePoint point = new TimePoint(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+            TimePoint point = new TimePoint(
+                    Integer.parseInt(parts[0]),
+                    Integer.parseInt(parts[1]));
             model.addPoint(point, Integer.parseInt(parts[2]));
         } else if (s.startsWith("restart:")) {
             // Restart the model

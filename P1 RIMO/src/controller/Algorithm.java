@@ -25,6 +25,7 @@ public class Algorithm extends Thread{
                 case LOGARITHMIC -> logarithmicStep(i);
             };
             if (isExecuted) {
+                // Send message with new TimePoint
                 StringBuilder sb = new StringBuilder();
                 sb.append("addpoint:");
                 sb.append(point.getTime()).append(",");
@@ -37,7 +38,9 @@ public class Algorithm extends Thread{
 
     private TimePoint linearStep(int iterations) {
         long time = System.currentTimeMillis();
-        for (int i = 0; isExecuted && i <= iterations; i++) step(5, 0);
+        for (int i = 0; isExecuted && i <= iterations; i++) {
+            step(5, 0);
+        }
         time = System.currentTimeMillis() - time;
         return new TimePoint(time, iterations);
     }
@@ -55,7 +58,9 @@ public class Algorithm extends Thread{
 
     private TimePoint logarithmicStep(int iterations) {
         long time = System.currentTimeMillis();
-        for (int i = 1; isExecuted && i <= iterations; i *= 2) step(5, 0);
+        for (int i = 1; isExecuted && i <= iterations; i *= 2) {
+            step(5, 0);
+        }
         time = System.currentTimeMillis() - time;
         return new TimePoint(time, iterations);
     }
