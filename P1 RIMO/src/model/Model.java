@@ -9,8 +9,8 @@ public class Model implements Notifiable {
 
     private static Model instance;
 
-    private Main main;
-    private ArrayList<TimePoint>[] pointLists;
+    private final Notifiable main;
+    private final ArrayList<TimePoint>[] pointLists;
 
     private Model(Main main) {
         this.main = main;
@@ -38,10 +38,6 @@ public class Model implements Notifiable {
     @Override
     public void notify(String s) {
         Complexity complexity = Complexity.valueOf(s);
-        switch (complexity) {
-            case LINEAR -> pointLists[0].clear();
-            case QUADRATIC -> pointLists[1].clear();
-            case LOGARITHMIC -> pointLists[2].clear();
-        }
+        pointLists[complexity.ordinal()].clear();
     }
 }

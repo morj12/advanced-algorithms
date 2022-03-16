@@ -1,19 +1,17 @@
 package controller;
 
-import main.ErrorWriter;
-import main.Main;
 import model.TimePoint;
 
 public class Algorithm extends Thread{
 
     private static final int MAX_ITERATIONS = 35;
 
-    private Main main;
-    private Complexity algorithm;
+    private final Controller controller;
+    private final Complexity algorithm;
     private boolean isExecuted;
 
-    public Algorithm(Main main, Complexity algorithm) {
-        this.main = main;
+    public Algorithm(Controller controller, Complexity algorithm) {
+        this.controller = controller;
         this.algorithm = algorithm;
         this.isExecuted = true;
     }
@@ -25,10 +23,14 @@ public class Algorithm extends Thread{
                 case LINEAR -> linearStep(i);
                 case QUADRATIC -> quadraticStep(i);
                 case LOGARITHMIC -> logarithmicStep(i);
-                default -> null;
             };
             if (isExecuted) {
-                main.getModel().addPoint(point, algorithm.ordinal());
+                StringBuilder sb = new StringBuilder();
+                sb.append("addpoint:");
+                sb.append(point.getTime()).append(",");
+                sb.append(point.getIterations()).append(",");
+                sb.append(algorithm.ordinal());
+                controller.notify(sb.toString());
             }
         }
     }
@@ -61,8 +63,7 @@ public class Algorithm extends Thread{
     private void step(long m, int n) {
         try {
             Thread.sleep(m, n);
-        } catch (Exception e) {
-            ErrorWriter.writeError(e);
+        } catch (Exception ignored) {
         }
     }
 

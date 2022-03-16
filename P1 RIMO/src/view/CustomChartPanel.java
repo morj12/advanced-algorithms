@@ -17,8 +17,6 @@ import java.util.ArrayList;
 
 public class CustomChartPanel extends JPanel {
 
-    private Model model;
-    private View view;
     protected final int FPS = 24;
     private JFreeChart chartInfo;
     private ChartPanel chartPanel;
@@ -29,9 +27,7 @@ public class CustomChartPanel extends JPanel {
     private ArrayList<TimePoint>[] pointLists;
 
 
-    public CustomChartPanel(Model model, View view) {
-        this.model = model;
-        this.view = view;
+    public CustomChartPanel() {
         initComponents();
     }
 
@@ -48,7 +44,6 @@ public class CustomChartPanel extends JPanel {
         this.chartPanel = new ChartPanel(chartInfo);
         this.add(chartPanel);
         this.chartPanel.setPopupMenu(null);
-        this.pointLists = this.model.getPointLists();
         this.linearSeries = new XYSeries(Complexity.LINEAR.toString());
         this.quadraticSeries = new XYSeries(Complexity.QUADRATIC.toString());
         this.logarithmicSeries = new XYSeries(Complexity.LOGARITHMIC.toString());
@@ -56,8 +51,18 @@ public class CustomChartPanel extends JPanel {
         dataset.addSeries(linearSeries);
         dataset.addSeries(quadraticSeries);
         dataset.addSeries(logarithmicSeries);
+    }
+
+    public void setPointListsAndStart(ArrayList<TimePoint>[] pointLists) {
+        this.pointLists = pointLists;
+        startUpdate();
+    }
+
+    public void startUpdate() {
         Runnable r = () -> {
-            Timer t = new Timer(1000 / FPS, (ActionEvent e) -> repaint());
+            Timer t = new Timer(1000 / FPS, (ActionEvent e) -> {
+                repaint();
+            });
             t.start();
         };
         new Thread(r).start();
