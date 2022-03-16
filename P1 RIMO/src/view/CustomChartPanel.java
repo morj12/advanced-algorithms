@@ -60,23 +60,15 @@ public class CustomChartPanel extends JPanel {
 
     public void startUpdate() {
         Runnable r = () -> {
-            Timer t = new Timer(1000 / FPS, (ActionEvent e) -> {
-                repaint();
-            });
+            Timer t = new Timer(
+                    1000 / FPS,
+                    (ActionEvent e) -> updateChart());
             t.start();
         };
         new Thread(r).start();
     }
 
-    @Override
-    public void repaint() {
-        if (this.getGraphics() != null) {
-            paint(this.getGraphics());
-        }
-    }
-
-    @Override
-    public void paint(Graphics g) {
+    public void updateChart() {
         for (int i = 0; i < pointLists.length; i++) {
             if (pointLists[i].isEmpty()) {
                 dataset.getSeries(i).clear();
