@@ -1,76 +1,31 @@
 package controller;
 
-import main.ErrorWriter;
 import main.Main;
 import main.Notifiable;
-import model.TimePoint;
 
-public class Controller extends Thread implements Notifiable {
+public class Controller implements Notifiable {
 
     private final Main main;
-    private final int algoIndex;
-    private boolean execute;
+    private Algorithm[] algorithms;
 
 
-    public Controller(Main main, int algo_index) {
+    public Controller(Main main) {
         this.main = main;
-        this.algoIndex = algo_index;
-        this.execute = true;
+        this.algorithms = new Algorithm[Complexity.values().length];
     }
 
-    public void run() {
-        TimePoint p;
-        for (int i = 0; execute && i < 35; i++) {
-            p = switch (algoIndex) {
-                case 0 -> linearStep(i);
-                case 1 -> quadraticStep(i);
-                case 2 -> logarithmicStep(i);
-                default -> null;
-            };
-            if (execute) {
-                main.getModel().addPoint(p, algoIndex);
-            }
-        }
-    }
-
-    private TimePoint linearStep(int iterations) {
-        long time = System.currentTimeMillis();
-        for (int i = 0; execute && i <= iterations; i++) step(5, 0);
-        time = System.currentTimeMillis() - time;
-        return new TimePoint(time, iterations);
-    }
-
-    private TimePoint quadraticStep(int iterations) {
-        long time = System.currentTimeMillis();
-        for (int i = 0; execute && i <= iterations; i++) {
-            for (int j = 0; execute && j < iterations; j++) {
-                step(5, 0);
-            }
-        }
-        time = System.currentTimeMillis() - time;
-        return new TimePoint(time, iterations);
-    }
-
-    private TimePoint logarithmicStep(int iterations) {
-        long time = System.currentTimeMillis();
-        for (int i = 1; execute && i <= iterations; i *= 2) step(5, 0);
-        time = System.currentTimeMillis() - time;
-        return new TimePoint(time, iterations);
-    }
-
-    private void step(long m, int n) {
-        try {
-            Thread.sleep(m, n);
-        } catch (Exception e) {
-            ErrorWriter.writeError(e);
+    public void tryExecuteAlgorithm(Complexity complexity) {
+        if (algorithms[complexity.ordinal()] == null) {
+            algorithms[complexity.ordinal()] = new Algorithm(main, Complexity.values()[complexity.ordinal()]);
+            algorithms[complexity.ordinal()].start();
+        } else {
+            main.getModel().notify(complexity.name());
+            algorithms[complexity.ordinal()].stopAlgorithm();
+            algorithms[complexity.ordinal()] = null;
         }
     }
 
     @Override
     public void notify(String s) {
-        switch (s) {
-            case "START" -> this.start();
-            case "STOP" -> execute = false;
-        }
     }
 }

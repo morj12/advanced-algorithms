@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-
 import controller.Complexity;
 import main.Main;
 import main.Notifiable;

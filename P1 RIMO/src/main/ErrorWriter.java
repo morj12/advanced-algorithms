@@ -7,8 +7,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Date;
 
-// Classe per homogeneitzar els errors.
-
 public class ErrorWriter {
 
     static public void writeError(Exception ex) {
