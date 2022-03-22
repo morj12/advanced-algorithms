@@ -12,11 +12,11 @@ import model.Piece;
  *
  * @author ikerg
  */
-public class Knight extends Piece{
+public class Messi extends Piece {
     
-    public Knight() {
+    public Messi() {
         name = this.getClass().getName();
-        image = "image/knight.png";
+        image = "image/messi.png";
         movements = SetMovements();
     }
 
@@ -35,5 +35,4 @@ public class Knight extends Piece{
         
         return movements;
     }
-
 }
