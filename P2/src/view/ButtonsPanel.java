@@ -4,8 +4,6 @@ import main.Notifiable;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class ButtonsPanel extends JPanel {
