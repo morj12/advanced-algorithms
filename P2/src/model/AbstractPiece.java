@@ -1,6 +1,6 @@
 package model;
 
-public abstract class Piece {
+public abstract class AbstractPiece {
     protected String name;
     protected Movement[] movements;
     protected String image;

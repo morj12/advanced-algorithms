@@ -6,13 +6,13 @@
 package model.pieces;
 
 import model.Movement;
-import model.Piece;
+import model.AbstractPiece;
 
 /**
  *
  * @author ikerg
  */
-public class Rook extends Piece{
+public class Rook extends AbstractPiece {
     
     public Rook() {
         outOfBoundsDimension = true;

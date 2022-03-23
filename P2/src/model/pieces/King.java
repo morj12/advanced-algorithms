@@ -6,13 +6,13 @@
 package model.pieces;
 
 import model.Movement;
-import model.Piece;
+import model.AbstractPiece;
 
 /**
  *
  * @author ikerg
  */
-public class King extends Piece{
+public class King extends AbstractPiece {
     
     public King() {
         name = this.getClass().getName();
