@@ -2,12 +2,12 @@ package model;
 
 public abstract class AbstractPiece {
     protected String name;
-    protected Movement[] movements;
+    protected Move[] moves;
     protected String image;
     protected boolean outOfBoundsDimension = false;
 
-    public Movement[] getMovements() {
-        return movements;
+    public Move[] getMoves() {
+        return moves;
     }
 
     public String getName() {

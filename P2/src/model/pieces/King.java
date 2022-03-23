@@ -5,7 +5,7 @@
  */
 package model.pieces;
 
-import model.Movement;
+import model.Move;
 import model.AbstractPiece;
 
 /**
@@ -17,22 +17,22 @@ public class King extends AbstractPiece {
     public King() {
         name = this.getClass().getName();
         image = "image/king.png";
-        movements = SetMovements();
+        moves = SetMoves();
     }
 
-    private Movement[] SetMovements() {
-        movements = new Movement[8];
+    private Move[] SetMoves() {
+        moves = new Move[8];
         int pos = 0;
         
-        movements[pos] = new Movement(0,1); 
-        movements[pos++] = new Movement(1,1);
-        movements[pos++] = new Movement(1,0);
-        movements[pos++] = new Movement(1,-1);
-        movements[pos++] = new Movement(0,-1);
-        movements[pos++] = new Movement(-1,-1);
-        movements[pos++] = new Movement(-1,0);
-        movements[pos++] = new Movement(-1,1);
+        moves[pos] = new Move(0,1);
+        moves[pos++] = new Move(1,1);
+        moves[pos++] = new Move(1,0);
+        moves[pos++] = new Move(1,-1);
+        moves[pos++] = new Move(0,-1);
+        moves[pos++] = new Move(-1,-1);
+        moves[pos++] = new Move(-1,0);
+        moves[pos++] = new Move(-1,1);
         
-        return movements;
+        return moves;
     }
 }

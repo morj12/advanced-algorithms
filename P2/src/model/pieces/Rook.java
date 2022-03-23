@@ -5,7 +5,7 @@
  */
 package model.pieces;
 
-import model.Movement;
+import model.Move;
 import model.AbstractPiece;
 
 /**
@@ -18,27 +18,27 @@ public class Rook extends AbstractPiece {
         outOfBoundsDimension = true;
         name = this.getClass().getName();
         image = "image/rook.png";
-        movements = new Movement[0];
+        moves = new Move[0];
     }
     
     public Rook(int dimension) {
         outOfBoundsDimension = true;
         name = this.getClass().getName();
         image = "image/rook.png";
-        movements = SetMovements(dimension);
+        moves = SetMoves(dimension);
     }
 
-    private Movement[] SetMovements(int limit) {
-        movements = new Movement[(limit - 1) * 4];
+    private Move[] SetMoves(int limit) {
+        moves = new Move[(limit - 1) * 4];
         int pos = 0;
         
         for (int i = -(limit - 1); i < limit; i++) {
             if (i != 0) { 
-                movements[pos] = new Movement(0, i);
-                movements[pos++] = new Movement(i, 0);
+                moves[pos] = new Move(0, i);
+                moves[pos++] = new Move(i, 0);
             }
         }
         
-        return movements;
+        return moves;
     }
 }

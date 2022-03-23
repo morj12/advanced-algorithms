@@ -1,7 +1,7 @@
 package model.pieces;
 
 import model.AbstractPiece;
-import model.Movement;
+import model.Move;
 
 public class Queen extends AbstractPiece {
 
@@ -9,20 +9,27 @@ public class Queen extends AbstractPiece {
         outOfBoundsDimension = true;
         name = this.getClass().getName();
         image = "image/queen.png";
-        movements = new Movement[0];
+        moves = new Move[0];
     }
 
     public Queen(int dimension) {
         outOfBoundsDimension = true;
         name = this.getClass().getName();
         image = "image/rook.png";
-        movements = SetMovements(dimension);
+        moves = SetMoves(dimension);
     }
 
-    // TODO: add moves
-    private Movement[] SetMovements(int limit) {
-        movements = new Movement[8];
+    private Move[] SetMoves(int limit) {
+        moves = new Move[(limit - 1) * 4 * 2];
         int pos = 0;
-        return movements;
+        for (int i = -(limit - 1); i < limit; i++) {
+            if (i != 0) {
+                moves[pos++] = new Move(0, i);
+                moves[pos++] = new Move(i, 0);
+                moves[pos++] = new Move(i, i);
+                moves[pos++] = new Move(-i, i);
+            }
+        }
+        return moves;
     }
 }

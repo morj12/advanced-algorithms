@@ -5,7 +5,7 @@
  */
 package model.pieces;
 
-import model.Movement;
+import model.Move;
 import model.AbstractPiece;
 
 /**
@@ -17,22 +17,22 @@ public class Pony extends AbstractPiece {
     public Pony() {
         name = this.getClass().getName();
         image = "image/pony.png";
-        movements = SetMovements();
+        moves = SetMoves();
     }
 
-    private Movement[] SetMovements() {
-        movements = new Movement[8];
+    private Move[] SetMoves() {
+        moves = new Move[8];
         int pos = 0;
         
-        movements[pos] = new Movement(1,3);
-        movements[pos++] = new Movement(3,1);
-        movements[pos++] = new Movement(1,-3);
-        movements[pos++] = new Movement(3,-1);
-        movements[pos++] = new Movement(-1,3);
-        movements[pos++] = new Movement(-3,1);
-        movements[pos++] = new Movement(-1,-3);
-        movements[pos++] = new Movement(-3,-1);
+        moves[pos] = new Move(1,3);
+        moves[pos++] = new Move(3,1);
+        moves[pos++] = new Move(1,-3);
+        moves[pos++] = new Move(3,-1);
+        moves[pos++] = new Move(-1,3);
+        moves[pos++] = new Move(-3,1);
+        moves[pos++] = new Move(-1,-3);
+        moves[pos++] = new Move(-3,-1);
         
-        return movements;
+        return moves;
     }
 }
