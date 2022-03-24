@@ -1,6 +1,7 @@
 package view;
 
 import main.Notifiable;
+import model.Board;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +11,7 @@ public class View extends JFrame implements Notifiable {
     private SettingsPanel settingsPanel;
     private BoardPanel boardPanel;
     private StatusPanel statusPanel;
+
 
     public View(int dimension) {
         this.setTitle("Chess pieces route");
@@ -36,6 +38,7 @@ public class View extends JFrame implements Notifiable {
 
     @Override
     public void notify(String s, Object o) {
+        // repaint board panel based on new dimension
         if (s.equals("dimensionChanged")) {
             var slider = (JSlider) o;
             if (!slider.getValueIsAdjusting()) {

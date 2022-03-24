@@ -23,6 +23,11 @@ public class Cell {
     public void setPiece(AbstractPiece piece, int stepNumber) {
         this.piece = piece;
         this.stepNumber = stepNumber;
+        this.visited = true;
+    }
+
+    public boolean isVisited() {
+        return this.visited;
     }
 
     public void IncrementStep() {
@@ -32,6 +37,7 @@ public class Cell {
     public void reset() {
         this.stepNumber = -1;
         this.piece = null;
+        this.visited = false;
     }
 
     public void visit() {
@@ -41,6 +47,6 @@ public class Cell {
     /** Example:  0/Me (step 0 of Megaknight) **/
     @Override
     public String toString() {
-        return stepNumber + "/" + (piece != null ? piece.getClass().getSimpleName().substring(0, 2) : "--");
+        return stepNumber + "/" + (piece != null ? piece.getClass().getSimpleName().substring(0, 2) : "  ");
     }
 }

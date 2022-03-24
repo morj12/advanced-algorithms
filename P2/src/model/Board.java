@@ -26,8 +26,12 @@ public class Board {
     }
 
     /** Puts a piece **/
-    public void putPiece(AbstractPiece piece, int x, int y, int stepNumber) {
+    public void putPiece(AbstractPiece piece, int stepNumber, int x, int y) {
         cells[x][y].setPiece(piece, stepNumber);
+    }
+
+    public boolean isVisitedCell(int x, int y) {
+        return cells[x][y].isVisited();
     }
 
     /** Removes a piece **/
@@ -40,7 +44,7 @@ public class Board {
         String s = "***** BOARD ***** \n";
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[i].length; j++) {
-                s += cells[j][i].toString() + " ";
+                s += cells[i][j].toString() + " ";
             }
             s += "\n\n";
         }

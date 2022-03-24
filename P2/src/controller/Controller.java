@@ -10,14 +10,12 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static java.lang.System.exit;
-
 public class Controller implements Notifiable {
 
     private Notifiable main;
-    private boolean isExecuted;
+    private boolean isExecuted;     // not used
     private Board board;
-    private Semaphore mutex;
+    private Semaphore mutex;        // not used
 
     /**
      * Gets main reference
@@ -36,6 +34,7 @@ public class Controller implements Notifiable {
     public void start(int dimension, AbstractPiece[] pieces, int[] x, int[] y) {
         AtomicBoolean hasSolution = new AtomicBoolean(false);
         board = new Board(dimension);
+        main.notify("board", board);
         var t = new Thread(() -> hasSolution.set(findPaths(pieces, x, y)));
         t.start();
 
@@ -49,52 +48,44 @@ public class Controller implements Notifiable {
      */
     private boolean findPaths(AbstractPiece[] pieces, int[] x, int[] y) {
         List<Boolean> hasSolution = new ArrayList<>();
-
         for (int i = 0; i < pieces.length; i++) {
             hasSolution.add(findPath(pieces[i], 0, x[i], y[i]));
         }
         if (hasSolution.stream().allMatch(b -> b.booleanValue())) {
+            System.out.println("DONE step: " + step);
             return true;
         } else {
+            System.out.println("FAILED step: " + step);
             return false;
         }
     }
 
     /**
      * Backtracking algorithm for one piece
-     * Needs to use mutex on operations "setPiece" and "removePiece"
+     * Needs to use mutex on operations "setPiece" and "removePiece" (NOT USED NOW)
      */
-
-    private int calls = 0;
-
+    private int step = 0;
     private boolean findPath(AbstractPiece piece, int stepNumber, int x, int y) {
-        calls++;
+        System.out.println(++step);
         board.putPiece(piece, stepNumber++, x, y);
-        if (stepNumber == board.getDimension() * board.getDimension())  {
-            System.out.println(board);
+        if (stepNumber == board.getDimension() * board.getDimension()) {
             return true;
         }
         // get all moves and loop foreach
         Move[] moves = piece.getMoves();
         int[] newPosition;
         for (Move move : moves) {
-            try {
-                // get the new position
-                newPosition = move.getMoveAsArray();
-                newPosition[0] += x;
-                newPosition[1] += y;
-                // check if it's out of bounds
-                if (!(newPosition[0] < 0
-                        || newPosition[0] >= board.getDimension()
-                        || newPosition[1] < 0
-                        || newPosition[1] >= board.getDimension())) {
-                    if (findPath(piece, newPosition[0], newPosition[1], stepNumber)) return true;
-                }
-            } catch (StackOverflowError e) {
-                System.out.println("STACKOVERFLOWERROR");
-                System.out.println("stepnumber = " + stepNumber);
-                System.out.println("calls = " + calls);
-                exit(0);
+            // get the new position
+            newPosition = move.getMoveAsArray();
+            newPosition[0] += x;
+            newPosition[1] += y;
+            // check if it's out of bounds
+            if (!(newPosition[0] < 0
+                    || newPosition[0] >= board.getDimension()
+                    || newPosition[1] < 0
+                    || newPosition[1] >= board.getDimension()
+                    || board.isVisitedCell(newPosition[0], newPosition[1]))) {
+                if (findPath(piece, stepNumber, newPosition[0], newPosition[1])) return true;
             }
         }
         // if no solution, clear
