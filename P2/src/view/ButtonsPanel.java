@@ -25,8 +25,8 @@ public class ButtonsPanel extends JPanel {
         startButton.setPreferredSize(new Dimension(180, 30));
         stopButton = new JButton("Stop");
         stopButton.setPreferredSize(new Dimension(180, 30));
-        sliderLabel = new JLabel("Dimension : 8");
-        slider = new JSlider(SwingConstants.HORIZONTAL, 4, 10, 8);
+        sliderLabel = new JLabel("Dimension : 6");
+        slider = new JSlider(SwingConstants.HORIZONTAL, 4, 8, 6);
         slider.setPreferredSize(new Dimension(180, 25));
         slider.addChangeListener(e -> view.notify("dimensionChanged", e.getSource())); // change listener
         this.add(sliderLabel);

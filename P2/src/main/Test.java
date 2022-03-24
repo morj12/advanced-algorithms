@@ -31,10 +31,10 @@ public class Test implements Notifiable {
          */
 
 
-        controller.start(dimension, new AbstractPiece[]{new Knight()}, new int[]{0}, new int[]{0});
-//        controller.start(dimension, new AbstractPiece[]{new Megaknight()}, new int[]{0}, new int[]{0});
-//        controller.start(dimension, new AbstractPiece[]{new Pony()}, new int[]{0}, new int[]{0});
-//        controller.start(dimension, new AbstractPiece[]{new King()}, new int[]{0}, new int[]{0});
+//        controller.start(dimension, new AbstractPiece[]{new Knight()}, new int[]{0}, new int[]{0}); // not ok for 8
+//        controller.start(dimension, new AbstractPiece[]{new Megaknight()}, new int[]{0}, new int[]{0}); // ok for 8
+//        controller.start(dimension, new AbstractPiece[]{new Pony()}, new int[]{0}, new int[]{0}); // not ok for 8
+        controller.start(dimension, new AbstractPiece[]{new King()}, new int[]{0}, new int[]{0}); // ok for any dim
 
         // not checked
 //        controller.start(dimension, new AbstractPiece[]{new Queen()}, new int[]{0}, new int[]{0});
