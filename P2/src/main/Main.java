@@ -1,5 +1,9 @@
 package main;
 
+import model.Board;
+import model.pieces.Drunk;
+import model.pieces.King;
+import model.pieces.Messi;
 import view.View;
 
 import javax.swing.*;
@@ -24,6 +28,16 @@ public class Main implements Notifiable {
         }
         view = new View(dimension);
         view.showGui();
+
+        Board board = new Board(dimension);
+        System.out.println(board);
+
+        board.initPiece(new Drunk(), 3, 1);
+        board.initPiece(new Messi(), 2, 5);
+        board.initPiece(new King(), 1, 0);
+
+        System.out.println(board);
+
     }
 
     @Override

@@ -1,40 +1,41 @@
 package model;
 
 public class Cell {
-    private int x;
-    private int y;
-    private boolean visited;
 
-    public Cell(int x, int y, boolean visited) {
-        this.x = x;
-        this.y = y;
-        this.visited = visited;
-    }
+    private boolean visited;
+    private int stepNumber;
+    private AbstractPiece piece;
 
     public Cell() {
+
+        this.visited = false;
+        this.stepNumber = -1;
     }
 
-    public int getX() {
-        return x;
+    public AbstractPiece getPiece() {
+        return piece;
     }
 
-    public int getY() {
-        return y;
+    public void setPiece(AbstractPiece piece) {
+        this.piece = piece;
     }
 
-    public boolean isVisited() {
-        return visited;
+    public void IncrementStep() {
+        stepNumber++;
     }
 
-    public void setVisited(boolean visited) {
-        this.visited = visited;
+    public void reset() {
+        this.stepNumber = -1;
+        this.piece = null;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void visit() {
+        this.visited = true;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    /** Example:  0/Me (step 0 of Megaknight) **/
+    @Override
+    public String toString() {
+        return stepNumber + "/" + (piece != null ? piece.getClass().getSimpleName().substring(0, 2) : "--");
     }
 }
