@@ -3,12 +3,14 @@ package controller;
 import main.Notifiable;
 import model.AbstractPiece;
 import model.Board;
+import model.Move;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static java.lang.System.exit;
 
 public class Controller implements Notifiable {
 
@@ -34,7 +36,9 @@ public class Controller implements Notifiable {
     public void start(int dimension, AbstractPiece[] pieces, int[] x, int[] y) {
         AtomicBoolean hasSolution = new AtomicBoolean(false);
         board = new Board(dimension);
-        new Thread(() -> hasSolution.set(findPaths(dimension, pieces, x, y))).start();
+        var t = new Thread(() -> hasSolution.set(findPaths(pieces, x, y)));
+        t.start();
+
     }
 
     /**
@@ -43,11 +47,11 @@ public class Controller implements Notifiable {
      * If all elements are true, returns true
      * Else returns false
      */
-    public boolean findPaths(int dimension, AbstractPiece[] pieces, int[] x, int[] y) {
+    private boolean findPaths(AbstractPiece[] pieces, int[] x, int[] y) {
         List<Boolean> hasSolution = new ArrayList<>();
 
         for (int i = 0; i < pieces.length; i++) {
-            hasSolution.add(findPath(dimension, pieces[i], x[i], y[i]));
+            hasSolution.add(findPath(pieces[i], 0, x[i], y[i]));
         }
         if (hasSolution.stream().allMatch(b -> b.booleanValue())) {
             return true;
@@ -60,8 +64,41 @@ public class Controller implements Notifiable {
      * Backtracking algorithm for one piece
      * Needs to use mutex on operations "setPiece" and "removePiece"
      */
-    private boolean findPath(int dimension, AbstractPiece piece, int x, int i) {
 
+    private int calls = 0;
+
+    private boolean findPath(AbstractPiece piece, int stepNumber, int x, int y) {
+        calls++;
+        board.putPiece(piece, stepNumber++, x, y);
+        if (stepNumber == board.getDimension() * board.getDimension())  {
+            System.out.println(board);
+            return true;
+        }
+        // get all moves and loop foreach
+        Move[] moves = piece.getMoves();
+        int[] newPosition;
+        for (Move move : moves) {
+            try {
+                // get the new position
+                newPosition = move.getMoveAsArray();
+                newPosition[0] += x;
+                newPosition[1] += y;
+                // check if it's out of bounds
+                if (!(newPosition[0] < 0
+                        || newPosition[0] >= board.getDimension()
+                        || newPosition[1] < 0
+                        || newPosition[1] >= board.getDimension())) {
+                    if (findPath(piece, newPosition[0], newPosition[1], stepNumber)) return true;
+                }
+            } catch (StackOverflowError e) {
+                System.out.println("STACKOVERFLOWERROR");
+                System.out.println("stepnumber = " + stepNumber);
+                System.out.println("calls = " + calls);
+                exit(0);
+            }
+        }
+        // if no solution, clear
+        board.removePiece(x, y);
         return false;
     }
 

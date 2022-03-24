@@ -24,14 +24,14 @@ public class Knight extends AbstractPiece {
         moves = new Move[8];
         int pos = 0;
 
-        moves[pos] = new Move(1,2);     //one right two up
+        moves[pos++] = new Move(1,2);     //one right two up
         moves[pos++] = new Move(2,1);   //two right one up
         moves[pos++] = new Move(1,-2);  //one right two down
         moves[pos++] = new Move(2,-1);  //two right one down
         moves[pos++] = new Move(-1,2);  //one left two up
         moves[pos++] = new Move(-2,1);  //two left one up
         moves[pos++] = new Move(-1,-2); //one left two down
-        moves[pos++] = new Move(-2,-1); //two left one down
+        moves[pos] = new Move(-2,-1); //two left one down
         
         return moves;
     }

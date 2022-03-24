@@ -24,14 +24,14 @@ public class Pony extends AbstractPiece {
         moves = new Move[8];
         int pos = 0;
         
-        moves[pos] = new Move(1,3);
+        moves[pos++] = new Move(1,3);
         moves[pos++] = new Move(3,1);
         moves[pos++] = new Move(1,-3);
         moves[pos++] = new Move(3,-1);
         moves[pos++] = new Move(-1,3);
         moves[pos++] = new Move(-3,1);
         moves[pos++] = new Move(-1,-3);
-        moves[pos++] = new Move(-3,-1);
+        moves[pos] = new Move(-3,-1);
         
         return moves;
     }

@@ -34,7 +34,7 @@ public class Rook extends AbstractPiece {
         
         for (int i = -(limit - 1); i < limit; i++) {
             if (i != 0) { 
-                moves[pos] = new Move(0, i);
+                moves[pos++] = new Move(0, i);
                 moves[pos++] = new Move(i, 0);
             }
         }

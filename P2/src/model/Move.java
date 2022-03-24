@@ -28,4 +28,8 @@ public class Move {
     public void setY(int y) {
         this.y = y;
     }
+
+    public int[] getMoveAsArray() {
+        return new int[]{x, y};
+    }
 }

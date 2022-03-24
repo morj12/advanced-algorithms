@@ -20,6 +20,11 @@ public class Cell {
         this.piece = piece;
     }
 
+    public void setPiece(AbstractPiece piece, int stepNumber) {
+        this.piece = piece;
+        this.stepNumber = stepNumber;
+    }
+
     public void IncrementStep() {
         stepNumber++;
     }
