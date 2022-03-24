@@ -18,6 +18,11 @@ public class Test implements Notifiable {
     }
 
 
+    /**
+     * for tomorrow:
+     * verify queen, rook, messi, drunk
+     * paint
+     */
     private void start() {
         board = new Board(dimension);
         view = new View(dimension);
