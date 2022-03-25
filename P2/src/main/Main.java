@@ -25,7 +25,7 @@ public class Main implements Notifiable {
 
     private void start() {
         isExecutedAlgorithm = false;
-        view = new View(this, initDimension);
+        view = new View(this);
         controller = new Controller(this);
         view.showGui();
     }

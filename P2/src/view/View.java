@@ -28,6 +28,8 @@ public class View extends JFrame implements Notifiable {
     private int dimension;
     private int[] selectedCell;
 
+    private final int DEFAULT_DIMENSION = 8;
+
 
     public View(Notifiable main, int dimension) {
         this.setTitle("Chess pieces route");
@@ -36,6 +38,16 @@ public class View extends JFrame implements Notifiable {
         this.setResizable(false);
         this.main = main;
         this.dimension = dimension;
+        initComponents();
+    }
+
+    public View(Notifiable main) {
+        this.setTitle("Chess pieces route");
+        this.getContentPane().setLayout(new BorderLayout());
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.main = main;
+        this.dimension = DEFAULT_DIMENSION;
         initComponents();
     }
 
