@@ -61,7 +61,9 @@ public class Main implements Notifiable {
                 String[] split = s.substring(6).split(",");
                 int dimension = Integer.parseInt(split[0]);
                 AbstractPiece piece = AbstractPieceCreator.create(split[1]);
-                controller.start(dimension, piece, 0, 0);
+                int x = Integer.parseInt(split[2]);
+                int y = Integer.parseInt(split[3]);
+                controller.start(dimension, piece, y, x);
             }
         } else if (s.equals("stop")) {
             /** Stop and unlock settings **/

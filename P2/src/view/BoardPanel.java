@@ -1,5 +1,7 @@
 package view;
 
+import main.Notifiable;
+
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
@@ -12,19 +14,27 @@ public class BoardPanel extends JPanel implements MouseListener {
     private int dimension;
     private final int BOARD_SIZE = 600;
     private int cellSize;
+    private Notifiable view;
 
-    private int [][] cells;
+    private int[][] cells;
 
-    public BoardPanel(int dimension) {
+
+    private boolean isCellSelected;
+    private int[] selectedCell;
+
+    public BoardPanel(Notifiable view, int dimension) {
+        this.view = view;
         this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         this.dimension = dimension;
         this.cellSize = BOARD_SIZE / dimension;
         this.setAlignmentX(CENTER_ALIGNMENT);
         this.setAlignmentY(CENTER_ALIGNMENT);
         initComponents();
+        this.addMouseListener(this);
     }
 
     private void initComponents() {
+        isCellSelected = false;
         cells = new int[dimension][dimension];
         Arrays.stream(cells).forEach(cellColumn -> Arrays.fill(cellColumn, -1));
     }
@@ -83,14 +93,26 @@ public class BoardPanel extends JPanel implements MouseListener {
 
     }
 
+    public boolean isCellSelected() {
+        return isCellSelected;
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if (!isCellSelected) {
+            int x = e.getX();
+            int y = e.getY();
+            selectedCell = new int[]{x / cellSize, y / cellSize};
+            isCellSelected = true;
+            view.notify("select", selectedCell);
+        } else {
+            isCellSelected = false;
+            view.notify("unselect", null);
+        }
     }
 
     @Override
