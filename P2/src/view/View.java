@@ -1,16 +1,30 @@
 package view;
 
 import main.Notifiable;
+import model.AbstractPieceCreator;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.util.Arrays;
 
 public class View extends JFrame implements Notifiable {
 
     private Notifiable main;
-    private SettingsPanel settingsPanel;
-    private BoardPanel boardPanel;
-    private int[] startCoords;
+    private JPanel settingsPanel;
+    private JPanel buttonsPanel;
+    private JPanel sliderPanel;
+    private JPanel pieceChoosePanel;
+    private BoardPanel board;
+    private int dimension;
+
+    private JButton start;
+    private JButton stop;
+    private JLabel sliderLabel;
+    private JSlider slider;
+    private JLabel boxLabel;
+    private JComboBox<String> pieceBox;
+
 
     public View(Notifiable main, int dimension) {
         this.setTitle("Chess pieces route");
@@ -18,15 +32,92 @@ public class View extends JFrame implements Notifiable {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
         this.main = main;
-        settingsPanel = new SettingsPanel(this);
-        boardPanel = new BoardPanel(dimension);
+        this.dimension = dimension;
         initComponents();
     }
 
+    /** GUI elements configuration only **/
     private void initComponents() {
-        startCoords = new int[2];
+
+        settingsPanel = new JPanel();
+        settingsPanel.setLayout(new BorderLayout());
+        settingsPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+
+        buttonsPanel = new JPanel();
+        buttonsPanel.setPreferredSize(new Dimension(200, 50));
+        buttonsPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        start = new JButton("Start");
+        start.addActionListener(e -> startPressed());
+        stop = new JButton("Stop");
+        stop.addActionListener(e -> stopPressed());
+        buttonsPanel.add(start);
+        buttonsPanel.add(stop);
+        settingsPanel.add(BorderLayout.WEST, buttonsPanel);
+
+        sliderPanel = new JPanel();
+        sliderPanel.setPreferredSize(new Dimension(200, 50));
+        sliderPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        sliderLabel = new JLabel("Dimension: " + dimension);
+        slider = new JSlider(SwingConstants.HORIZONTAL, 4, 8, dimension);
+        slider.setPreferredSize(new Dimension(180, 20));
+        slider.addChangeListener(e -> sliderChanged(slider));
+        sliderPanel.add(sliderLabel);
+        sliderPanel.add(slider);
+        settingsPanel.add(BorderLayout.CENTER, sliderPanel);
+
+        pieceChoosePanel = new JPanel();
+        pieceChoosePanel.setPreferredSize(new Dimension(200, 50));
+        pieceChoosePanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        boxLabel = new JLabel("Select a piece");
+        pieceBox = new JComboBox<>();
+        pieceBox.addItem("Select a piece");
+        Arrays.stream(AbstractPieceCreator.pieces).forEach(piece -> pieceBox.addItem(piece));
+        pieceChoosePanel.add(boxLabel);
+        pieceChoosePanel.add(pieceBox);
+        settingsPanel.add(BorderLayout.EAST, pieceChoosePanel);
+
+        board = new BoardPanel(dimension);
+
         this.add(BorderLayout.NORTH, settingsPanel);
-        this.add(BorderLayout.CENTER, boardPanel);
+        this.add(BorderLayout.CENTER, board);
+    }
+
+    public void reset() {
+        board.reset();
+        repaint();
+    }
+
+    public void setPiece(int stepNumber, int x, int y) {
+        board.setPiece(stepNumber, x, y);
+    }
+
+    public void removePiece(int x, int y) {
+        board.removePiece(x, y);
+    }
+
+    /** Mouse stop event **/
+    private void stopPressed() {
+        main.notify("stop", null);
+    }
+
+    /** Mouse start event **/
+    private void startPressed() {
+        // TODO: select the initial position
+        if (!(pieceBox.getSelectedItem()).equals("Select a piece")) {
+            main.notify("start:" + slider.getValue() + "," + pieceBox.getSelectedItem(), null);
+        }
+    }
+
+    /** Slider change event **/
+    private void sliderChanged(JSlider e) {
+        if (!e.getValueIsAdjusting()) main.notify("dimension:" + e.getValue(), null);
+    }
+
+    public void setDimension(int dimension) {
+        this.dimension = dimension;
+        board.setDimension(dimension);
+        board.repaint();
+        sliderLabel.setText("Dimension:" + dimension);
     }
 
     public void showGui() {
@@ -35,33 +126,17 @@ public class View extends JFrame implements Notifiable {
         this.setVisible(true);
     }
 
-    public void setPiece(int stepNumber, int x, int y) {
-        boardPanel.setPiece(stepNumber, x, y);
+    public void lockSettings() {
+        slider.setEnabled(false);
+        pieceBox.setEnabled(false);
     }
 
-    public void removePiece(int x, int y) {
-        boardPanel.removePiece(x, y);
+    public void unlockSettings() {
+        slider.setEnabled(true);
+        pieceBox.setEnabled(true);
     }
-
 
     @Override
     public void notify(String s, Object o) {
-        // repaint board panel based on new dimension
-        if (s.equals("dimensionChanged")) {
-            var slider = (JSlider) o;
-            if (!slider.getValueIsAdjusting()) {
-                boardPanel.setDimension(slider.getValue());
-                boardPanel.repaint();
-                settingsPanel.setDimension(slider.getValue());
-            }
-        } else if (s.equals("start")) {
-            var piece = settingsPanel.getPiece();
-            if (!piece.equals("Select a piece")) {
-
-            }
-            // try algorithm start
-        } else if (s.equals("stop")) {
-            // try algorithm stop
-        }
     }
 }

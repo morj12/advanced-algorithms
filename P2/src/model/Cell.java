@@ -30,20 +30,12 @@ public class Cell {
         return this.visited;
     }
 
-    public void IncrementStep() {
-        stepNumber++;
-    }
-
     public void reset() {
         this.stepNumber = -1;
         this.piece = null;
         this.visited = false;
     }
-
-    public void visit() {
-        this.visited = true;
-    }
-
+    
     /** Example:  0/Me (step 0 of Megaknight) **/
     @Override
     public String toString() {

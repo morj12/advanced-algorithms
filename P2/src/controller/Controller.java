@@ -5,17 +5,12 @@ import model.AbstractPiece;
 import model.Board;
 import model.Move;
 
-import java.util.concurrent.Semaphore;
-
 public class Controller implements Notifiable {
 
     private Notifiable main;
-    private boolean isExecuted;     // not used
+    private boolean isExecuted;
     private Board board;
-    private Semaphore mutex;        // not used
-
     private final int WAIT = 333;
-    private Thread algorithm;
 
     /**
      * Gets main reference
@@ -23,7 +18,7 @@ public class Controller implements Notifiable {
      */
     public Controller(Notifiable main) {
         this.main = main;
-        this.mutex = new Semaphore(1);
+        this.isExecuted = false;
     }
 
     /**
@@ -33,10 +28,9 @@ public class Controller implements Notifiable {
      */
     public void start(int dimension, AbstractPiece piece, int x, int y) {
         board = new Board(dimension);
-        main.notify("started", null);
         this.isExecuted = true;
-        algorithm = new Thread(() -> prepare(piece, x, y));
-        algorithm.start();
+        var t = new Thread(() -> prepare(piece, x, y));
+        t.start();
 
     }
 
@@ -47,9 +41,9 @@ public class Controller implements Notifiable {
         boolean hasSolution;
         hasSolution = findPath(piece, 0, x, y);
         if (hasSolution) {
-            System.out.println("DONE step: " + step);
+            main.notify("finished", null);
         } else {
-            System.out.println("FAILED step: " + step);
+            main.notify("finishedNoSolution", null);
         }
     }
 
@@ -67,24 +61,23 @@ public class Controller implements Notifiable {
             }
             main.notify("draw:" + stepNumber + "," + x + "," + y, null);
             board.putPiece(piece, stepNumber++, x, y);
+            /** If finished return true **/
             if (stepNumber == board.getDimension() * board.getDimension()) {
-                main.notify("finished", null);
                 return true;
             }
-            // get all moves and loop foreach
+            /** Get moves **/
             Move[] moves = piece.getMoves();
             int[] newPosition;
             for (Move move : moves) {
-                // get the new position
                 newPosition = move.getMoveAsArray();
                 newPosition[0] += x;
                 newPosition[1] += y;
-                // check if it's out of bounds
+                /** Continue with backtracking if the move is valid **/
                 if (isValidPosition(newPosition)) {
                     if (findPath(piece, stepNumber, newPosition[0], newPosition[1])) return true;
                 }
             }
-            // if no solution, clear
+            /** Find another path **/
             board.removePiece(x, y);
             main.notify("remove:" + x + "," + y, null);
         }

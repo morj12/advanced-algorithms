@@ -14,18 +14,18 @@ import model.AbstractPiece;
  */
 public class Rook extends AbstractPiece {
 
-    public Rook(int dimension) {
-        outOfBoundsDimension = true;
+
+    public Rook() {
         name = this.getClass().getName();
         image = "image/rook.png";
-        moves = SetMoves(dimension);
+        moves = SetMoves();
     }
 
-    private Move[] SetMoves(int limit) {
-        moves = new Move[(limit - 1) * 4];
+    private Move[] SetMoves() {
+        moves = new Move[(MAX_DIMENSION - 1) * 4];
         int pos = 0;
         
-        for (int i = -(limit - 1); i < limit; i++) {
+        for (int i = -(MAX_DIMENSION - 1); i < MAX_DIMENSION; i++) {
             if (i != 0) { 
                 moves[pos++] = new Move(0, i);
                 moves[pos++] = new Move(i, 0);

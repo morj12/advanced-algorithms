@@ -5,13 +5,10 @@ import model.AbstractPiece;
 
 public class Messi extends AbstractPiece {
 
-    private Move[] alternatedMoves;
-
     public Messi() {
         name = this.getClass().getSimpleName();
         image = "image/messi.png";
         moves = SetMoves();
-        hasState = true;
     }
 
     private Move[] SetMoves() {
@@ -27,8 +24,7 @@ public class Messi extends AbstractPiece {
         moves[pos++] = new Move(-2,1);  //two left one up
         moves[pos++] = new Move(-1,-2); //one left two down
         moves[pos] = new Move(-2,-1); //two left one down
-        // alternated moves
-        
+
         return moves;
     }
 }

@@ -3,8 +3,6 @@ package view;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
@@ -17,8 +15,6 @@ public class BoardPanel extends JPanel implements MouseListener {
 
     private int [][] cells;
 
-    private boolean selectedPiece;
-
     public BoardPanel(int dimension) {
         this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         this.dimension = dimension;
@@ -29,12 +25,8 @@ public class BoardPanel extends JPanel implements MouseListener {
     }
 
     private void initComponents() {
-        selectedPiece = false;
-        //initialize local cells array
         cells = new int[dimension][dimension];
-        for (int[] cellColumn : cells) {
-            Arrays.fill(cellColumn, -1);
-        }
+        Arrays.stream(cells).forEach(cellColumn -> Arrays.fill(cellColumn, -1));
     }
 
     public void setPiece(int stepNumber, int x, int y) {
@@ -78,9 +70,8 @@ public class BoardPanel extends JPanel implements MouseListener {
                     g.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
                 }
 
-                // paint cells
+                // if visited
                 if (cells[i][j] != -1) {
-                    System.out.println(i + " " +  j);
                     g.setColor(Color.BLUE);
                     g.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
                     g.setColor(Color.black);
@@ -97,20 +88,8 @@ public class BoardPanel extends JPanel implements MouseListener {
 
     }
 
-    public boolean isSelectedPiece() {
-        return selectedPiece;
-    }
-
-    public void setSelectedPiece(boolean selectedPiece) {
-        this.selectedPiece = selectedPiece;
-    }
-
     @Override
     public void mousePressed(MouseEvent e) {
-        int x = e.getX() / cellSize;
-        int y = e.getY() / cellSize;
-        selectedPiece = true;
-
     }
 
     @Override
@@ -126,5 +105,9 @@ public class BoardPanel extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    public void reset() {
+        Arrays.stream(cells).forEach(cellColumn -> Arrays.fill(cellColumn, -1));
     }
 }
