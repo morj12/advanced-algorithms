@@ -7,7 +7,6 @@ public class Megaknight extends AbstractPiece {
 
     public Megaknight() {
         name = this.getClass().getSimpleName();
-        image = "image/megaknight.png";
         moves = SetMoves();
     }
 

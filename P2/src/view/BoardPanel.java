@@ -72,8 +72,9 @@ public class BoardPanel extends JPanel implements MouseListener {
 
                 // if visited
                 if (cells[i][j] != -1) {
-                    g.setColor(Color.BLUE);
-                    g.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+                    g.setFont(g.getFont().deriveFont((float) (BOARD_SIZE / dimension * 0.8)));
+                    g.setColor(Color.RED);
+                    g.drawString(Integer.toString(cells[i][j]), j * cellSize, i * cellSize + cellSize);
                     g.setColor(Color.black);
 
                 }

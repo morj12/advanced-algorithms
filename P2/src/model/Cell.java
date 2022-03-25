@@ -35,7 +35,7 @@ public class Cell {
         this.piece = null;
         this.visited = false;
     }
-    
+
     /** Example:  0/Me (step 0 of Megaknight) **/
     @Override
     public String toString() {

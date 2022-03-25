@@ -7,7 +7,6 @@ public class Pony extends AbstractPiece {
     
     public Pony() {
         name = this.getClass().getSimpleName();
-        image = "image/pony.png";
         moves = SetMoves();
     }
 

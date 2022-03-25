@@ -8,7 +8,6 @@ public class Queen extends AbstractPiece {
 
     public Queen() {
         name = this.getClass().getName();
-        image = "image/rook.png";
         moves = SetMoves();
     }
 

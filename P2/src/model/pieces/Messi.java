@@ -7,7 +7,6 @@ public class Messi extends AbstractPiece {
 
     public Messi() {
         name = this.getClass().getSimpleName();
-        image = "image/messi.png";
         moves = SetMoves();
     }
 
