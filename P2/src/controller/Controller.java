@@ -71,17 +71,21 @@ public class Controller implements Notifiable {
             newPosition[0] += x;
             newPosition[1] += y;
             // check if it's out of bounds
-            if (!(newPosition[0] < 0
-                    || newPosition[0] >= board.getDimension()
-                    || newPosition[1] < 0
-                    || newPosition[1] >= board.getDimension()
-                    || board.isVisitedCell(newPosition[0], newPosition[1]))) {
+            if (isValidPosition(newPosition)) {
                 if (findPath(piece, stepNumber, newPosition[0], newPosition[1])) return true;
             }
         }
         // if no solution, clear
         board.removePiece(x, y);
         return false;
+    }
+
+    private boolean isValidPosition(int[] newPosition) {
+        return !(newPosition[0] < 0
+                || newPosition[0] >= board.getDimension()
+                || newPosition[1] < 0
+                || newPosition[1] >= board.getDimension()
+                || board.isVisitedCell(newPosition[0], newPosition[1]));
     }
 
 
