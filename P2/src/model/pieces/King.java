@@ -17,10 +17,10 @@ public class King extends AbstractPiece {
         moves[pos++] = new Move(0,1);
         moves[pos++] = new Move(0,-1);
         moves[pos++] = new Move(1,0);
+        moves[pos++] = new Move(-1,0);
         moves[pos++] = new Move(1,-1);
         moves[pos++] = new Move(1,1);
         moves[pos++] = new Move(-1,-1);
-        moves[pos++] = new Move(-1,0);
         moves[pos] = new Move(-1,1);
         
         return moves;

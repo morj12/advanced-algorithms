@@ -5,12 +5,16 @@ import model.AbstractPiece;
 import model.Board;
 import model.Move;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 public class Controller implements Notifiable {
 
     private Notifiable main;
     private boolean isExecuted;
     private Board board;
-    private final int WAIT = 333;
+    private final int WAIT = 100;
 
     /**
      * Gets main reference
@@ -66,7 +70,7 @@ public class Controller implements Notifiable {
                 return true;
             }
             /** Get moves **/
-            Move[] moves = piece.getMoves();
+            List<Move> moves = optimize(piece.getMoves(), piece, x, y);
             int[] newPosition;
             for (Move move : moves) {
                 newPosition = move.getMoveAsArray();
@@ -84,6 +88,43 @@ public class Controller implements Notifiable {
         return false;
     }
 
+    /**
+     * Returns a new list of moves ordered by the number
+     * of possible derived moves of each move.
+     * Uses a wrapper class which assigns the number of derived
+     * moves to a move.
+     */
+    private List<Move> optimize(Move[] moves, AbstractPiece piece, int x, int y) {
+        List<MoveWrapper> wrappedMoves = new ArrayList<>();
+        for (Move move: moves) {
+             wrappedMoves.add(new MoveWrapper(move, getMovesNumber(piece, move.getX() + x, move.getY() + y)));
+        }
+        wrappedMoves.sort(Comparator.comparingInt(wrappedMove -> wrappedMove.possibleMoves));
+        List<Move> optimizedMoves = new ArrayList<>();
+        wrappedMoves.forEach(move -> optimizedMoves.add(move.move));
+        return optimizedMoves;
+    }
+
+    /** Just gets the number of moves for a piece at fixed position **/
+    private int getMovesNumber(AbstractPiece piece, int x, int y) {
+        int counter = 0;
+        Move[] moves = piece.getMoves();
+        for (Move move: moves) {
+            if (isValidPosition(new int[]{move.getX() + x, move.getY() + y})) counter++;
+        }
+        return counter;
+    }
+
+    /** Wrapper class which assigns the number of derived moves to a move **/
+    static class MoveWrapper {
+        Move move;
+        int possibleMoves;
+        public MoveWrapper(Move move, int possibleMoves) {
+            this.move = move;
+            this.possibleMoves = possibleMoves;
+        }
+    }
+
     private boolean isValidPosition(int[] newPosition) {
         return !(newPosition[0] < 0
                 || newPosition[0] >= board.getDimension()
@@ -96,6 +137,7 @@ public class Controller implements Notifiable {
     public void stopAlgorithm() {
         isExecuted = false;
     }
+
 
     @Override
     public void notify(String s, Object o) {

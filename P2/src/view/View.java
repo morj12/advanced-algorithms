@@ -65,7 +65,7 @@ public class View extends JFrame implements Notifiable {
         sliderPanel.setPreferredSize(new Dimension(200, 60));
         sliderPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         sliderLabel = new JLabel("Dimension: " + dimension);
-        slider = new JSlider(SwingConstants.HORIZONTAL, 4, 8, dimension);
+        slider = new JSlider(SwingConstants.HORIZONTAL, 4, 10, dimension);
         slider.setPreferredSize(new Dimension(180, 20));
         slider.addChangeListener(e -> sliderChanged(slider));
         sliderPanel.add(sliderLabel);
@@ -113,7 +113,6 @@ public class View extends JFrame implements Notifiable {
      * Mouse start event
      **/
     private void startPressed() {
-        // TODO: select the initial position
         if (!(pieceBox.getSelectedItem()).equals("Select a piece") && board.isCellSelected()) {
             main.notify(
                     "start:"

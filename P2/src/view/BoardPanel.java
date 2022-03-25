@@ -59,6 +59,7 @@ public class BoardPanel extends JPanel implements MouseListener {
     public void setDimension(int dimension) {
         this.dimension = dimension;
         this.cellSize = BOARD_SIZE / dimension;
+        reset();
     }
 
     @Override
@@ -103,15 +104,18 @@ public class BoardPanel extends JPanel implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (!isCellSelected) {
-            int x = e.getX();
-            int y = e.getY();
-            selectedCell = new int[]{x / cellSize, y / cellSize};
-            isCellSelected = true;
-            view.notify("select", selectedCell);
-        } else {
-            isCellSelected = false;
-            view.notify("unselect", null);
+        if (this.isEnabled()) {
+            if (!isCellSelected) {
+                int x = e.getX();
+                int y = e.getY();
+                selectedCell = new int[]{x / cellSize, y / cellSize};
+                isCellSelected = true;
+                view.notify("select", selectedCell);
+            } else {
+                isCellSelected = false;
+                view.notify("unselect", null);
+            }
+
         }
     }
 
@@ -131,6 +135,7 @@ public class BoardPanel extends JPanel implements MouseListener {
     }
 
     public void reset() {
+        cells = new int[dimension][dimension];
         Arrays.stream(cells).forEach(cellColumn -> Arrays.fill(cellColumn, -1));
     }
 }
