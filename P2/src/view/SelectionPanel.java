@@ -13,12 +13,7 @@ public class SelectionPanel extends JPanel {
 
     private Notifiable view;
 
-    private JComboBox[] pieceCombos = {
-            new JComboBox(),
-            new JComboBox(),
-            new JComboBox(),
-            new JComboBox()
-    };
+    private JComboBox box;
 
     public SelectionPanel(Notifiable view) {
         this.view = view;
@@ -28,14 +23,15 @@ public class SelectionPanel extends JPanel {
     }
 
     private void initComponents() {
-        // add comboboxes
-        stream(pieceCombos).forEach(box -> {
-            box.setPreferredSize(new Dimension(180, 30));
-            box.addItem("Select a piece");
-            this.add(box);
-        });
-        // add pieces to comboboxes
-        stream(PieceTypes.values()).forEach(piece -> stream(pieceCombos).forEach(box -> box.addItem(piece.toString())));
+        box = new JComboBox();
+        box.setPreferredSize(new Dimension(180, 30));
+        box.addItem("Select a piece");
+        this.add(box);
+        stream(PieceTypes.values()).forEach(piece -> box.addItem(piece.toString()));
+    }
+
+    public String getPiece() {
+        return (String) box.getSelectedItem();
     }
 
     @Override

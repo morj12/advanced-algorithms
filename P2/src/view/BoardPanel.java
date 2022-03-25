@@ -3,12 +3,21 @@ package view;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Arrays;
 
-public class BoardPanel extends JPanel {
+public class BoardPanel extends JPanel implements MouseListener {
 
     private int dimension;
     private final int BOARD_SIZE = 600;
     private int cellSize;
+
+    private int [][] cells;
+
+    private boolean selectedPiece;
 
     public BoardPanel(int dimension) {
         this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -16,6 +25,24 @@ public class BoardPanel extends JPanel {
         this.cellSize = BOARD_SIZE / dimension;
         this.setAlignmentX(CENTER_ALIGNMENT);
         this.setAlignmentY(CENTER_ALIGNMENT);
+        initComponents();
+    }
+
+    private void initComponents() {
+        selectedPiece = false;
+        //initialize local cells array
+        cells = new int[dimension][dimension];
+        for (int[] cellColumn : cells) {
+            Arrays.fill(cellColumn, -1);
+        }
+    }
+
+    public void setPiece(int stepNumber, int x, int y) {
+        cells[x][y] = stepNumber;
+    }
+
+    public void removePiece(int x, int y) {
+        cells[x][y] = -1;
     }
 
     @Override
@@ -39,6 +66,7 @@ public class BoardPanel extends JPanel {
         }
     }
 
+
     @Override
     public void paint(Graphics g) {
         g.setColor(Color.white);
@@ -49,8 +77,54 @@ public class BoardPanel extends JPanel {
                 if ((i + j) % 2 == 1) {
                     g.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
                 }
+
+                // paint cells
+                if (cells[i][j] != -1) {
+                    System.out.println(i + " " +  j);
+                    g.setColor(Color.BLUE);
+                    g.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+                    g.setColor(Color.black);
+
+                }
             }
         }
+
+    }
+
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    public boolean isSelectedPiece() {
+        return selectedPiece;
+    }
+
+    public void setSelectedPiece(boolean selectedPiece) {
+        this.selectedPiece = selectedPiece;
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        int x = e.getX() / cellSize;
+        int y = e.getY() / cellSize;
+        selectedPiece = true;
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
 
     }
 }

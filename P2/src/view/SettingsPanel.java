@@ -29,4 +29,8 @@ public class SettingsPanel extends JPanel {
     public void setDimension(int value) {
         buttonsPanel.setDimension(Integer.toString(value));
     }
+
+    public String getPiece() {
+        return selectionPanel.getPiece();
+    }
 }

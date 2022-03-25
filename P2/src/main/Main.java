@@ -26,7 +26,7 @@ public class Main implements Notifiable {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        view = new View(dimension);
+        view = new View(this, dimension);
         view.showGui();
 
 

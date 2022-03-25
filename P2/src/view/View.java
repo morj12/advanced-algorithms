@@ -1,33 +1,32 @@
 package view;
 
 import main.Notifiable;
-import model.Board;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class View extends JFrame implements Notifiable {
 
+    private Notifiable main;
     private SettingsPanel settingsPanel;
     private BoardPanel boardPanel;
-    private StatusPanel statusPanel;
+    private int[] startCoords;
 
-
-    public View(int dimension) {
+    public View(Notifiable main, int dimension) {
         this.setTitle("Chess pieces route");
         this.getContentPane().setLayout(new BorderLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
+        this.main = main;
         settingsPanel = new SettingsPanel(this);
         boardPanel = new BoardPanel(dimension);
-        statusPanel = new StatusPanel();
         initComponents();
     }
 
     private void initComponents() {
+        startCoords = new int[2];
         this.add(BorderLayout.NORTH, settingsPanel);
         this.add(BorderLayout.CENTER, boardPanel);
-        this.add(BorderLayout.SOUTH, statusPanel);
     }
 
     public void showGui() {
@@ -35,6 +34,15 @@ public class View extends JFrame implements Notifiable {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
+
+    public void setPiece(int stepNumber, int x, int y) {
+        boardPanel.setPiece(stepNumber, x, y);
+    }
+
+    public void removePiece(int x, int y) {
+        boardPanel.removePiece(x, y);
+    }
+
 
     @Override
     public void notify(String s, Object o) {
@@ -46,6 +54,14 @@ public class View extends JFrame implements Notifiable {
                 boardPanel.repaint();
                 settingsPanel.setDimension(slider.getValue());
             }
+        } else if (s.equals("start")) {
+            var piece = settingsPanel.getPiece();
+            if (!piece.equals("Select a piece")) {
+
+            }
+            // try algorithm start
+        } else if (s.equals("stop")) {
+            // try algorithm stop
         }
     }
 }
