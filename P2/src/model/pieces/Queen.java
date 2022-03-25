@@ -5,13 +5,6 @@ import model.Move;
 
 public class Queen extends AbstractPiece {
 
-    public Queen() {
-        outOfBoundsDimension = true;
-        name = this.getClass().getName();
-        image = "image/queen.png";
-        moves = new Move[0];
-    }
-
     public Queen(int dimension) {
         outOfBoundsDimension = true;
         name = this.getClass().getName();

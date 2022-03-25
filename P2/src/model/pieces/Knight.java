@@ -15,7 +15,7 @@ import model.AbstractPiece;
 public class Knight extends AbstractPiece {
     
     public Knight() {
-        name = this.getClass().getName();
+        name = this.getClass().getSimpleName();
         image = "image/knight.png";
         moves = SetMoves();
     }

@@ -6,7 +6,7 @@ import model.AbstractPiece;
 public class Megaknight extends AbstractPiece {
 
     public Megaknight() {
-        name = this.getClass().getName();
+        name = this.getClass().getSimpleName();
         image = "image/megaknight.png";
         moves = SetMoves();
     }

@@ -13,14 +13,7 @@ import model.AbstractPiece;
  * @author ikerg
  */
 public class Rook extends AbstractPiece {
-    
-    public Rook() {
-        outOfBoundsDimension = true;
-        name = this.getClass().getName();
-        image = "image/rook.png";
-        moves = new Move[0];
-    }
-    
+
     public Rook(int dimension) {
         outOfBoundsDimension = true;
         name = this.getClass().getName();
