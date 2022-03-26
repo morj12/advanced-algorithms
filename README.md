@@ -14,6 +14,6 @@ To do:
 - [X] Change cell selection with mouse
 - [X] Change "Move" to "Position" and get more uses
 - [X] Look for backtracking optimization
-- [ ] Add Messi moves and states
+- [X] Add pieces with states
 - [ ] Allow multiple pieces
-- [ ] Remove images
+- [ ] Use images
