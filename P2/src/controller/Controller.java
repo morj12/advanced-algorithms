@@ -11,10 +11,12 @@ import java.util.List;
 
 public class Controller implements Notifiable {
 
+    private final int DEFAULT_SPEED = 500;
+
     private Notifiable main;
     private boolean isExecuted;
     private Board board;
-    private final int WAIT = 100;
+    private int speed;
 
     /**
      * Gets main reference
@@ -23,6 +25,11 @@ public class Controller implements Notifiable {
     public Controller(Notifiable main) {
         this.main = main;
         this.isExecuted = false;
+        this.speed = DEFAULT_SPEED;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     /**
@@ -60,7 +67,7 @@ public class Controller implements Notifiable {
     private boolean findPath(AbstractPiece piece, int stepNumber, int x, int y) {
         if (isExecuted) {
             try {
-                Thread.sleep(WAIT);
+                Thread.sleep(speed);
             } catch (InterruptedException e) {
             }
             main.notify("draw:" + stepNumber + "," + x + "," + y, null);

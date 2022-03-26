@@ -20,10 +20,12 @@ public class View extends JFrame implements Notifiable {
     private JButton start;
     private JButton stop;
     private JLabel selectedCellLabel;
-    private JLabel sliderLabel;
-    private JSlider slider;
+    private JLabel dimensionSliderLabel;
+    private JSlider dimensionSlider;
     private JLabel boxLabel;
     private JComboBox<String> pieceBox;
+    private JLabel speedSliderLabel;
+    private JSlider speedSlider;
 
     private int dimension;
     private int[] selectedCell;
@@ -76,29 +78,40 @@ public class View extends JFrame implements Notifiable {
         sliderPanel = new JPanel();
         sliderPanel.setPreferredSize(new Dimension(200, 60));
         sliderPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        sliderLabel = new JLabel("Dimension: " + dimension);
-        slider = new JSlider(SwingConstants.HORIZONTAL, 4, 10, dimension);
-        slider.setPreferredSize(new Dimension(180, 20));
-        slider.addChangeListener(e -> sliderChanged(slider));
-        sliderPanel.add(sliderLabel);
-        sliderPanel.add(slider);
+        dimensionSliderLabel = new JLabel("Dimension: " + dimension);
+        dimensionSlider = new JSlider(SwingConstants.HORIZONTAL, 4, 10, dimension);
+        dimensionSlider.setPreferredSize(new Dimension(180, 20));
+        dimensionSlider.addChangeListener(e -> dimensionSliderChanged(dimensionSlider));
+        sliderPanel.add(dimensionSliderLabel);
+        sliderPanel.add(dimensionSlider);
         settingsPanel.add(BorderLayout.CENTER, sliderPanel);
 
         pieceChoosePanel = new JPanel();
-        pieceChoosePanel.setPreferredSize(new Dimension(200, 60));
+        pieceChoosePanel.setPreferredSize(new Dimension(200, 80));
         pieceChoosePanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         boxLabel = new JLabel("Select a piece");
         pieceBox = new JComboBox<>();
         pieceBox.addItem("Select a piece");
         Arrays.stream(AbstractPieceCreator.pieces).forEach(piece -> pieceBox.addItem(piece));
+        speedSliderLabel = new JLabel("Speed");
+        speedSlider = new JSlider(SwingConstants.HORIZONTAL,0,  1000, 500);
+        speedSlider.setPreferredSize(new Dimension(180, 20));
+        speedSlider.addChangeListener(e -> speedSliderChanged(speedSlider));
         pieceChoosePanel.add(boxLabel);
         pieceChoosePanel.add(pieceBox);
+        pieceChoosePanel.add(speedSliderLabel);
+        pieceChoosePanel.add(speedSlider);
         settingsPanel.add(BorderLayout.EAST, pieceChoosePanel);
 
         board = new BoardPanel(this, dimension);
 
         this.add(BorderLayout.NORTH, settingsPanel);
         this.add(BorderLayout.CENTER, board);
+    }
+
+    /** Speed slider change event **/
+    private void speedSliderChanged(JSlider speedSlider) {
+        main.notify("speed:", speedSlider.getValue());
     }
 
     public void reset() {
@@ -128,7 +141,7 @@ public class View extends JFrame implements Notifiable {
         if (!(pieceBox.getSelectedItem()).equals("Select a piece") && board.isCellSelected()) {
             main.notify(
                     "start:"
-                            + slider.getValue()
+                            + dimensionSlider.getValue()
                             + ","
                             + pieceBox.getSelectedItem()
                             + ","
@@ -139,9 +152,9 @@ public class View extends JFrame implements Notifiable {
     }
 
     /**
-     * Slider change event
+     * Dimension slider change event
      **/
-    private void sliderChanged(JSlider e) {
+    private void dimensionSliderChanged(JSlider e) {
         if (!e.getValueIsAdjusting()) main.notify("dimension:" + e.getValue(), null);
     }
 
@@ -149,7 +162,7 @@ public class View extends JFrame implements Notifiable {
         this.dimension = dimension;
         board.setDimension(dimension);
         board.repaint();
-        sliderLabel.setText("Dimension:" + dimension);
+        dimensionSliderLabel.setText("Dimension:" + dimension);
     }
 
     public void showGui() {
@@ -159,13 +172,13 @@ public class View extends JFrame implements Notifiable {
     }
 
     public void lockSettings() {
-        slider.setEnabled(false);
+        dimensionSlider.setEnabled(false);
         pieceBox.setEnabled(false);
         board.setEnabled(false);
     }
 
     public void unlockSettings() {
-        slider.setEnabled(true);
+        dimensionSlider.setEnabled(true);
         pieceBox.setEnabled(true);
         board.setEnabled(true);
     }

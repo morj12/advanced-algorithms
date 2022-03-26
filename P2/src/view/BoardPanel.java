@@ -105,17 +105,17 @@ public class BoardPanel extends JPanel implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         if (this.isEnabled()) {
-            if (!isCellSelected) {
-                int x = e.getX();
-                int y = e.getY();
-                selectedCell = new int[]{x / cellSize, y / cellSize};
+            int x = e.getX() / cellSize;
+            int y = e.getY() / cellSize;
+            if (!isCellSelected || (!(selectedCell[0] == x && selectedCell[1] == y))) {
+                selectedCell = new int[]{x, y};
                 isCellSelected = true;
                 view.notify("select", selectedCell);
-            } else {
+            } else  {
+                selectedCell = null;
                 isCellSelected = false;
                 view.notify("unselect", null);
             }
-
         }
     }
 

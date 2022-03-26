@@ -9,7 +9,6 @@ import javax.swing.*;
 
 public class Main implements Notifiable {
 
-    private final int initDimension = 8;
     private View view;
     private Controller controller;
     private boolean isExecutedAlgorithm;
@@ -74,6 +73,8 @@ public class Main implements Notifiable {
         } else if (s.startsWith("dimension:")) {
             /** Change dimension **/
             view.setDimension(Integer.parseInt(s.substring(10)));
+        } else if(s.equals("speed:")) {
+            controller.setSpeed((int) o);
         }
     }
 }
