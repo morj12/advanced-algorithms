@@ -39,7 +39,6 @@ public class Main implements Notifiable {
             int stepNumber = Integer.parseInt(split[0]);
             int x = Integer.parseInt(split[1]);
             int y = Integer.parseInt(split[2]);
-
             view.setPiece(stepNumber, new Position(x, y));
             view.repaint();
         } else if (s.startsWith("remove:")) {
