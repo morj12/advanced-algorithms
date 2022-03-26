@@ -41,7 +41,7 @@ public class Controller implements Notifiable {
         board = new Board(dimension);
         this.isExecuted = true;
         // Ask this
-        var t = new Thread(() -> Controller.this.prepare(piece, position));
+        var t = new Thread(() -> prepare(piece, position));
         t.start();
     }
 
