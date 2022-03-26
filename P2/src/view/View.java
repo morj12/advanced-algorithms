@@ -2,6 +2,7 @@ package view;
 
 import main.Notifiable;
 import model.AbstractPieceCreator;
+import model.Position;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -119,12 +120,12 @@ public class View extends JFrame implements Notifiable {
         repaint();
     }
 
-    public void setPiece(int stepNumber, int x, int y) {
-        board.setPiece(stepNumber, x, y);
+    public void setPiece(int stepNumber, Position position) {
+        board.setPiece(stepNumber, position);
     }
 
-    public void removePiece(int x, int y) {
-        board.removePiece(x, y);
+    public void removePiece(Position position) {
+        board.removePiece(position);
     }
 
     /**

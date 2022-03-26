@@ -5,7 +5,7 @@ public abstract class AbstractPiece {
     protected final int MAX_DIMENSION = 10;
 
     protected String name;
-    protected Move[] moves;
+    protected Position[] moves;
     protected String image;
 
 
@@ -13,7 +13,7 @@ public abstract class AbstractPiece {
         return name;
     }
 
-    public Move[] getMoves() {
+    public Position[] getMoves() {
         return moves;
     }
 

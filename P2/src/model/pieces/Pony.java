@@ -1,6 +1,6 @@
 package model.pieces;
 
-import model.Move;
+import model.Position;
 import model.AbstractPiece;
 
 public class Pony extends AbstractPiece {
@@ -10,18 +10,18 @@ public class Pony extends AbstractPiece {
         moves = SetMoves();
     }
 
-    private Move[] SetMoves() {
-        moves = new Move[8];
+    private Position[] SetMoves() {
+        moves = new Position[8];
         int pos = 0;
         
-        moves[pos++] = new Move(1,3);
-        moves[pos++] = new Move(3,1);
-        moves[pos++] = new Move(1,-3);
-        moves[pos++] = new Move(3,-1);
-        moves[pos++] = new Move(-1,3);
-        moves[pos++] = new Move(-3,1);
-        moves[pos++] = new Move(-1,-3);
-        moves[pos] = new Move(-3,-1);
+        moves[pos++] = new Position(1,3);
+        moves[pos++] = new Position(3,1);
+        moves[pos++] = new Position(1,-3);
+        moves[pos++] = new Position(3,-1);
+        moves[pos++] = new Position(-1,3);
+        moves[pos++] = new Position(-3,1);
+        moves[pos++] = new Position(-1,-3);
+        moves[pos] = new Position(-3,-1);
         
         return moves;
     }

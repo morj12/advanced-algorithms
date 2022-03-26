@@ -1,14 +1,14 @@
 package model;
 
-public class Move {
+public class Position {
 
     private int x;
     private int y;
 
-    public Move() {
+    public Position() {
     }
 
-    public Move(int x, int y) {
+    public Position(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -29,7 +29,7 @@ public class Move {
         this.y = y;
     }
 
-    public int[] getMoveAsArray() {
-        return new int[]{x, y};
+    public static Position sum(Position a, Position b) {
+        return new Position(a.getX() + b.getX(), a.getY() + b.getY());
     }
 }

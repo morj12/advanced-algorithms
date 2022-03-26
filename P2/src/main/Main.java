@@ -3,6 +3,7 @@ package main;
 import controller.Controller;
 import model.AbstractPiece;
 import model.AbstractPieceCreator;
+import model.Position;
 import view.View;
 
 import javax.swing.*;
@@ -38,14 +39,15 @@ public class Main implements Notifiable {
             int stepNumber = Integer.parseInt(split[0]);
             int x = Integer.parseInt(split[1]);
             int y = Integer.parseInt(split[2]);
-            view.setPiece(stepNumber, x, y);
+
+            view.setPiece(stepNumber, new Position(x, y));
             view.repaint();
         } else if (s.startsWith("remove:")) {
             /** Remove a piece **/
             var split = s.substring(7).split(",");
             int x = Integer.parseInt(split[0]);
             int y = Integer.parseInt(split[1]);
-            view.removePiece(x, y);
+            view.removePiece(new Position(x, y));
             view.repaint();
         } else if (s.equals("finished") || s.equals("finishedNoSolution")) {
             /** Unlock settings **/
@@ -62,7 +64,7 @@ public class Main implements Notifiable {
                 AbstractPiece piece = AbstractPieceCreator.create(split[1]);
                 int x = Integer.parseInt(split[2]);
                 int y = Integer.parseInt(split[3]);
-                controller.start(dimension, piece, y, x);
+                controller.start(dimension, piece, new Position(y, x));
             }
         } else if (s.equals("stop")) {
             /** Stop and unlock settings **/

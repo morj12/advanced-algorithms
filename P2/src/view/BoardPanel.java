@@ -1,6 +1,7 @@
 package view;
 
 import main.Notifiable;
+import model.Position;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -39,12 +40,12 @@ public class BoardPanel extends JPanel implements MouseListener {
         Arrays.stream(cells).forEach(cellColumn -> Arrays.fill(cellColumn, -1));
     }
 
-    public void setPiece(int stepNumber, int x, int y) {
-        cells[x][y] = stepNumber;
+    public void setPiece(int stepNumber, Position position) {
+        cells[position.getX()][position.getY()] = stepNumber;
     }
 
-    public void removePiece(int x, int y) {
-        cells[x][y] = -1;
+    public void removePiece(Position position) {
+        cells[position.getX()][position.getY()] = -1;
     }
 
     @Override
