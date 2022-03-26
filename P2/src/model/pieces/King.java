@@ -8,6 +8,7 @@ public class King extends AbstractPiece {
     public King() {
         name = this.getClass().getSimpleName();
         moves = SetMoves();
+        hasState = false;
     }
 
     private Position[] SetMoves() {

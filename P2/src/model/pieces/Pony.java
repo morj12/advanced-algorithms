@@ -8,6 +8,7 @@ public class Pony extends AbstractPiece {
     public Pony() {
         name = this.getClass().getSimpleName();
         moves = SetMoves();
+        hasState = false;
     }
 
     private Position[] SetMoves() {

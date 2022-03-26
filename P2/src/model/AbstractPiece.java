@@ -8,6 +8,11 @@ public abstract class AbstractPiece {
     protected Position[] moves;
     protected String image;
 
+    protected boolean hasState;
+
+    public boolean hasState() {
+        return hasState;
+    }
 
     public String getName() {
         return name;
@@ -19,6 +24,10 @@ public abstract class AbstractPiece {
 
     public String getImage() {
         return image;
+    }
+
+    public Position[] getMovesWithoutStateChange() {
+        return moves;
     }
 
 }

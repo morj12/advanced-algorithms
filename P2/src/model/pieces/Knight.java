@@ -9,6 +9,7 @@ public class Knight extends AbstractPiece {
     public Knight() {
         name = this.getClass().getSimpleName();
         moves = SetMoves();
+        hasState = false;
     }
 
     private Position[] SetMoves() {

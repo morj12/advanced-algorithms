@@ -10,6 +10,7 @@ public class Rook extends AbstractPiece {
     public Rook() {
         name = this.getClass().getName();
         moves = SetMoves();
+        hasState = false;
     }
 
     private Position[] SetMoves() {

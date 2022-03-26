@@ -9,6 +9,7 @@ public class Queen extends AbstractPiece {
     public Queen() {
         name = this.getClass().getName();
         moves = SetMoves();
+        hasState = false;
     }
 
     private Position[] SetMoves() {

@@ -40,9 +40,9 @@ public class Controller implements Notifiable {
     public void start(int dimension, AbstractPiece piece, Position position) {
         board = new Board(dimension);
         this.isExecuted = true;
-        var t = new Thread(() -> prepare(piece, position));
+        // Ask this
+        var t = new Thread(() -> Controller.this.prepare(piece, position));
         t.start();
-
     }
 
     /**
@@ -76,6 +76,7 @@ public class Controller implements Notifiable {
                 return true;
             }
             /** Get moves **/
+
             List<Position> moves = optimize(piece.getMoves(), piece, position);
             Position newPosition;
             for (Position move : moves) {
@@ -115,7 +116,13 @@ public class Controller implements Notifiable {
      **/
     private int getMovesNumber(AbstractPiece piece, Position position) {
         int counter = 0;
-        Position[] moves = piece.getMoves();
+        Position[] moves;
+        /** Get moves based on piece state existence **/
+        if (piece.hasState()) {
+            moves = piece.getMovesWithoutStateChange();
+        } else {
+            moves = piece.getMoves();
+        }
         for (Position move : moves) {
             if (isValidPosition(Position.sum(move, position))) counter++;
         }
