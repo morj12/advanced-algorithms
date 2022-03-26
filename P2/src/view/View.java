@@ -111,7 +111,7 @@ public class View extends JFrame implements Notifiable {
 
     /** Speed slider change event **/
     private void speedSliderChanged(JSlider speedSlider) {
-        main.notify("speed:", speedSlider.getValue());
+        main.notify("speed:", speedSlider.getMaximum() - speedSlider.getValue());
     }
 
     public void reset() {
