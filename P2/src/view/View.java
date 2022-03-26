@@ -11,7 +11,9 @@ import java.util.Arrays;
 
 public class View extends JFrame implements Notifiable {
 
+    private static View instance;
     private Notifiable main;
+
 
     private JPanel settingsPanel;
     private JPanel buttonsPanel;
@@ -33,18 +35,14 @@ public class View extends JFrame implements Notifiable {
 
     private final int DEFAULT_DIMENSION = 8;
 
-
-    public View(Notifiable main, int dimension) {
-        this.setTitle("Chess pieces route");
-        this.getContentPane().setLayout(new BorderLayout());
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setResizable(false);
-        this.main = main;
-        this.dimension = dimension;
-        initComponents();
+    public static View getInstance(Notifiable main) {
+        if (instance == null) {
+            instance = new View(main);
+        }
+        return instance;
     }
 
-    public View(Notifiable main) {
+    private View(Notifiable main) {
         this.setTitle("Chess pieces route");
         this.getContentPane().setLayout(new BorderLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);

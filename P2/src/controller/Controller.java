@@ -12,6 +12,7 @@ import java.util.List;
 public class Controller implements Notifiable {
 
     private final int DEFAULT_SPEED = 500;
+    private static Controller instance;
 
     private Notifiable main;
     private boolean isExecuted;
@@ -22,10 +23,17 @@ public class Controller implements Notifiable {
      * Gets main reference
      * Inits the mutex
      */
-    public Controller(Notifiable main) {
+    private Controller(Notifiable main) {
         this.main = main;
         this.isExecuted = false;
         this.speed = DEFAULT_SPEED;
+    }
+
+    public static Controller getInstance(Notifiable main) {
+        if (instance == null) {
+            instance = new Controller(main);
+        }
+        return instance;
     }
 
     public void setSpeed(int speed) {
