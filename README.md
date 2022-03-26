@@ -15,5 +15,6 @@ To do:
 - [X] Change "Move" to "Position" and get more uses
 - [X] Look for backtracking optimization
 - [X] Add pieces with states
+- [ ] Use singletons
 - [ ] Allow multiple pieces
 - [ ] Use images
