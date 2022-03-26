@@ -43,7 +43,7 @@ public class Main implements Notifiable {
             view.repaint();
         } else if (s.startsWith("remove:")) {
             /** Remove a piece **/
-            var split = s.substring(7).split(",");
+            String[] split = s.substring(7).split(",");
             int x = Integer.parseInt(split[0]);
             int y = Integer.parseInt(split[1]);
             view.removePiece(new Position(x, y));

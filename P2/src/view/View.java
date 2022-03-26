@@ -34,6 +34,7 @@ public class View extends JFrame implements Notifiable {
     private int[] selectedCell;
 
     private final int DEFAULT_DIMENSION = 8;
+    private final int MINIMUM_WAIT = 20;
 
     public static View getInstance(Notifiable main) {
         if (instance == null) {
@@ -93,7 +94,7 @@ public class View extends JFrame implements Notifiable {
         pieceBox.addItem("Select a piece");
         Arrays.stream(AbstractPieceCreator.pieces).forEach(piece -> pieceBox.addItem(piece));
         speedSliderLabel = new JLabel("Speed");
-        speedSlider = new JSlider(SwingConstants.HORIZONTAL,0,  1000, 500);
+        speedSlider = new JSlider(SwingConstants.HORIZONTAL, 0,  1000, 500);
         speedSlider.setPreferredSize(new Dimension(180, 20));
         speedSlider.addChangeListener(e -> speedSliderChanged(speedSlider));
         pieceChoosePanel.add(boxLabel);
@@ -110,7 +111,7 @@ public class View extends JFrame implements Notifiable {
 
     /** Speed slider change event **/
     private void speedSliderChanged(JSlider speedSlider) {
-        main.notify("speed:", speedSlider.getMaximum() - speedSlider.getValue());
+        main.notify("speed:", MINIMUM_WAIT + speedSlider.getMaximum() - speedSlider.getValue());
     }
 
     public void reset() {
@@ -119,7 +120,7 @@ public class View extends JFrame implements Notifiable {
     }
 
     public void setPiece(int stepNumber, Position position) {
-        board.setPiece(stepNumber, position);
+        board.setPiece(stepNumber, position, (String) pieceBox.getSelectedItem());
     }
 
     public void removePiece(Position position) {
