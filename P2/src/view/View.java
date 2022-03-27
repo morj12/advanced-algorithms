@@ -194,4 +194,8 @@ public class View extends JFrame implements Notifiable {
             selectedCellLabel.setText("Selected cell: none");
         }
     }
+
+    public void loadPiece(String s) {
+        board.loadPiece(s);
+    }
 }

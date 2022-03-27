@@ -61,6 +61,7 @@ public class Main implements Notifiable {
                 String[] split = s.substring(6).split(",");
                 int dimension = Integer.parseInt(split[0]);
                 AbstractPiece piece = AbstractPieceCreator.create(split[1]);
+                view.loadPiece(split[1]);
                 int x = Integer.parseInt(split[2]);
                 int y = Integer.parseInt(split[3]);
                 controller.start(dimension, piece, new Position(y, x));

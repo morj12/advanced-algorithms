@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.EmptyStackException;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,18 +53,14 @@ public class BoardPanel extends JPanel implements MouseListener {
     public void setPiece(int stepNumber, Position position, String selectedItem) {
         cells[position.getX()][position.getY()] = stepNumber;
         this.positionStack.push(new Position(position.getX(), position.getY()));
-        try {
-            this.image = ImageIO.read(new File("src/image/" + selectedItem + ".png"));
-        } catch (IOException ex) {
-            Logger.getLogger(BoardPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
     }
 
     public void removePiece(Position position) {
         cells[position.getX()][position.getY()] = -1;
         try {
             this.positionStack.pop();
-        } catch (Exception ignored) {}
+        } catch (EmptyStackException ignored) {}
     }
 
     @Override
@@ -114,7 +111,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 
                 g.drawImage(image, positionStack.get(positionStack.size() - 1).getY() * cellSize, positionStack.get(positionStack.size() - 1).getX() * cellSize, cellSize, cellSize, this);
             }
-        } catch (Exception ignored){}
+        } catch (EmptyStackException | ArrayIndexOutOfBoundsException ignored){}
     }
 
     public boolean isCellSelected() {
@@ -161,5 +158,13 @@ public class BoardPanel extends JPanel implements MouseListener {
         cells = new int[dimension][dimension];
         positionStack.clear();
         Arrays.stream(cells).forEach(cellColumn -> Arrays.fill(cellColumn, -1));
+    }
+
+    public void loadPiece(String s) {
+        try {
+            this.image = ImageIO.read(new File("src/image/" + s + ".png"));
+        } catch (IOException ex) {
+            Logger.getLogger(BoardPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
