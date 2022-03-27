@@ -60,7 +60,9 @@ public class BoardPanel extends JPanel implements MouseListener {
         cells[position.getX()][position.getY()] = -1;
         try {
             this.positionStack.pop();
-        } catch (EmptyStackException ignored) {}
+        } catch (EmptyStackException e) {
+            positionStack.clear();
+        }
     }
 
     @Override
@@ -111,7 +113,9 @@ public class BoardPanel extends JPanel implements MouseListener {
 
                 g.drawImage(image, positionStack.get(positionStack.size() - 1).getY() * cellSize, positionStack.get(positionStack.size() - 1).getX() * cellSize, cellSize, cellSize, this);
             }
-        } catch (EmptyStackException | ArrayIndexOutOfBoundsException ignored){}
+        } catch (EmptyStackException | ArrayIndexOutOfBoundsException e){
+            positionStack.clear();
+        }
     }
 
     public boolean isCellSelected() {
