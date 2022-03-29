@@ -17,4 +17,4 @@ To do:
 - [X] Add pieces with states
 - [X] Use singletons
 - [ ] Allow multiple pieces
-- [ ] Use images
+- [X] Use images
