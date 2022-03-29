@@ -21,7 +21,6 @@ public class Controller implements Notifiable {
 
     /**
      * Gets main reference
-     * Inits the mutex
      */
     private Controller(Notifiable main) {
         this.main = main;
@@ -48,7 +47,6 @@ public class Controller implements Notifiable {
     public void start(int dimension, AbstractPiece piece, Position position) {
         board = new Board(dimension);
         this.isExecuted = true;
-        // Ask this
         Thread t = new Thread(() -> prepare(piece, position));
         t.start();
     }
