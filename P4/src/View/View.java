@@ -5,10 +5,13 @@
  */
 package View;
 
+import Main.Notifiable;
+
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.File;
 
 /**
  *
@@ -16,11 +19,14 @@ import java.awt.event.ActionEvent;
  */
 public class View  extends JFrame {
 
+    private Notifiable main;
+
+    private File actualFile;
+
     private JPanel huffmanPanel;
     private JPanel infoPanel;
     private JLabel huffmanListPanel;
     private JList<String> huffmanList;
-
     private JButton openFileButton;
     private JButton generateHuffmanButton;
     private JLabel actualFileInfoLabel;
@@ -28,12 +34,16 @@ public class View  extends JFrame {
     private JLabel actualFileNameLabel;
     private JLabel compressedFileInfoLabel;
     private JLabel compressedFileSizeLabel;
+    private DefaultListModel<String> model;
+    private JScrollPane scrollPane;
 
-    public View() {
+    public View(Notifiable main) {
+        this.main = main;
         this.setTitle("Huffman compressor");
         this.getContentPane().setLayout(new BorderLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
+        this.actualFile = null;
         initComponents();
     }
 
@@ -43,13 +53,25 @@ public class View  extends JFrame {
         huffmanPanel.setPreferredSize(new Dimension(200, 400));
         huffmanPanel.setBackground(Color.WHITE);
         huffmanPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        huffmanList = new JList<>(new String[]{"Hello", "world", "niggers"});
+
+        model = new DefaultListModel<>();
+        for (int i = 0; i < 30; i++) {
+            model.addElement("element" + i);
+        }
+
+        huffmanList = new JList<>(model);
         huffmanList.setAlignmentX(Component.LEFT_ALIGNMENT);
+        huffmanList.setLayoutOrientation(JList.VERTICAL);
+        scrollPane = new JScrollPane(huffmanList);
+        scrollPane.setPreferredSize(new Dimension(180, 350));
+
+
         huffmanListPanel = new JLabel("Huffman tree");
         huffmanListPanel.setPreferredSize(new Dimension(180, 30));
         huffmanListPanel.setFont(new Font("Arial", Font.PLAIN, 25));
         huffmanPanel.add(huffmanListPanel);
-        huffmanPanel.add(huffmanList);
+        huffmanPanel.add(scrollPane);
+
 
         infoPanel = new JPanel();
         infoPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -63,14 +85,18 @@ public class View  extends JFrame {
         generateHuffmanButton = new JButton("Generate Huffman tree");
         generateHuffmanButton.setPreferredSize(new Dimension(180, 30));
         generateHuffmanButton.addActionListener(this::generateHuffmanButtonPressed);
+        generateHuffmanButton.setEnabled(false);
         actualFileInfoLabel = new JLabel("Actual file info");
-        actualFileNameLabel = new JLabel("Name: niggers.json");
+        actualFileInfoLabel.setPreferredSize(new Dimension(180, 30));
+        actualFileInfoLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        actualFileNameLabel = new JLabel("Name: none");
         actualFileNameLabel.setPreferredSize(new Dimension(180, 30));
-        actualFileSizeLabel = new JLabel("Size: 3033");
+        actualFileSizeLabel = new JLabel("Size: none");
         actualFileSizeLabel.setPreferredSize(new Dimension(180, 30));
         compressedFileInfoLabel = new JLabel("Compressed file info");
         compressedFileInfoLabel.setPreferredSize(new Dimension(180, 30));
-        compressedFileSizeLabel = new JLabel("Size in bytes: 2022");
+        compressedFileInfoLabel.setFont(new Font("Arial", 1, 12));
+        compressedFileSizeLabel = new JLabel("Size in bytes: none");
         compressedFileSizeLabel.setPreferredSize(new Dimension(180, 30));
 
         infoPanel.add(openFileButton);
@@ -87,11 +113,21 @@ public class View  extends JFrame {
     }
 
     private void generateHuffmanButtonPressed(ActionEvent actionEvent) {
-
+        main.notify("generate", actualFile);
     }
 
     private void openFileButtonPressed(ActionEvent actionEvent) {
-
+        JFileChooser jFileChooser = new JFileChooser();
+        jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int result = jFileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            this.actualFile = jFileChooser.getSelectedFile();
+            actualFileNameLabel.setText("Name: " + actualFile.getName());
+            actualFileSizeLabel.setText("Size: " + actualFile.length() + " bytes");
+            generateHuffmanButton.setEnabled(true);
+        } else {
+            generateHuffmanButton.setEnabled(false);
+        }
     }
 
     public void showGui() {
@@ -100,12 +136,4 @@ public class View  extends JFrame {
         this.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        new View().showGui();
-    }
 }
