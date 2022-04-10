@@ -12,7 +12,7 @@ public class Node {
     public Node (Byte data, int frequency) {
         this.data = data;
         this.frequency = frequency;
-        this. = null;
+        this.leftNode = null;
         this.rightNode = null;
     }
 
