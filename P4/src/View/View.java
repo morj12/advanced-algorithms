@@ -90,14 +90,14 @@ public class View  extends JFrame {
         actualFileInfoLabel.setPreferredSize(new Dimension(180, 30));
         actualFileInfoLabel.setFont(new Font("Arial", Font.BOLD, 12));
         actualFileNameLabel = new JLabel("Name: none");
-        actualFileNameLabel.setPreferredSize(new Dimension(180, 30));
+        actualFileNameLabel.setPreferredSize(new Dimension(180, 24));
         actualFileSizeLabel = new JLabel("Size: none");
-        actualFileSizeLabel.setPreferredSize(new Dimension(180, 30));
+        actualFileSizeLabel.setPreferredSize(new Dimension(180, 24));
         compressedFileInfoLabel = new JLabel("Compressed file info");
         compressedFileInfoLabel.setPreferredSize(new Dimension(180, 30));
         compressedFileInfoLabel.setFont(new Font("Arial", 1, 12));
         compressedFileSizeLabel = new JLabel("Size in bytes: none");
-        compressedFileSizeLabel.setPreferredSize(new Dimension(180, 30));
+        compressedFileSizeLabel.setPreferredSize(new Dimension(180, 24));
 
         infoPanel.add(openFileButton);
         infoPanel.add(generateHuffmanButton);
@@ -119,6 +119,7 @@ public class View  extends JFrame {
     private void openFileButtonPressed(ActionEvent actionEvent) {
         JFileChooser jFileChooser = new JFileChooser();
         jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        jFileChooser.setDialogTitle("Open file");
         int result = jFileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             this.actualFile = jFileChooser.getSelectedFile();

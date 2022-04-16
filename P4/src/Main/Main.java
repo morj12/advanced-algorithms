@@ -39,7 +39,7 @@ public class Main implements Notifiable {
     public void notify(String s, Object o) {
         if (s.equals("generate")) {
             File file = (File) o;
-            System.out.println(file.getAbsolutePath());
+            controller.start(file);
         }
     }
 }

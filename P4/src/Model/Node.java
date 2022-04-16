@@ -1,6 +1,6 @@
 package Model;
 
-public class Node {
+public class Node implements Comparable<Node> {
     public static final int LEFT_NODE = 0;
     public static final int RIGHT_NODE = 1;
 
@@ -9,11 +9,22 @@ public class Node {
     private int frequency;
     private Byte data;
 
+    public Node() {
+        this.data = null;
+        this.frequency = 0;
+        this.leftNode = null;
+        this.rightNode = null;
+    }
+
     public Node (Byte data, int frequency) {
         this.data = data;
         this.frequency = frequency;
         this.leftNode = null;
         this.rightNode = null;
+    }
+
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
     }
 
     public Byte getData() {
@@ -52,5 +63,10 @@ public class Node {
         this.leftNode = null;
         this.frequency = 0;
         this.data = 0;
+    }
+
+    @Override
+    public int compareTo(Node o) {
+        return this.frequency - o.frequency;
     }
 }
