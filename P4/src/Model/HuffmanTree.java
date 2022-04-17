@@ -1,25 +1,30 @@
 package Model;
 
+import java.util.Map;
+
 public class HuffmanTree {
-    private Node root;
 
-    public HuffmanTree(){
-        this.root = null;
+    private Map<Byte, String> huffmanTreeMap;
+    private int compressedSize;
+
+    public HuffmanTree(Map<Byte, String> huffmanTreeMap, int compressedSize) {
+        this.huffmanTreeMap = huffmanTreeMap;
+        this.compressedSize = compressedSize;
     }
 
-    public HuffmanTree(Node root){
-        this.root = root;
+    public Map<Byte, String> getHuffmanTreeMap() {
+        return huffmanTreeMap;
     }
 
-    public Node getRoot() {
-        return root;
+    public void setHuffmanTreeMap(Map<Byte, String> huffmanTreeMap) {
+        this.huffmanTreeMap = huffmanTreeMap;
     }
 
-    public void setRoot(Node root){
-        this.root = root;
+    public int getCompressedSize() {
+        return compressedSize;
     }
 
-    public void deleteHuffmanTree(){
-        this.root = null;
+    public void setCompressedSize(int compressedSize) {
+        this.compressedSize = compressedSize;
     }
 }

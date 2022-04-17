@@ -6,6 +6,7 @@
 package View;
 
 import Main.Notifiable;
+import Model.HuffmanTree;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -14,10 +15,9 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 
 /**
- *
  * @author ikerg
  */
-public class View  extends JFrame {
+public class View extends JFrame {
 
     private Notifiable main;
 
@@ -55,9 +55,6 @@ public class View  extends JFrame {
         huffmanPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         model = new DefaultListModel<>();
-        for (int i = 0; i < 30; i++) {
-            model.addElement("element" + i);
-        }
 
         huffmanList = new JList<>(model);
         huffmanList.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -113,6 +110,7 @@ public class View  extends JFrame {
     }
 
     private void generateHuffmanButtonPressed(ActionEvent actionEvent) {
+        model.clear();
         main.notify("generate", actualFile);
     }
 
@@ -129,6 +127,17 @@ public class View  extends JFrame {
         } else {
             generateHuffmanButton.setEnabled(false);
         }
+    }
+
+    public void setCompressedInfo(HuffmanTree o) {
+        compressedFileSizeLabel.setText("Size: " + o.getCompressedSize() + " bytes");
+        try {
+            o.getHuffmanTreeMap().forEach((key, value) -> model.addElement(
+                    key
+                            + " | "
+                            + value
+            ));
+        } catch (Exception ignored) {}
     }
 
     public void showGui() {

@@ -6,6 +6,7 @@
 package Main;
 
 import Controller.Controller;
+import Model.HuffmanTree;
 import View.View;
 
 import javax.swing.*;
@@ -38,8 +39,12 @@ public class Main implements Notifiable {
     @Override
     public void notify(String s, Object o) {
         if (s.equals("generate")) {
-            File file = (File) o;
-            controller.start(file);
+            if (!controller.isExecuted()) {
+                File file = (File) o;
+                controller.start(file);
+            }
+        } else if (s.equals("compressedSize")) {
+            view.setCompressedInfo((HuffmanTree) o);
         }
     }
 }

@@ -69,4 +69,12 @@ public class Node implements Comparable<Node> {
     public int compareTo(Node o) {
         return this.frequency - o.frequency;
     }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "frequency=" + frequency +
+                ", data=" + data +
+                '}';
+    }
 }
