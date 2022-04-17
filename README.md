@@ -18,3 +18,11 @@ To do:
 - [X] Use singletons
 - [ ] Allow multiple pieces
 - [X] Use images
+
+## Exercice 4
+To do:
+- [ ] Entropy
+- [ ] Null list
+- [ ] Index out of bound exception
+- [ ] Metadata
+
