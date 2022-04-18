@@ -14,6 +14,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
+import static javax.swing.ScrollPaneConstants.*;
+
 /**
  * @author ikerg
  */
@@ -26,7 +28,6 @@ public class View extends JFrame {
     private JPanel huffmanPanel;
     private JPanel infoPanel;
     private JLabel huffmanListPanel;
-    private JList<String> huffmanList;
     private JButton openFileButton;
     private JButton generateHuffmanButton;
     private JLabel actualFileInfoLabel;
@@ -34,8 +35,8 @@ public class View extends JFrame {
     private JLabel actualFileNameLabel;
     private JLabel compressedFileInfoLabel;
     private JLabel compressedFileSizeLabel;
-    private DefaultListModel<String> model;
     private JScrollPane scrollPane;
+    private JTextArea area;
 
     public View(Notifiable main) {
         this.main = main;
@@ -54,21 +55,20 @@ public class View extends JFrame {
         huffmanPanel.setBackground(Color.WHITE);
         huffmanPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        model = new DefaultListModel<>();
-
-        huffmanList = new JList<>(model);
-        huffmanList.setAlignmentX(Component.LEFT_ALIGNMENT);
-        huffmanList.setLayoutOrientation(JList.VERTICAL);
-        scrollPane = new JScrollPane(huffmanList);
-        scrollPane.setPreferredSize(new Dimension(180, 350));
-
 
         huffmanListPanel = new JLabel("Huffman tree");
         huffmanListPanel.setPreferredSize(new Dimension(180, 30));
         huffmanListPanel.setFont(new Font("Arial", Font.PLAIN, 25));
+        area = new JTextArea();
+        area.setFont(new Font("Arial", Font.PLAIN, 12));
+        area.setAlignmentX(Component.LEFT_ALIGNMENT);
+        area.setEnabled(false);
+        scrollPane = new JScrollPane(area,
+                VERTICAL_SCROLLBAR_ALWAYS,
+                HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(180, 350));
         huffmanPanel.add(huffmanListPanel);
         huffmanPanel.add(scrollPane);
-
 
         infoPanel = new JPanel();
         infoPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -106,11 +106,10 @@ public class View extends JFrame {
 
         this.add(BorderLayout.WEST, huffmanPanel);
         this.add(BorderLayout.EAST, infoPanel);
-
     }
 
     private void generateHuffmanButtonPressed(ActionEvent actionEvent) {
-        model.clear();
+        area.setText("");
         main.notify("generate", actualFile);
     }
 
@@ -131,13 +130,10 @@ public class View extends JFrame {
 
     public void setCompressedInfo(HuffmanTree o) {
         compressedFileSizeLabel.setText("Size: " + o.getCompressedSize() + " bytes");
-        try {
-            o.getHuffmanTreeMap().forEach((key, value) -> model.addElement(
-                    key
-                            + " | "
-                            + value
-            ));
-        } catch (Exception ignored) {}
+        StringBuilder sb = new StringBuilder();
+        o.getHuffmanTreeMap().forEach((key, value) -> sb.append(key).append(" | ").append(value).append("\n"));
+        area.setText(sb.toString());
+
     }
 
     public void showGui() {
