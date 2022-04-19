@@ -22,7 +22,10 @@ To do:
 ## Exercice 4
 To do:
 - [ ] Entropy
-- [ ] Null list
-- [ ] Index out of bound exception
+- [X] Handle null list error
+- [X] Handle index out of bound exception
 - [ ] Metadata
+- [ ] Compress and save
+- [ ] Read and decompress
+- [ ] Use singletons
 
