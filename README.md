@@ -24,9 +24,8 @@ To do:
 - [ ] Entropy
 - [X] Handle null list error
 - [X] Handle index out of bound exception
-- [X] Metadata
-- [X] Compress and save
-- [X] Read and decompress
+- [ ] Metadata
+- [ ] Compress and save
+- [ ] Read and decompress
 - [ ] Use singletons
-- [ ] Add progress bar 
 
