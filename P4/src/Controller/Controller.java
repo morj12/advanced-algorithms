@@ -12,6 +12,7 @@ import Model.Node;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -48,9 +49,11 @@ public class Controller implements Notifiable {
             byte[] allBytes = Files.readAllBytes(file.toPath());
             PriorityQueue<Node> nodes = getNodesList(allBytes);
             Node root = createHuffmanTree(nodes);
+            byte[] compressedBytes;
+
             if (root != null) {
                 createHuffmanCodes(root, "", sb);
-                byte[] compressedBytes = compressFile(allBytes, huffmanCodeMap);
+                compressedBytes = compressFile(allBytes, huffmanCodeMap);
                 main.notify("compressedSize", new HuffmanTree(huffmanCodeMap, compressedBytes.length));
             }
             isExecuted = false;
@@ -121,6 +124,63 @@ public class Controller implements Notifiable {
             huffmanBytes[index++] = (byte) Integer.parseInt(byteString, 2);
         }
         return huffmanBytes;
+    }
+
+    public byte[] decompressFile(byte[] compressedBytes, Map<Byte,String> huffmanCodeMap){
+        boolean flagByte = true;
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < compressedBytes.length; i++){
+            byte byteToString = compressedBytes[i];
+            if(i == compressedBytes.length - 1) {
+                flagByte = false;
+            }
+            sb.append((byteToBitString(flagByte,byteToString)));
+        }
+
+        String stringDecompress = sb.toString();
+        Map<String, Byte> map = new HashMap<>();
+
+         //Switch order key and value?
+        for(Map.Entry<Byte,String> entry : huffmanCodeMap.entrySet()){
+            map.put(entry.getValue(), entry.getKey());
+        }
+
+        ArrayList<Byte> bytesDecompress = new ArrayList<>();
+        int start = 0;
+        int end = 1;
+
+        while(start < stringDecompress.length()) {
+            while(end < stringDecompress.length() && map.get(stringDecompress.substring(start, end)) == null){
+                end++;
+            }
+            bytesDecompress.add(map.get(stringDecompress.substring(start,end)));
+            start = end;
+        }
+
+        byte[] decompressedFile = new byte[bytesDecompress.size()];
+        for(int i = 0; i < decompressedFile.length; i++){
+            if(decompressedFile != null){
+                decompressedFile[i] = bytesDecompress.get(i);
+            }
+        }
+
+        //CHECK COMPRESSED FILE
+        System.out.println(new String(decompressedFile));
+
+        return decompressedFile;
+    }
+
+    private String byteToBitString (boolean flagByte, byte byteToChange){
+        int temporal = byteToChange;
+
+        if(flagByte) {
+            temporal |= 256;
+        }
+
+        String bitString = Integer.toBinaryString(temporal);
+
+        return flagByte ? bitString.substring(bitString.length() - 8) : bitString;
     }
 
     @Override
