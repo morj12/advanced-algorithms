@@ -26,7 +26,7 @@ public class Controller implements Notifiable {
     StringBuilder sb;
     byte[] compressedBytes;
 
-    public synchronized boolean isExecuted() {
+    public boolean isExecuted() {
         return isExecuted;
     }
 
@@ -224,7 +224,7 @@ public class Controller implements Notifiable {
         }
     }
 
-    public double theoricEntropy (){
+    public double theoreticEntropy (){
         for(int i = 0; i < compressedBytes.length; i++){
 
         }
