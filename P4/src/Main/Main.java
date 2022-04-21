@@ -11,8 +11,6 @@ import View.View;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.FileDescriptor;
-import java.nio.file.Paths;
 
 /**
  * @author ikerg
@@ -44,36 +42,45 @@ public class Main implements Notifiable {
 
     @Override
     public void notify(String s, Object o) {
-        if (s.equals("generate")) {
-            if (!controller.isExecuted()) {
-                File file = (File) o;
-                controller.startThreadCreateHuffmanTree(file);
-                view.enableButtons(false, false, false, false);
+        switch (s) {
+            case "generate" -> {
+                if (!controller.isExecuted()) {
+                    File file = (File) o;
+                    controller.startThreadCreateHuffmanTree(file);
+                    view.enableButtons(false, false, false, false);
+                }
             }
-        } else if (s.equals("compressed")) {
-            view.setCompressedInfo((HuffmanTree) o);
-            view.enableButtons(true, false, true, false);
-        } else if (s.equals("encode&save")) {
-            if (!controller.isExecuted()) {
-                File sourceFile = (File) o;
-                File destFile = new File(ENCODED_FOLDER + sourceFile.getName() + ENCODED_EXTENSION);
-                view.enableButtons(false, false, false, false);
-                controller.startThreadZipFile(sourceFile, destFile);
+            case "compressed" -> {
+                view.setCompressedInfo((HuffmanTree) o);
+                view.enableButtons(true, true, true, false);
             }
-        } else if (s.equals("decode&save")) {
-            if (!controller.isExecuted()) {
-                File sourceFile = (File) o;
-                String fileName = sourceFile.getName();
-                File destFile = new File (DECODED_FOLDER + fileName.replace(".huffman", ""));
-                view.enableButtons(false, false, false, false);
-                controller.startThreadUnzipFile(sourceFile, destFile);
+            case "encode&save" -> {
+                if (!controller.isExecuted()) {
+                    File sourceFile = (File) o;
+                    File destFile = new File(ENCODED_FOLDER + sourceFile.getName() + ENCODED_EXTENSION);
+                    view.enableButtons(false, false, false, false);
+                    controller.startThreadZipFile(sourceFile, destFile);
+                }
             }
-        } else if (s.equals("encoded")) {
-            view.createEncodeOkMessage();
-            view.enableButtons(true, false, true, false);
-        } else if (s.equals("decoded")) {
-            view.createDecodeOkMessage();
-            view.enableButtons(true, false, false, true);
+            case "decode&save" -> {
+                if (!controller.isExecuted()) {
+                    File sourceFile = (File) o;
+                    String fileName = sourceFile.getName();
+                    File destFile = new File(DECODED_FOLDER + fileName.replace(".huffman", ""));
+                    view.enableButtons(false, false, false, false);
+                    controller.startThreadUnzipFile(sourceFile, destFile);
+                }
+            }
+            case "encoded" -> {
+                view.createEncodeOkMessage();
+                view.enableButtons(true, true, true, false);
+            }
+            case "decoded" -> {
+                view.createDecodeOkMessage();
+                view.enableButtons(true, false, false, true);
+            }
+            case "progressBarStart" -> view.clearAndPrepareProgress((int) o);
+            case "step" -> view.updateProgress((int) o);
         }
     }
 
