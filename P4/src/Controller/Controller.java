@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import static java.lang.System.currentTimeMillis;
+
 /**
  * @author ikerg
  */
@@ -46,10 +48,10 @@ public class Controller implements Notifiable {
     public void readAndCompress(File file) {
         try {
             initComponents();
+
             byte[] allBytes = Files.readAllBytes(file.toPath());
             PriorityQueue<Node> nodes = getNodesList(allBytes);
             Node root = createHuffmanTree(nodes);
-
 
             if (root != null) {
                 createHuffmanCodes(root, "", sb);
@@ -82,10 +84,14 @@ public class Controller implements Notifiable {
     private PriorityQueue<Node> getNodesList(byte[] allBytes) {
         PriorityQueue<Node> nodes = new PriorityQueue<>();
         Map<Byte, Integer> frequencyTable = new HashMap<>();
+        main.notify("progressBarStart", allBytes.length);
+        int step = 0;
         for (byte fileByte : allBytes) {
+            main.notify("step", ++step);
             // puts frequency 1 if not exists, if exists increments frequency
             frequencyTable.merge(fileByte, 1, Integer::sum);
         }
+        step = 0;
         for (Map.Entry<Byte, Integer> frequency : frequencyTable.entrySet()) {
             nodes.add(new Node(frequency.getKey(), frequency.getValue()));
         }
@@ -115,7 +121,10 @@ public class Controller implements Notifiable {
 
         int index = 0;
         byte[] huffmanBytes = new byte[bytesNumber];
+
+        main.notify("progressBarStart", bytesNumber);
         for (int i = 0; i < sb.length(); i += 8) {
+            main.notify("step", i);
             String byteString;
             if (sb.length() < i + 8) {
                 byteString = sb.substring(i);
@@ -130,7 +139,9 @@ public class Controller implements Notifiable {
     public byte[] decompressFile(byte[] compressedBytes, Map<Byte, String> huffmanCodeMap) {
         StringBuilder sb = new StringBuilder();
 
+        main.notify("progressBarStart", compressedBytes.length);
         for (int i = 0; i < compressedBytes.length; i++) {
+            main.notify("step", i);
             byte byteToString = compressedBytes[i];
             sb.append(byteToBitString((i != compressedBytes.length - 1), byteToString));
         }
@@ -146,7 +157,9 @@ public class Controller implements Notifiable {
         int start = 0;
         int end = 1;
 
+        main.notify("progressBarStart", decompressedString.length());
         while (start < decompressedString.length()) {
+            main.notify("step", start);
             while (end < decompressedString.length() && map.get(decompressedString.substring(start, end)) == null) {
                 end++;
             }
@@ -158,8 +171,10 @@ public class Controller implements Notifiable {
 
         byte[] decompressedFile = new byte[bytesDecompress.size()];
         int i = 0;
+        main.notify("progressBarStart", bytesDecompress.size());
         for (Byte b : bytesDecompress) {
             decompressedFile[i++] = b;
+            main.notify("step", i);
         }
 
         return decompressedFile;
@@ -234,7 +249,6 @@ public class Controller implements Notifiable {
     public double realEntropy(){
         return 0;
     }
-
 
     @Override
     public void notify(String s, Object o) {
