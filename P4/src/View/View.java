@@ -43,6 +43,8 @@ public class View extends JFrame {
     private JLabel theoreticalEntropy;
     private JLabel reallEntropy;
 
+    private JProgressBar progressBar;
+
     public View(Notifiable main) {
         this.main = main;
         this.setTitle("Huffman compressor");
@@ -73,6 +75,23 @@ public class View extends JFrame {
     }
 
     private void initComponents() {
+        initHuffmanPanel();
+        initInfoPanel();
+        initButtons();
+        Arrays.stream(buttons).forEach(infoPanel::add);
+        infoPanel.add(actualFileInfoLabel);
+        infoPanel.add(actualFileNameLabel);
+        infoPanel.add(actualFileSizeLabel);
+        infoPanel.add(compressedFileInfoLabel);
+        infoPanel.add(compressedFileSizeLabel);
+        infoPanel.add(theoreticalEntropy);
+        infoPanel.add(reallEntropy);
+        infoPanel.add(progressBar);
+        this.add(BorderLayout.WEST, huffmanPanel);
+        this.add(BorderLayout.EAST, infoPanel);
+    }
+
+    private void initHuffmanPanel() {
         huffmanPanel = new JPanel();
         huffmanPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         huffmanPanel.setPreferredSize(new Dimension(200, 400));
@@ -92,13 +111,14 @@ public class View extends JFrame {
         scrollPane.setPreferredSize(new Dimension(180, 350));
         huffmanPanel.add(huffmanListPanel);
         huffmanPanel.add(scrollPane);
+    }
 
+    private void initInfoPanel() {
         infoPanel = new JPanel();
         infoPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         infoPanel.setPreferredSize(new Dimension(200, 400));
         infoPanel.setBackground(Color.WHITE);
         infoPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
         actualFileInfoLabel = new JLabel("Actual file info");
         actualFileInfoLabel.setPreferredSize(new Dimension(180, 30));
         actualFileInfoLabel.setFont(new Font("Arial", Font.BOLD, 12));
@@ -115,20 +135,9 @@ public class View extends JFrame {
         theoreticalEntropy.setPreferredSize(new Dimension(180, 24));
         reallEntropy = new JLabel("Real entropy: none");
         reallEntropy.setPreferredSize(new Dimension(180, 24));
-
-        initButtons();
-        Arrays.stream(buttons).forEach(infoPanel::add);
-
-        infoPanel.add(actualFileInfoLabel);
-        infoPanel.add(actualFileNameLabel);
-        infoPanel.add(actualFileSizeLabel);
-        infoPanel.add(compressedFileInfoLabel);
-        infoPanel.add(compressedFileSizeLabel);
-        infoPanel.add(theoreticalEntropy);
-        infoPanel.add(reallEntropy);
-
-        this.add(BorderLayout.WEST, huffmanPanel);
-        this.add(BorderLayout.EAST, infoPanel);
+        progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
+        progressBar.setStringPainted(true);
+        progressBar.setPreferredSize(new Dimension(180, 24));
     }
 
     private void decodeAndSaveButtonPressed(ActionEvent actionEvent) {
@@ -172,7 +181,6 @@ public class View extends JFrame {
         compressedFileSizeLabel.setText("Size: " + o.getCompressedSize() + " bytes");
         theoreticalEntropy.setText("Theoretical entropy: " + o.getTheoreticalEntropy());
         reallEntropy.setText("Real entropy: " + o.getRealEntropy());
-        reallEntropy.setText("Theorical entropy: " + o);
         StringBuilder sb = new StringBuilder();
         o.getHuffmanTreeMap().forEach((key, value) -> sb.append(key).append(" | ").append(value).append("\n"));
         area.setText(sb.toString());
@@ -189,6 +197,15 @@ public class View extends JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+
+    public void clearAndPrepareProgress(int max) {
+        progressBar.setValue(0);
+        progressBar.setMaximum(max);
+    }
+
+    public void updateProgress(int value) {
+        progressBar.setValue(value);
     }
 
     public void createEncodeOkMessage() {
