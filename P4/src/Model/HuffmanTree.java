@@ -6,10 +6,22 @@ public class HuffmanTree {
 
     private Map<Byte, String> huffmanTreeMap;
     private int compressedSize;
+    private double theoreticalEntropy;
+    private double realEntropy;
 
-    public HuffmanTree(Map<Byte, String> huffmanTreeMap, int compressedSize) {
+    public double getTheoreticalEntropy() {
+        return theoreticalEntropy;
+    }
+
+    public double getRealEntropy() {
+        return realEntropy;
+    }
+
+    public HuffmanTree(Map<Byte, String> huffmanTreeMap, int compressedSize, double theoreticalEntropy, double realEntropy) {
         this.huffmanTreeMap = huffmanTreeMap;
         this.compressedSize = compressedSize;
+        this.theoreticalEntropy = theoreticalEntropy;
+        this.realEntropy = realEntropy;
     }
 
     public Map<Byte, String> getHuffmanTreeMap() {

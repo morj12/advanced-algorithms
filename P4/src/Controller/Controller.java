@@ -9,8 +9,7 @@ import Main.Notifiable;
 import Model.HuffmanTree;
 import Model.Node;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +24,7 @@ public class Controller implements Notifiable {
     private Notifiable main;
     Map<Byte, String> huffmanCodeMap;
     StringBuilder sb;
+    byte[] compressedBytes;
 
     public synchronized boolean isExecuted() {
         return isExecuted;
@@ -39,7 +39,7 @@ public class Controller implements Notifiable {
         this.isExecuted = false;
     }
 
-    public void start(File file) {
+    public void startThreadCreateHuffmanTree(File file) {
         new Thread(() -> readAndCompress(file)).start();
     }
 
@@ -49,15 +49,16 @@ public class Controller implements Notifiable {
             byte[] allBytes = Files.readAllBytes(file.toPath());
             PriorityQueue<Node> nodes = getNodesList(allBytes);
             Node root = createHuffmanTree(nodes);
-            byte[] compressedBytes;
+
 
             if (root != null) {
                 createHuffmanCodes(root, "", sb);
                 compressedBytes = compressFile(allBytes, huffmanCodeMap);
-                main.notify("compressedSize", new HuffmanTree(huffmanCodeMap, compressedBytes.length));
+                main.notify("compressed", new HuffmanTree(huffmanCodeMap, compressedBytes.length, 0, 0));
             }
             isExecuted = false;
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -126,23 +127,18 @@ public class Controller implements Notifiable {
         return huffmanBytes;
     }
 
-    public byte[] decompressFile(byte[] compressedBytes, Map<Byte,String> huffmanCodeMap){
-        boolean flagByte = true;
+    public byte[] decompressFile(byte[] compressedBytes, Map<Byte, String> huffmanCodeMap) {
         StringBuilder sb = new StringBuilder();
 
-        for(int i = 0; i < compressedBytes.length; i++){
+        for (int i = 0; i < compressedBytes.length; i++) {
             byte byteToString = compressedBytes[i];
-            if(i == compressedBytes.length - 1) {
-                flagByte = false;
-            }
-            sb.append((byteToBitString(flagByte,byteToString)));
+            sb.append(byteToBitString((i != compressedBytes.length - 1), byteToString));
         }
 
-        String stringDecompress = sb.toString();
+        String decompressedString = sb.toString();
         Map<String, Byte> map = new HashMap<>();
 
-         //Switch order key and value?
-        for(Map.Entry<Byte,String> entry : huffmanCodeMap.entrySet()){
+        for (Map.Entry<Byte, String> entry : huffmanCodeMap.entrySet()) {
             map.put(entry.getValue(), entry.getKey());
         }
 
@@ -150,38 +146,95 @@ public class Controller implements Notifiable {
         int start = 0;
         int end = 1;
 
-        while(start < stringDecompress.length()) {
-            while(end < stringDecompress.length() && map.get(stringDecompress.substring(start, end)) == null){
+        while (start < decompressedString.length()) {
+            while (end < decompressedString.length() && map.get(decompressedString.substring(start, end)) == null) {
                 end++;
             }
-            bytesDecompress.add(map.get(stringDecompress.substring(start,end)));
+            if (map.containsKey(decompressedString.substring(start, end))) {
+                bytesDecompress.add(map.get(decompressedString.substring(start, end)));
+            }
             start = end;
         }
 
         byte[] decompressedFile = new byte[bytesDecompress.size()];
-        for(int i = 0; i < decompressedFile.length; i++){
-            if(decompressedFile != null){
-                decompressedFile[i] = bytesDecompress.get(i);
-            }
+        int i = 0;
+        for (Byte b : bytesDecompress) {
+            decompressedFile[i++] = b;
         }
-
-        //CHECK COMPRESSED FILE
-        System.out.println(new String(decompressedFile));
 
         return decompressedFile;
     }
 
-    private String byteToBitString (boolean flagByte, byte byteToChange){
+    private String byteToBitString(boolean flagByte, byte byteToChange) {
         int temporal = byteToChange;
 
-        if(flagByte) {
+        if (flagByte) {
             temporal |= 256;
         }
 
         String bitString = Integer.toBinaryString(temporal);
 
-        return flagByte ? bitString.substring(bitString.length() - 8) : bitString;
+        return flagByte || temporal < 0 ? bitString.substring(bitString.length() - 8) : bitString;
     }
+
+    public void startThreadZipFile(File sourceFile, File destinationFile) {
+        new Thread(() -> zipFile(sourceFile, destinationFile)).start();
+    }
+
+    public void startThreadUnzipFile(File sourceFile, File destinationFile) {
+        new Thread(() -> unzipFile(sourceFile, destinationFile)).start();
+    }
+
+    public void zipFile(File sourceFile, File destinationFile) {
+        try (
+                FileInputStream inputStream = new FileInputStream(sourceFile);
+                OutputStream outputStream = new FileOutputStream(destinationFile);
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)
+        ) {
+            isExecuted = true;
+            byte[] bytesFile = new byte[inputStream.available()];
+            inputStream.read(bytesFile);
+            objectOutputStream.writeObject(compressedBytes);
+            objectOutputStream.writeObject(huffmanCodeMap);
+            main.notify("encoded", null);
+
+            isExecuted = false;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void unzipFile(File sourceFile, File destinationFile) {
+        try (
+                InputStream inputStream = new FileInputStream(sourceFile);
+                OutputStream outputStream = new FileOutputStream(destinationFile);
+                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+        ) {
+            isExecuted = true;
+
+            byte[] huffmanBytes = (byte[]) objectInputStream.readObject();
+            Map<Byte, String> huffmanMapCodes = (Map<Byte, String>) objectInputStream.readObject();
+            byte[] decompressedBytes = decompressFile(huffmanBytes, huffmanMapCodes);
+            outputStream.write(decompressedBytes);
+
+            main.notify("decoded", null);
+            isExecuted = false;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public double theoricEntropy (){
+        for(int i = 0; i < compressedBytes.length; i++){
+
+        }
+        return 0;
+    }
+
+    public double realEntropy(){
+        return 0;
+    }
+
 
     @Override
     public void notify(String s, Object o) {

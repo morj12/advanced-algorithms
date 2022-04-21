@@ -13,6 +13,7 @@ import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.Arrays;
 
 import static javax.swing.ScrollPaneConstants.*;
 
@@ -28,8 +29,9 @@ public class View extends JFrame {
     private JPanel huffmanPanel;
     private JPanel infoPanel;
     private JLabel huffmanListPanel;
-    private JButton openFileButton;
-    private JButton generateHuffmanButton;
+
+    private JButton[] buttons;
+
     private JLabel actualFileInfoLabel;
     private JLabel actualFileSizeLabel;
     private JLabel actualFileNameLabel;
@@ -37,6 +39,9 @@ public class View extends JFrame {
     private JLabel compressedFileSizeLabel;
     private JScrollPane scrollPane;
     private JTextArea area;
+
+    private JLabel theoreticalEntropy;
+    private JLabel reallEntropy;
 
     public View(Notifiable main) {
         this.main = main;
@@ -48,13 +53,31 @@ public class View extends JFrame {
         initComponents();
     }
 
+    private void initButtons() {
+        buttons = new JButton[4];
+        buttons[0] = new JButton("Open file");
+        buttons[0].setPreferredSize(new Dimension(180, 30));
+        buttons[0].addActionListener(this::openFileButtonPressed);
+        buttons[1] = new JButton("Generate Huffman tree");
+        buttons[1].setPreferredSize(new Dimension(180, 30));
+        buttons[1].addActionListener(this::generateHuffmanButtonPressed);
+        buttons[1].setEnabled(false);
+        buttons[2] = new JButton("Encode and save file");
+        buttons[2].setPreferredSize(new Dimension(180, 30));
+        buttons[2].addActionListener(this::encodeAndSaveButtonPressed);
+        buttons[2].setEnabled(false);
+        buttons[3] = new JButton("Decode and save file");
+        buttons[3].setPreferredSize(new Dimension(180, 30));
+        buttons[3].addActionListener(this::decodeAndSaveButtonPressed);
+        buttons[3].setEnabled(false);
+    }
+
     private void initComponents() {
         huffmanPanel = new JPanel();
         huffmanPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         huffmanPanel.setPreferredSize(new Dimension(200, 400));
         huffmanPanel.setBackground(Color.WHITE);
         huffmanPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
 
         huffmanListPanel = new JLabel("Huffman tree");
         huffmanListPanel.setPreferredSize(new Dimension(180, 30));
@@ -76,13 +99,6 @@ public class View extends JFrame {
         infoPanel.setBackground(Color.WHITE);
         infoPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        openFileButton = new JButton("Open file");
-        openFileButton.setPreferredSize(new Dimension(180, 30));
-        openFileButton.addActionListener(this::openFileButtonPressed);
-        generateHuffmanButton = new JButton("Generate Huffman tree");
-        generateHuffmanButton.setPreferredSize(new Dimension(180, 30));
-        generateHuffmanButton.addActionListener(this::generateHuffmanButtonPressed);
-        generateHuffmanButton.setEnabled(false);
         actualFileInfoLabel = new JLabel("Actual file info");
         actualFileInfoLabel.setPreferredSize(new Dimension(180, 30));
         actualFileInfoLabel.setFont(new Font("Arial", Font.BOLD, 12));
@@ -95,17 +111,33 @@ public class View extends JFrame {
         compressedFileInfoLabel.setFont(new Font("Arial", 1, 12));
         compressedFileSizeLabel = new JLabel("Size in bytes: none");
         compressedFileSizeLabel.setPreferredSize(new Dimension(180, 24));
+        theoreticalEntropy = new JLabel("Theoretical entropy: none");
+        theoreticalEntropy.setPreferredSize(new Dimension(180, 24));
+        reallEntropy = new JLabel("Real entropy: none");
+        reallEntropy.setPreferredSize(new Dimension(180, 24));
 
-        infoPanel.add(openFileButton);
-        infoPanel.add(generateHuffmanButton);
+        initButtons();
+        Arrays.stream(buttons).forEach(infoPanel::add);
+
         infoPanel.add(actualFileInfoLabel);
         infoPanel.add(actualFileNameLabel);
         infoPanel.add(actualFileSizeLabel);
         infoPanel.add(compressedFileInfoLabel);
         infoPanel.add(compressedFileSizeLabel);
+        infoPanel.add(theoreticalEntropy);
+        infoPanel.add(reallEntropy);
 
         this.add(BorderLayout.WEST, huffmanPanel);
         this.add(BorderLayout.EAST, infoPanel);
+    }
+
+    private void decodeAndSaveButtonPressed(ActionEvent actionEvent) {
+        main.notify("decode&save", actualFile);
+    }
+
+    private void encodeAndSaveButtonPressed(ActionEvent actionEvent) {
+        main.notify("encode&save", actualFile);
+
     }
 
     private void generateHuffmanButtonPressed(ActionEvent actionEvent) {
@@ -122,18 +154,35 @@ public class View extends JFrame {
             this.actualFile = jFileChooser.getSelectedFile();
             actualFileNameLabel.setText("Name: " + actualFile.getName());
             actualFileSizeLabel.setText("Size: " + actualFile.length() + " bytes");
-            generateHuffmanButton.setEnabled(true);
+            if (actualFile.getName().contains(".huffman")) {
+                buttons[1].setEnabled(false);
+                buttons[2].setEnabled(false);
+                buttons[3].setEnabled(true);
+            } else {
+                buttons[1].setEnabled(true);
+                buttons[2].setEnabled(false);
+                buttons[3].setEnabled(false);
+            }
         } else {
-            generateHuffmanButton.setEnabled(false);
+            buttons[1].setEnabled(false);
         }
     }
 
     public void setCompressedInfo(HuffmanTree o) {
         compressedFileSizeLabel.setText("Size: " + o.getCompressedSize() + " bytes");
+        theoreticalEntropy.setText("Theoretical entropy: " + o.getTheoreticalEntropy());
+        reallEntropy.setText("Real entropy: " + o.getRealEntropy());
+        reallEntropy.setText("Theorical entropy: " + o);
         StringBuilder sb = new StringBuilder();
         o.getHuffmanTreeMap().forEach((key, value) -> sb.append(key).append(" | ").append(value).append("\n"));
         area.setText(sb.toString());
 
+    }
+
+    public void enableButtons(boolean ... buttons) {
+        for (int i = 0; i < buttons.length; i++) {
+            this.buttons[i].setEnabled(buttons[i]);
+        }
     }
 
     public void showGui() {
@@ -142,4 +191,11 @@ public class View extends JFrame {
         this.setVisible(true);
     }
 
+    public void createEncodeOkMessage() {
+        JOptionPane.showMessageDialog(this, "Encoding finished");
+    }
+
+    public void createDecodeOkMessage() {
+        JOptionPane.showMessageDialog(this, "Decoding finished");
+    }
 }
