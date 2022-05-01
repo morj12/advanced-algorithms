@@ -8,15 +8,12 @@ package Controller;
 import Main.Notifiable;
 import Model.HuffmanTree;
 import Model.Node;
+import Utils.BinaryLogarithm;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
-
-import static java.lang.System.currentTimeMillis;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author ikerg
@@ -27,6 +24,9 @@ public class Controller implements Notifiable {
     Map<Byte, String> huffmanCodeMap;
     StringBuilder sb;
     byte[] compressedBytes;
+    double theoreticalEntropy;
+    double realEntropy;
+    double symbolNumber;
 
     public boolean isExecuted() {
         return isExecuted;
@@ -36,9 +36,8 @@ public class Controller implements Notifiable {
 
     public Controller(Notifiable main) {
         this.main = main;
-        this.huffmanCodeMap = new HashMap<>();
-        this.sb = new StringBuilder();
         this.isExecuted = false;
+        initComponents();
     }
 
     public void startThreadCreateHuffmanTree(File file) {
@@ -48,6 +47,7 @@ public class Controller implements Notifiable {
     public void readAndCompress(File file) {
         try {
             initComponents();
+            this.isExecuted = true;
 
             byte[] allBytes = Files.readAllBytes(file.toPath());
             PriorityQueue<Node> nodes = getNodesList(allBytes);
@@ -56,7 +56,12 @@ public class Controller implements Notifiable {
             if (root != null) {
                 createHuffmanCodes(root, "", sb);
                 compressedBytes = compressFile(allBytes, huffmanCodeMap);
-                main.notify("compressed", new HuffmanTree(huffmanCodeMap, compressedBytes.length, 0, 0));
+                realEntropy(compressedBytes.length * 8);
+                main.notify("compressed", new HuffmanTree(
+                        huffmanCodeMap,
+                        compressedBytes.length,
+                        theoreticalEntropy,
+                        realEntropy));
             }
             isExecuted = false;
         } catch (IOException e) {
@@ -67,7 +72,9 @@ public class Controller implements Notifiable {
     public void initComponents() {
         this.huffmanCodeMap = new HashMap<>();
         this.sb = new StringBuilder();
-        this.isExecuted = true;
+        this.theoreticalEntropy = 0;
+        this.realEntropy = 0;
+        this.symbolNumber = 0;
     }
 
     private void createHuffmanCodes(Node node, String code, StringBuilder sb) {
@@ -91,8 +98,15 @@ public class Controller implements Notifiable {
             // puts frequency 1 if not exists, if exists increments frequency
             frequencyTable.merge(fileByte, 1, Integer::sum);
         }
+
+        //get theoretical entropy
+        theoreticEntropy(frequencyTable);
+        symbolNumber = frequencyTable.size();
+
+        main.notify("progressBarStart", frequencyTable.size());
         step = 0;
         for (Map.Entry<Byte, Integer> frequency : frequencyTable.entrySet()) {
+            main.notify("step", ++step);
             nodes.add(new Node(frequency.getKey(), frequency.getValue()));
         }
         return nodes;
@@ -239,17 +253,19 @@ public class Controller implements Notifiable {
         }
     }
 
-    public double theoreticEntropy (){
-        for(int i = 0; i < compressedBytes.length; i++){
-
+    public void theoreticEntropy(Map<Byte, Integer> frequencyTable) {
+        double localEntropy = 0;
+        for (Map.Entry<Byte, Integer> entry: frequencyTable.entrySet()) {
+            localEntropy += (double) entry.getValue() / frequencyTable.size() * BinaryLogarithm.binaryLog(
+                    1 / ((double) entry.getValue() / frequencyTable.size())
+            );
         }
-        return 0;
     }
 
-    public double realEntropy(){
-        return 0;
+    public void realEntropy(int bits) {
+        realEntropy = bits / symbolNumber;
     }
-
+    
     @Override
     public void notify(String s, Object o) {
 

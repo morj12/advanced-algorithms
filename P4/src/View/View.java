@@ -13,6 +13,7 @@ import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 
 import static javax.swing.ScrollPaneConstants.*;
@@ -23,6 +24,8 @@ import static javax.swing.ScrollPaneConstants.*;
 public class View extends JFrame {
 
     private Notifiable main;
+
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
     private File actualFile;
 
@@ -163,6 +166,9 @@ public class View extends JFrame {
             this.actualFile = jFileChooser.getSelectedFile();
             actualFileNameLabel.setText("Name: " + actualFile.getName());
             actualFileSizeLabel.setText("Size: " + actualFile.length() + " bytes");
+            compressedFileSizeLabel.setText("Size: none");
+            theoreticalEntropy.setText("Theoretical entropy: none");
+            reallEntropy.setText("Real entropy: none");
             if (actualFile.getName().contains(".huffman")) {
                 buttons[1].setEnabled(false);
                 buttons[2].setEnabled(false);
@@ -179,8 +185,8 @@ public class View extends JFrame {
 
     public void setCompressedInfo(HuffmanTree o) {
         compressedFileSizeLabel.setText("Size: " + o.getCompressedSize() + " bytes");
-        theoreticalEntropy.setText("Theoretical entropy: " + o.getTheoreticalEntropy());
-        reallEntropy.setText("Real entropy: " + o.getRealEntropy());
+        theoreticalEntropy.setText("Theoretical entropy: " + df.format(o.getTheoreticalEntropy()));
+        reallEntropy.setText("Real entropy: " + df.format(o.getRealEntropy()));
         StringBuilder sb = new StringBuilder();
         o.getHuffmanTreeMap().forEach((key, value) -> sb.append(key).append(" | ").append(value).append("\n"));
         area.setText(sb.toString());
