@@ -260,12 +260,13 @@ public class Controller implements Notifiable {
                     1 / ((double) entry.getValue() / frequencyTable.size())
             );
         }
+        theoreticalEntropy = localEntropy;
     }
 
     public void realEntropy(int bits) {
         realEntropy = bits / symbolNumber;
     }
-    
+
     @Override
     public void notify(String s, Object o) {
 
