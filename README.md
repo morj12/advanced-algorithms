@@ -21,7 +21,7 @@ To do:
 
 ## Exercice 4
 To do:
-- [ ] Entropy
+- [X] Entropy
 - [X] Handle null list error
 - [X] Handle index out of bound exception
 - [X] Metadata
