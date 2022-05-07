@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Controller;
 
 import Main.Notifiable;
@@ -15,9 +10,6 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * @author ikerg
- */
 public class Controller implements Notifiable {
 
     private Notifiable main;
@@ -101,7 +93,7 @@ public class Controller implements Notifiable {
 
         //get theoretical entropy
         theoreticEntropy(frequencyTable);
-        symbolNumber = frequencyTable.size();
+        symbolNumber = getSymbolNumber(frequencyTable);
 
         main.notify("progressBarStart", frequencyTable.size());
         step = 0;
@@ -196,13 +188,10 @@ public class Controller implements Notifiable {
 
     private String byteToBitString(boolean flagByte, byte byteToChange) {
         int temporal = byteToChange;
-
         if (flagByte) {
             temporal |= 256;
         }
-
         String bitString = Integer.toBinaryString(temporal);
-
         return flagByte || temporal < 0 ? bitString.substring(bitString.length() - 8) : bitString;
     }
 
@@ -254,16 +243,26 @@ public class Controller implements Notifiable {
     }
 
     public void theoreticEntropy(Map<Byte, Integer> frequencyTable) {
+        double symbolNumber = getSymbolNumber(frequencyTable);
+
         double localEntropy = 0;
         for (Map.Entry<Byte, Integer> entry: frequencyTable.entrySet()) {
-            localEntropy += (double) entry.getValue() / frequencyTable.size() * BinaryLogarithm.binaryLog(
-                    1 / ((double) entry.getValue() / frequencyTable.size())
-            );
+            double entryValue = (double) entry.getValue();
+            var frequency = entryValue / symbolNumber;
+            var logarithm = BinaryLogarithm.binaryLog(1 / (frequency));
+            localEntropy += frequency * logarithm;
+
         }
         theoreticalEntropy = localEntropy;
     }
 
-    public void realEntropy(int bits) {
+    public double getSymbolNumber(Map<Byte, Integer> frequencyTable) {
+        AtomicReference<Double> originalSymbolNumber = new AtomicReference<>((double) 0);
+        frequencyTable.forEach((key, value) -> originalSymbolNumber.updateAndGet(v -> v + value));
+        return originalSymbolNumber.get();
+    }
+
+    public void realEntropy(double bits) {
         realEntropy = bits / symbolNumber;
     }
 

@@ -12,9 +12,6 @@ import View.View;
 import javax.swing.*;
 import java.io.File;
 
-/**
- * @author ikerg
- */
 public class Main implements Notifiable {
 
     private Controller controller;

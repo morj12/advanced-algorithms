@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package View;
 
 import Main.Notifiable;
@@ -18,9 +13,6 @@ import java.util.Arrays;
 
 import static javax.swing.ScrollPaneConstants.*;
 
-/**
- * @author ikerg
- */
 public class View extends JFrame {
 
     private Notifiable main;
