@@ -19,17 +19,16 @@ public class Controller implements Notifiable {
     double theoreticalEntropy;
     double realEntropy;
     double symbolNumber;
-
-    public boolean isExecuted() {
-        return isExecuted;
-    }
-
     private boolean isExecuted;
 
     public Controller(Notifiable main) {
         this.main = main;
         this.isExecuted = false;
         initComponents();
+    }
+
+    public boolean isExecuted() {
+        return isExecuted;
     }
 
     public void startThreadCreateHuffmanTree(File file) {
@@ -108,11 +107,11 @@ public class Controller implements Notifiable {
         while (nodes.size() > 1) {
             Node left = nodes.poll();
             Node right = nodes.poll();
-            Node root = new Node(null, left.getFrequency() + right.getFrequency());
+            Node root = new Node(
+                    null,
+                    left.getFrequency() + right.getFrequency());
             root.setLeftNode(left);
             root.setRightNode(right);
-            nodes.remove(left);
-            nodes.remove(right);
             nodes.add(root);
         }
         return nodes.poll();
@@ -166,7 +165,8 @@ public class Controller implements Notifiable {
         main.notify("progressBarStart", decompressedString.length());
         while (start < decompressedString.length()) {
             main.notify("step", start);
-            while (end < decompressedString.length() && map.get(decompressedString.substring(start, end)) == null) {
+            while (end < decompressedString.length()
+                    && map.get(decompressedString.substring(start, end)) == null) {
                 end++;
             }
             if (map.containsKey(decompressedString.substring(start, end))) {
