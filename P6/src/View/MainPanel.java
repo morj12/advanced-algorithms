@@ -2,6 +2,7 @@ package View;
 
 import Main.Notifiable;
 import Model.Board;
+import Model.Step;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -54,5 +55,10 @@ public class MainPanel extends JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+
+    public void activateButtons(boolean start, boolean shuffle) {
+        startButton.setEnabled(start);
+        shuffleButton.setEnabled(shuffle);
     }
 }

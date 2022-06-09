@@ -2,20 +2,19 @@ package Controller;
 
 import Main.Notifiable;
 import Model.Board;
-import Model.Node;
-
-import java.util.PriorityQueue;
-import java.util.Random;
+import Model.Step;
 
 public class Controller {
 
     private Notifiable main;
     private Board board;
     private Thread pathFinder;
+    private int dimension;
 
-    public Controller(Notifiable main, Board board) {
+    public Controller(Notifiable main, Board board, int dimension) {
         this.main = main;
         this.board = board;
+        this.dimension = dimension;
     }
 
     public void prepare() {
@@ -24,34 +23,52 @@ public class Controller {
     }
 
     private void executeSearch() {
-        Node solution = brandAndBound();
-    }
-
-    private Node brandAndBound() {
-        PriorityQueue<Node> queue = new PriorityQueue<>();
-
-
-        return null;
-    }
-
-    public void shuffle() {
-        int[][] matrix = board.getMatrix();
-        Random random = new Random();
-
-        // Fisher-Yates algorithm
-        for (int i = matrix.length - 1; i > 0; i--) {
-            for (int j = matrix[i].length - 1; j > 0; j--) {
-                int m = random.nextInt(i + 1);
-                int n = random.nextInt(j + 1);
-                int temp = matrix[i][j];
-                matrix[i][j] = matrix[m][n];
-                matrix[m][n] = temp;
+        int counter = 0;
+        int[] coords = Utility.getZeroCoords(board.getMatrix());
+        int[][] finalMatrix = new int[dimension][dimension];
+        for (int i = 0; i < finalMatrix.length; i++) {
+            for (int j = 0; j < finalMatrix[i].length; j++) {
+                finalMatrix[i][j] = counter++;
             }
         }
 
+        Step finalStep = Step.solve(board.getMatrix(), coords[0], coords[1], finalMatrix);
+        if (finalStep != null) {
+            showSteps(finalStep);
+        }
+        main.notify("finished", finalStep);
+    }
+
+    private void showSteps(Step finalStep) {
+        Step step = reverse(finalStep);
+        while (step != null) {
+            board.setMatrix(step.getMatrix());
+            step = step.getParent();
+            main.notify("repaint", null);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+            }
+        }
+    }
+
+    public void shuffle() {
+        board.shuffle();
         main.notify("shuffleFinished", null);
     }
 
-
+    public Step reverse(Step step) {
+        Step prev = null;
+        Step current = step;
+        Step next;
+        while (current != null) {
+            next = current.getParent();
+            current.setParent(prev);
+            prev = current;
+            current = next;
+        }
+        step = prev;
+        return step;
+    }
 
 }

@@ -16,14 +16,22 @@ public class BoardPanel extends JPanel {
     private static int size = 600;
     private static int dimension = 3;
     private static int cellSize = size / dimension;
-    private double numberSize = cellSize * 0.5;
 
     private BufferedImage img;
+    private BufferedImage[] imgs;
 
     public BoardPanel(Board board) {
         this.board = board;
         try {
             img = ImageIO.read(new File("src/img/floppa.png"));
+            imgs = new BufferedImage[dimension * dimension];
+            int counter = 0;
+
+            for (int i = 0; i < dimension; i++) {
+                for (int j = 0; j < dimension; j++) {
+                    imgs[counter++] = img.getSubimage(j * cellSize, i * cellSize, cellSize, cellSize);
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,15 +52,7 @@ public class BoardPanel extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-        BufferedImage[] imgs = new BufferedImage[dimension * dimension];
-        int counter = 0;
-        int [][] matrix = board.getMatrix();
-        for (int i = 0; i < dimension; i++) {
-            for (int j = 0; j < dimension; j++) {
-                imgs[counter++] = img.getSubimage(j * cellSize, i * cellSize, cellSize, cellSize);
-            }
-        }
-
+        int[][] matrix = board.getMatrix();
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 if (matrix[j][i] != 0) {

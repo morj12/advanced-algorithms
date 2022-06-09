@@ -26,17 +26,29 @@ public class Main implements Notifiable {
         }
 
         board = new Board((int) Math.sqrt(NUMBERS));
-        controller = new Controller(this, board);
+        controller = new Controller(this, board, (int) Math.sqrt(NUMBERS));
         view = new MainPanel(this, board);
         view.showGui();
+
+
     }
 
     @Override
     public void notify(String s, Object o) {
         switch (s) {
             case "shuffle" -> controller.shuffle();
-            case "shuffleFinished" -> view.repaint();
-            case "start" -> controller.prepare();
+
+            case "shuffleFinished", "repaint" -> view.repaint();
+            case "start" -> {
+                controller.prepare();
+                view.activateButtons(false, false);
+                // TIMEOUT
+                new Timer(20000, (e) -> {
+                    System.out.println("Timeout!!!");
+                    System.exit(0);
+                }).start();
+            }
+            case "finished" -> view.activateButtons(true, true);
         }
     }
 
