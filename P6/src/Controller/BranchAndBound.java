@@ -58,7 +58,9 @@ public class BranchAndBound {
         pq.add(first);
 
         while (!pq.isEmpty()) {
-            if (!isExecuted) return null;
+            if (!isExecuted) {
+                return null;
+            }
 
             Node min = pq.remove();
             if (min.getDistance() == 0) {

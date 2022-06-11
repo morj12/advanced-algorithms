@@ -12,8 +12,8 @@ public class Main implements Notifiable {
     private MainPanel view;
     private Matrix matrix;
 
-    public static final int NUMBERS = 9;
-    public static final int DIMENSION = (int) Math.sqrt(NUMBERS);
+    public static int NUMBERS = 9;
+    public static int DIMENSION = (int) Math.sqrt(NUMBERS);
 
     public static void main(String[] args) {
         new Main().start();
@@ -39,10 +39,18 @@ public class Main implements Notifiable {
             case "shuffleFinished", "repaint" -> view.repaint();
             case "start" -> {
                 controller.prepare();
-                view.activateButtons(false, false, true);
+                view.enableElements(false, false, false, true);
             }
-            case "finished" -> view.activateButtons(true, true, false);
+            case "finished" -> view.enableElements(true, true, true, false);
             case "cancelled" -> controller.interrupt();
+            case "numbers" -> {
+                NUMBERS = (int) o;
+                DIMENSION = (int) Math.sqrt(NUMBERS);
+                matrix = new Matrix();
+                controller.setMatrix(matrix);
+                view.setMatrix(matrix);
+                view.repaint();
+            }
         }
     }
 

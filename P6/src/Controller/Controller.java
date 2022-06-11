@@ -16,6 +16,10 @@ public class Controller {
         this.matrix = matrix;
     }
 
+    public void setMatrix(Matrix matrix) {
+        this.matrix = matrix;
+    }
+
     public void prepare() {
         this.bnb = new BranchAndBound();
         pathFinder = new Thread(this::executeSearch);
@@ -64,5 +68,6 @@ public class Controller {
 
     public void interrupt() {
         bnb.interrupt();
+        bnb = null;
     }
 }

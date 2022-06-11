@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class BoardPanel extends JPanel {
 
-    private Matrix board;
+    private Matrix matrix;
 
     private static int size = 600;
     private static int cellSize = size / Main.DIMENSION;
@@ -21,7 +21,17 @@ public class BoardPanel extends JPanel {
     private BufferedImage[] imgs;
 
     public BoardPanel(Matrix matrix) {
-        this.board = matrix;
+        this.matrix = matrix;
+        initComponents();
+    }
+
+    public void setMatrix(Matrix matrix) {
+        this.matrix = matrix;
+        initComponents();
+    }
+
+    private void initComponents() {
+        cellSize = size / Main.DIMENSION;
         try {
             img = ImageIO.read(new File("src/img/floppa.png"));
             imgs = new BufferedImage[Main.DIMENSION * Main.DIMENSION];
@@ -52,7 +62,7 @@ public class BoardPanel extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-        int[][] matrix = board.getMatrix();
+        int[][] matrix = this.matrix.getMatrix();
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 if (matrix[j][i] != 0) {
