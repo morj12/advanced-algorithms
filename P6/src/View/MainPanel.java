@@ -1,7 +1,7 @@
 package View;
 
 import Main.Notifiable;
-import Model.Board;
+import Model.Matrix;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -11,16 +11,16 @@ import java.awt.event.ActionEvent;
 public class MainPanel extends JFrame {
 
     private final Notifiable main;
-    private Board board;
+    private Matrix board;
 
     private BoardPanel boardPanel;
     private JPanel buttonsPanel;
     private JButton startButton;
     private JButton shuffleButton;
 
-    public MainPanel(Notifiable main, Board board) {
+    public MainPanel(Notifiable main, Matrix matrix) {
         this.main = main;
-        this.board = board;
+        this.board = matrix;
         this.setTitle("Puzzle 8");
         this.getContentPane().setLayout(new BorderLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);

@@ -1,7 +1,7 @@
 package View;
 
 import Main.Main;
-import Model.Board;
+import Model.Matrix;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class BoardPanel extends JPanel {
 
-    private Board board;
+    private Matrix board;
 
     private static int size = 600;
     private static int cellSize = size / Main.DIMENSION;
@@ -20,8 +20,8 @@ public class BoardPanel extends JPanel {
     private BufferedImage img;
     private BufferedImage[] imgs;
 
-    public BoardPanel(Board board) {
-        this.board = board;
+    public BoardPanel(Matrix matrix) {
+        this.board = matrix;
         try {
             img = ImageIO.read(new File("src/img/floppa.png"));
             imgs = new BufferedImage[Main.DIMENSION * Main.DIMENSION];

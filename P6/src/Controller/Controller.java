@@ -1,19 +1,18 @@
 package Controller;
 
 import Main.Notifiable;
-import Model.Board;
+import Model.Matrix;
 import Model.Node;
-import Utility.MatrixOperations;
 
 public class Controller {
 
     private Notifiable main;
-    private Board board;
+    private Matrix matrix;
     private Thread pathFinder;
 
-    public Controller(Notifiable main, Board board) {
+    public Controller(Notifiable main, Matrix matrix) {
         this.main = main;
-        this.board = board;
+        this.matrix = matrix;
     }
 
     public void prepare() {
@@ -23,19 +22,18 @@ public class Controller {
 
     private void executeSearch() {
         BranchAndBound bnb = new BranchAndBound();
-        Node finalNode = bnb.solve(board.getMatrix());
+        Node finalNode = bnb.branchAndBound(matrix.getMatrix());
         if (finalNode != null) {
             showNodes(finalNode);
         }
-
         main.notify("finished", finalNode);
     }
 
     private void showNodes(Node node) {
         Node step = reverse(node);
         while (step != null) {
-            board.setMatrix(step.matrix);
-            step = step.parent;
+            matrix.setMatrix(step.getMatrix());
+            step = step.getParent();
             main.notify("repaint", null);
             try {
                 Thread.sleep(100);
@@ -45,7 +43,7 @@ public class Controller {
     }
 
     public void shuffle() {
-        board.shuffle();
+        matrix.shuffle();
         main.notify("shuffleFinished", null);
     }
 
@@ -54,8 +52,8 @@ public class Controller {
         Node current = step;
         Node next;
         while (current != null) {
-            next = current.parent;
-            current.parent = prev;
+            next = current.getParent();
+            current.setParent(prev);
             prev = current;
             current = next;
         }

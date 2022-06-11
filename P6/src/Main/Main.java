@@ -1,7 +1,7 @@
 package Main;
 
 import Controller.Controller;
-import Model.Board;
+import Model.Matrix;
 import View.MainPanel;
 
 import javax.swing.*;
@@ -10,7 +10,7 @@ public class Main implements Notifiable {
 
     private Controller controller;
     private MainPanel view;
-    private Board board;
+    private Matrix matrix;
 
     public static final int NUMBERS = 9;
     public static final int DIMENSION = (int) Math.sqrt(NUMBERS);
@@ -26,9 +26,9 @@ public class Main implements Notifiable {
             e.printStackTrace();
         }
 
-        board = new Board();
-        controller = new Controller(this, board);
-        view = new MainPanel(this, board);
+        matrix = new Matrix();
+        controller = new Controller(this, matrix);
+        view = new MainPanel(this, matrix);
         view.showGui();
     }
 
@@ -40,11 +40,6 @@ public class Main implements Notifiable {
             case "start" -> {
                 controller.prepare();
                 view.activateButtons(false, false);
-                // TIMEOUT
-                new Timer(10000, (e) -> {
-                    System.out.println("Timeout!!!");
-                    System.exit(0);
-                }).start();
             }
             case "finished" -> view.activateButtons(true, true);
         }

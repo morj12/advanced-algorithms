@@ -1,10 +1,44 @@
-package Utility;
+package Model;
 
 import Main.Main;
 
 import java.util.Random;
 
-public class MatrixOperations {
+public class Matrix {
+
+    private int[][] matrix;
+
+    /******************************
+     * Non static methods section *
+     *****************************/
+
+    public void setMatrix(int[][] matrix) {
+        this.matrix = matrix;
+    }
+
+    public Matrix() {
+        this.matrix = createCorrectMatrix();
+    }
+
+    public int[][] getMatrix() {
+        return matrix;
+    }
+
+    public void shuffle() {
+        Random random = new Random();
+        // Fisher-Yates algorithm
+        for (int i = this.matrix.length - 1; i > 0; i--) {
+            for (int j = this.matrix[i].length - 1; j > 0; j--) {
+                int m = random.nextInt(i + 1);
+                int n = random.nextInt(j + 1);
+                swap(this.matrix, i, j, m, n);
+            }
+        }
+    }
+
+    /******************************
+     * Static methods section *
+     *****************************/
 
     public static int[][] copyMatrix(int[][] src) {
         int[][] dst = new int[src.length][src.length];
@@ -27,7 +61,7 @@ public class MatrixOperations {
         int count = 0;
         for (int i = 0; i < Main.DIMENSION; i++)
             for (int j = 0; j < Main.DIMENSION; j++)
-                if (matrix[i][j]!=0 && matrix[i][j] != finalMat[i][j])
+                if (matrix[i][j] != 0 && matrix[i][j] != finalMat[i][j])
                     count++;
         return count;
     }
@@ -49,16 +83,4 @@ public class MatrixOperations {
         return matrix;
     }
 
-    public static void shuffleMatrix(int [][] matrix) {
-        Random random = new Random();
-
-        // Fisher-Yates algorithm
-        for (int i = matrix.length - 1; i > 0; i--) {
-            for (int j = matrix[i].length - 1; j > 0; j--) {
-                int m = random.nextInt(i + 1);
-                int n = random.nextInt(j + 1);
-                swap(matrix, i, j, m, n);
-            }
-        }
-    }
 }
