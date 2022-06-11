@@ -10,6 +10,15 @@ public class BranchAndBound {
 
     public static int[] ROW_SHIFT = {1, 0, -1, 0};
     public static int[] COLUMN_SHIFT = {0, -1, 0, 1};
+    private boolean isExecuted;
+
+    public void setExecuted(boolean executed) {
+        isExecuted = executed;
+    }
+
+    public boolean isExecuted() {
+        return isExecuted;
+    }
 
     public Node createNewNode(
             int[][] matrix,
@@ -35,6 +44,8 @@ public class BranchAndBound {
     }
 
     public Node branchAndBound(int[][] matrix) {
+        isExecuted = true;
+
         PriorityQueue<Node> pq = new PriorityQueue<>();
         int[] zeroCoords = Matrix.getZeroCoords(matrix);
         int x = zeroCoords[0];
@@ -47,6 +58,8 @@ public class BranchAndBound {
         pq.add(first);
 
         while (!pq.isEmpty()) {
+            if (!isExecuted) return null;
+
             Node min = pq.remove();
             if (min.getDistance() == 0) {
                 return min;
@@ -68,5 +81,9 @@ public class BranchAndBound {
             }
         }
         return null;
+    }
+
+    public synchronized void interrupt() {
+        if (isExecuted) isExecuted = false;
     }
 }

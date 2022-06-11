@@ -9,6 +9,7 @@ public class Controller {
     private Notifiable main;
     private Matrix matrix;
     private Thread pathFinder;
+    BranchAndBound bnb;
 
     public Controller(Notifiable main, Matrix matrix) {
         this.main = main;
@@ -16,12 +17,12 @@ public class Controller {
     }
 
     public void prepare() {
+        this.bnb = new BranchAndBound();
         pathFinder = new Thread(this::executeSearch);
         pathFinder.start();
     }
 
     private void executeSearch() {
-        BranchAndBound bnb = new BranchAndBound();
         Node finalNode = bnb.branchAndBound(matrix.getMatrix());
         if (finalNode != null) {
             showNodes(finalNode);
@@ -61,4 +62,7 @@ public class Controller {
         return step;
     }
 
+    public void interrupt() {
+        bnb.interrupt();
+    }
 }

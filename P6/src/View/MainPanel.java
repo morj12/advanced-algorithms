@@ -17,6 +17,7 @@ public class MainPanel extends JFrame {
     private JPanel buttonsPanel;
     private JButton startButton;
     private JButton shuffleButton;
+    private JButton cancelButton;
 
     public MainPanel(Notifiable main, Matrix matrix) {
         this.main = main;
@@ -33,13 +34,21 @@ public class MainPanel extends JFrame {
         startButton.addActionListener(this::startButtonPressed);
         shuffleButton = new JButton("Shuffle");
         shuffleButton.addActionListener(this::shuffleButtonPressed);
+        cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(this::cancelButtonPressed);
+        cancelButton.setEnabled(false);
         buttonsPanel = new JPanel();
         buttonsPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         buttonsPanel.add(startButton);
         buttonsPanel.add(shuffleButton);
+        buttonsPanel.add(cancelButton);
         this.add(BorderLayout.NORTH, buttonsPanel);
         boardPanel = new BoardPanel(board);
         this.add(BorderLayout.SOUTH, boardPanel);
+    }
+
+    private void cancelButtonPressed(ActionEvent actionEvent) {
+        main.notify("cancelled", null);
     }
 
     private void shuffleButtonPressed(ActionEvent actionEvent) {
@@ -56,8 +65,9 @@ public class MainPanel extends JFrame {
         this.setVisible(true);
     }
 
-    public void activateButtons(boolean start, boolean shuffle) {
+    public void activateButtons(boolean start, boolean shuffle, boolean cancel) {
         startButton.setEnabled(start);
         shuffleButton.setEnabled(shuffle);
+        cancelButton.setEnabled(cancel);
     }
 }

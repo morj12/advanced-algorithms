@@ -39,9 +39,10 @@ public class Main implements Notifiable {
             case "shuffleFinished", "repaint" -> view.repaint();
             case "start" -> {
                 controller.prepare();
-                view.activateButtons(false, false);
+                view.activateButtons(false, false, true);
             }
-            case "finished" -> view.activateButtons(true, true);
+            case "finished" -> view.activateButtons(true, true, false);
+            case "cancelled" -> controller.interrupt();
         }
     }
 
