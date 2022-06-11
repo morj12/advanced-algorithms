@@ -1,5 +1,6 @@
 package View;
 
+import Main.Main;
 import Model.Board;
 
 import javax.imageio.ImageIO;
@@ -14,8 +15,7 @@ public class BoardPanel extends JPanel {
     private Board board;
 
     private static int size = 600;
-    private static int dimension = 3;
-    private static int cellSize = size / dimension;
+    private static int cellSize = size / Main.DIMENSION;
 
     private BufferedImage img;
     private BufferedImage[] imgs;
@@ -24,11 +24,11 @@ public class BoardPanel extends JPanel {
         this.board = board;
         try {
             img = ImageIO.read(new File("src/img/floppa.png"));
-            imgs = new BufferedImage[dimension * dimension];
+            imgs = new BufferedImage[Main.DIMENSION * Main.DIMENSION];
             int counter = 0;
 
-            for (int i = 0; i < dimension; i++) {
-                for (int j = 0; j < dimension; j++) {
+            for (int i = 0; i < Main.DIMENSION; i++) {
+                for (int j = 0; j < Main.DIMENSION; j++) {
                     imgs[counter++] = img.getSubimage(j * cellSize, i * cellSize, cellSize, cellSize);
                 }
             }
@@ -53,10 +53,11 @@ public class BoardPanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         int[][] matrix = board.getMatrix();
-        for (int i = 0; i < dimension; i++) {
-            for (int j = 0; j < dimension; j++) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
                 if (matrix[j][i] != 0) {
-                    g.drawImage(imgs[matrix[j][i]],
+                    g.drawImage(
+                            imgs[matrix[j][i]],
                             i * cellSize,
                             j * cellSize,
                             this);

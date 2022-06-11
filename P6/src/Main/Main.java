@@ -12,7 +12,8 @@ public class Main implements Notifiable {
     private MainPanel view;
     private Board board;
 
-    private final int NUMBERS = 9;
+    public static final int NUMBERS = 9;
+    public static final int DIMENSION = (int) Math.sqrt(NUMBERS);
 
     public static void main(String[] args) {
         new Main().start();
@@ -25,25 +26,22 @@ public class Main implements Notifiable {
             e.printStackTrace();
         }
 
-        board = new Board((int) Math.sqrt(NUMBERS));
-        controller = new Controller(this, board, (int) Math.sqrt(NUMBERS));
+        board = new Board();
+        controller = new Controller(this, board);
         view = new MainPanel(this, board);
         view.showGui();
-
-
     }
 
     @Override
     public void notify(String s, Object o) {
         switch (s) {
             case "shuffle" -> controller.shuffle();
-
             case "shuffleFinished", "repaint" -> view.repaint();
             case "start" -> {
                 controller.prepare();
                 view.activateButtons(false, false);
                 // TIMEOUT
-                new Timer(20000, (e) -> {
+                new Timer(10000, (e) -> {
                     System.out.println("Timeout!!!");
                     System.exit(0);
                 }).start();

@@ -2,19 +2,18 @@ package Controller;
 
 import Main.Notifiable;
 import Model.Board;
-import Model.Step;
+import Model.Node;
+import Utility.MatrixOperations;
 
 public class Controller {
 
     private Notifiable main;
     private Board board;
     private Thread pathFinder;
-    private int dimension;
 
-    public Controller(Notifiable main, Board board, int dimension) {
+    public Controller(Notifiable main, Board board) {
         this.main = main;
         this.board = board;
-        this.dimension = dimension;
     }
 
     public void prepare() {
@@ -23,27 +22,20 @@ public class Controller {
     }
 
     private void executeSearch() {
-        int counter = 0;
-        int[] coords = Utility.getZeroCoords(board.getMatrix());
-        int[][] finalMatrix = new int[dimension][dimension];
-        for (int i = 0; i < finalMatrix.length; i++) {
-            for (int j = 0; j < finalMatrix[i].length; j++) {
-                finalMatrix[i][j] = counter++;
-            }
+        BranchAndBound bnb = new BranchAndBound();
+        Node finalNode = bnb.solve(board.getMatrix());
+        if (finalNode != null) {
+            showNodes(finalNode);
         }
 
-        Step finalStep = Step.solve(board.getMatrix(), coords[0], coords[1], finalMatrix);
-        if (finalStep != null) {
-            showSteps(finalStep);
-        }
-        main.notify("finished", finalStep);
+        main.notify("finished", finalNode);
     }
 
-    private void showSteps(Step finalStep) {
-        Step step = reverse(finalStep);
+    private void showNodes(Node node) {
+        Node step = reverse(node);
         while (step != null) {
-            board.setMatrix(step.getMatrix());
-            step = step.getParent();
+            board.setMatrix(step.matrix);
+            step = step.parent;
             main.notify("repaint", null);
             try {
                 Thread.sleep(100);
@@ -57,13 +49,13 @@ public class Controller {
         main.notify("shuffleFinished", null);
     }
 
-    public Step reverse(Step step) {
-        Step prev = null;
-        Step current = step;
-        Step next;
+    public Node reverse(Node step) {
+        Node prev = null;
+        Node current = step;
+        Node next;
         while (current != null) {
-            next = current.getParent();
-            current.setParent(prev);
+            next = current.parent;
+            current.parent = prev;
             prev = current;
             current = next;
         }

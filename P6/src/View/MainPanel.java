@@ -2,7 +2,6 @@ package View;
 
 import Main.Notifiable;
 import Model.Board;
-import Model.Step;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
