@@ -9,7 +9,7 @@ public class Controller {
     private Notifiable main;
     private Matrix matrix;
     private Thread pathFinder;
-    BranchAndBound bnb;
+    private BranchAndBound bnb;
 
     public Controller(Notifiable main, Matrix matrix) {
         this.main = main;
