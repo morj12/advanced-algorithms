@@ -57,7 +57,7 @@ public abstract class Colour {
             hue = 0;
         else if (maxValue == red && green >= blue)
             hue = (60 * ((green - blue) / delta) + 0) % 360;
-        else if (maxValue == red && green < blue)
+        else if (maxValue == red)
             hue = (60 * ((green - blue) / delta) + 360) % 360;
         else if (maxValue == green)
             hue = (60 * ((blue - red) / delta) + 120) % 360;

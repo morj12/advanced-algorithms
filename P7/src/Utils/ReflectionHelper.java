@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class ReflectionHelper {
-    private static final boolean DEBUG_MODE = Main.Main.getDebugMode();
 
     public static Object execute(Class root, Object invoker, String function, Object[] args) {
         // Use reflexion to invoke any method declared for root class
@@ -22,11 +21,8 @@ public class ReflectionHelper {
             }
 
         } catch (NoSuchMethodException e) {
-            if (DEBUG_MODE) e.printStackTrace();
         } catch (IllegalAccessException e) {
-            if (DEBUG_MODE) e.printStackTrace();
         } catch (InvocationTargetException e) {
-            if (DEBUG_MODE) e.printStackTrace();
         }
         return null;
     }
@@ -40,7 +36,6 @@ public class ReflectionHelper {
             }
 
         } catch (Exception ex) {
-            if (DEBUG_MODE) ex.printStackTrace();
         }
 
         // If nothing have been found return null value

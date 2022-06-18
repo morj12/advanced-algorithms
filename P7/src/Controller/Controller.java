@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 public class Controller implements Notifiable {
 
-    private static boolean DEBUG = Main.Main.getDebugMode();
     private static String FILE_EXTENSION = "png";
     private static String DIRECTORY_LOCATION = "src/resources/";
     private static String DIRECTORY_IMG_LOCATION = DIRECTORY_LOCATION + "flags/";
@@ -45,7 +44,6 @@ public class Controller implements Notifiable {
         try {
             algorithmThread.interrupt();
         } catch (Exception e) {
-            if (DEBUG) e.printStackTrace();
         }
     }
 
@@ -186,8 +184,7 @@ public class Controller implements Notifiable {
             stream.writeObject(palette);
             stream.close();
 
-            if(DEBUG)
-                System.out.println("Image Data was successfully written to a file.");
+            System.out.println("Image Data was successfully written to a file.");
 
         } catch (Exception e) {
             e.printStackTrace();

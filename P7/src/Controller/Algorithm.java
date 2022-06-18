@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
 
-public class Algorithm implements IAlgorithm {
+public class Algorithm {
     private double tolerance = 0.005;
     private Controller controller;
 
@@ -19,8 +19,6 @@ public class Algorithm implements IAlgorithm {
         this.controller = controller;
     }
 
-
-    @Override
     public void identifyFlag(Flag flag, int nPuntos, boolean singleThread) {
         // Variables a usar
         File file = flag.getImage();
@@ -59,7 +57,7 @@ public class Algorithm implements IAlgorithm {
 
             tasks.add(new Callable() {
                 @Override
-                public Colorimetry call() throws Exception {
+                public Colorimetry call() {
                     double [] colp = new double[paleta.getTotalColours()];
                     Colour col;
 
@@ -109,7 +107,6 @@ public class Algorithm implements IAlgorithm {
         contrastColorimetryAgainstDatabase(resCol);
     }
 
-    @Override
     public boolean similarColorimetry(Colorimetry candidate, Colorimetry target) {
         double[] a1 = candidate.getColorimetry();
         double[] a2 = target.getColorimetry();
@@ -121,7 +118,6 @@ public class Algorithm implements IAlgorithm {
         return true;
     }
 
-    @Override
     public void contrastColorimetryAgainstDatabase(Colorimetry foundColorimetry) {
         ArrayList<Colorimetry> bd = controller.getDatabase();
         Flag result = null;
@@ -137,7 +133,6 @@ public class Algorithm implements IAlgorithm {
         }
     }
 
-    @Override
     public Colorimetry launchThreads(ExecutorService threadPool, Palette paleta, int nThreads, ArrayList<Callable<Colorimetry>> tasks) {
         Colorimetry resCol = null;
         double[][] colorimetria = new double[nThreads][paleta.getTotalColours()];
