@@ -21,7 +21,7 @@ public class Palette {
 
     public String getColourName (int index) { return colours[index].getName(); }
 
-    public Colour getColor (int R, int G, int B) {
+    public Colour getColour (int R, int G, int B) {
         for (Colour colour:
              colours) {
             if (colour.isAcceptedColour(R,G,B)){

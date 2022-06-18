@@ -23,4 +23,24 @@ public class Colorimetry {
     public String getNameFlag() {
         return nameFlag;
     }
+
+    public static Colorimetry fuse(double[][] colorimetrias) {
+        if (colorimetrias == null)
+            return null;
+
+        double[] newColour = new double[colorimetrias[0].length];
+
+        for (int i = 0; i < newColour.length ; i++) {
+            for (int j = 0; j<colorimetrias.length; j++) {
+                newColour[i] += colorimetrias[j][i];
+            }
+            newColour[i] /= colorimetrias.length;
+        }
+
+        Colorimetry resCol = new Colorimetry("");
+
+        resCol.setColorimetry(newColour);
+
+        return resCol;
+    }
 }
