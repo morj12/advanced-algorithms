@@ -112,6 +112,7 @@ public class View extends JFrame {
                     image = ImageIO.read(file);
                     imagePanel.updateImage(image);
                     flagNameLabel.setText(file.getName());
+                    startButton.setEnabled(true);
                 } else {
                     JOptionPane.showMessageDialog(
                             null,

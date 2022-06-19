@@ -49,9 +49,8 @@ public class Main implements Notifiable {
             case "stop" -> {
                 controller.stopSearch();
             }
-            case "loaded", "stopped" -> {
-                view.enableButtons(false, true, true, false);
-            }
+            case "stopped" -> view.enableButtons(false, true, true, false);
+            case "loaded" -> view.enableButtons(false, true, false, false);
             case "startProgress" -> view.clearAndPrepareProgress((int) arguments[0]);
             case "step" -> view.updateProgress();
         }
