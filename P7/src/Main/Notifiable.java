@@ -1,5 +1,5 @@
 package Main;
 
 public interface Notifiable {
-    void notify(String message, Object[] object);
+    void notify(String message, Object ... arguments);
 }
