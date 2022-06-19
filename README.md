@@ -30,3 +30,7 @@ To do:
 - [ ] Use singletons
 - [X] Add progress bar 
 
+## Exercise 7
+To do:
+- [] Save color distributions in a file
+- [] Allow changing number of points depending depending on the size of the flag
