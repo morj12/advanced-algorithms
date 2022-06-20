@@ -6,6 +6,7 @@ import Main.Notifiable;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
@@ -27,6 +28,8 @@ public class View extends JFrame {
     private JButton selectImageButton;
     private JButton startButton;
     private JButton stopButton;
+    private JSlider samplesSlider;
+    private JLabel samplesNumberLabel;
     private JProgressBar progressBar;
     private JLabel flagNameLabel;
     private JLabel statusLabel;
@@ -54,10 +57,15 @@ public class View extends JFrame {
         startButton.addActionListener(this::startButtonPressed);
         stopButton = new JButton("Stop");
         stopButton.addActionListener(this::stopButtonPressed);
+        samplesSlider = new JSlider(SwingConstants.HORIZONTAL, 1000, 50000, 25000);
+        samplesSlider.addChangeListener(this::sliderChanged);
+        samplesNumberLabel = new JLabel("Samples: " + samplesSlider.getValue());
         buttonsPanel.add(loadFlagsButton);
         buttonsPanel.add(selectImageButton);
         buttonsPanel.add(startButton);
         buttonsPanel.add(stopButton);
+        buttonsPanel.add(samplesSlider);
+        buttonsPanel.add(samplesNumberLabel);
 
         imagePanel = new ImagePanel();
         imagePanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -85,6 +93,13 @@ public class View extends JFrame {
         this.add(BorderLayout.SOUTH, infoPanel);
 
         enableButtons(true, false, false, false);
+    }
+
+    private void sliderChanged(ChangeEvent changeEvent) {
+        if (samplesSlider.getValueIsAdjusting()) {
+            samplesNumberLabel.setText("Samples: " + samplesSlider.getValue());
+            main.notify("samples", samplesSlider.getValue());
+        }
     }
 
     public void clearAndPrepareProgress(int max) {

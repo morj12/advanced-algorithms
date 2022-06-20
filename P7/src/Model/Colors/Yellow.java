@@ -1,16 +1,17 @@
 package Model.Colors;
 
-import Model.Color;
+import Model.AbstractColor;
+import Model.HSVInterval;
 
-public class Yellow extends Color {
+public class Yellow extends AbstractColor {
     public Yellow() {
         super("Yellow",
                 4,
-                ORANGE_YELLOW_BORDER,
-                YELLOW_GREEN_BORDER,
-                MAX_SATURATION_WHITE,
-                100,
-                MAX_BRIGHTNESS_BLACK,
-                100);
+                HSVInterval.ORANGE_YELLOW_BORDER,
+                HSVInterval.YELLOW_GREEN_BORDER,
+                HSVInterval.MAX_SATURATION_WHITE,
+                HSVInterval.MAX_COLOR,
+                HSVInterval.MAX_BRIGHTNESS_BLACK,
+                HSVInterval.MAX_COLOR);
     }
 }

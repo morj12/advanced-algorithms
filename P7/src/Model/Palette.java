@@ -3,7 +3,7 @@ package Model;
 import Model.Colors.*;
 
 public class Palette {
-    private static Color[] colors = new Color[] {
+    private static AbstractColor[] colors = new AbstractColor[] {
             new White(),
             new Black(),
             new Red(),
@@ -17,10 +17,9 @@ public class Palette {
 
     public static String getColourName (int index) { return colors[index].getName(); }
 
-    public static Color getColour (int R, int G, int B) {
-        for (Color color :
-                colors) {
-            if (color.isAcceptedColour(R,G,B)){
+    public static AbstractColor getColor(int R, int G, int B) {
+        for (AbstractColor color : colors) {
+            if (color.matches(R,G,B)){
                 return color;
             }
         }

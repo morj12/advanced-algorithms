@@ -1,16 +1,17 @@
 package Model.Colors;
 
-import Model.Color;
+import Model.AbstractColor;
+import Model.HSVInterval;
 
-public class Black extends Color {
+public class Black extends AbstractColor {
     public Black() {
         super("Black",
                 1,
                 0,
-                360,
+                HSVInterval.MAX_COLOR,
                 0,
-                100,
+                HSVInterval.MAX_COLOR,
                 0,
-                Color.MAX_BRIGHTNESS_BLACK);
+                HSVInterval.MAX_BRIGHTNESS_BLACK);
     }
 }

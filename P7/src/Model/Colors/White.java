@@ -1,16 +1,17 @@
 package Model.Colors;
 
-import Model.Color;
+import Model.AbstractColor;
+import Model.HSVInterval;
 
-public class White extends Color {
+public class White extends AbstractColor {
     public White() {
         super("White",
                 0,
                 0,
-                360,
+                HSVInterval.MAX_COLOR,
                 0,
-                MAX_SATURATION_WHITE,
-                MIN_BRIGHTNESS_WHITE,
-                100);
+                HSVInterval.MAX_SATURATION_WHITE,
+                HSVInterval.MIN_BRIGHTNESS_WHITE,
+                HSVInterval.MAX_COLOR);
     }
 }

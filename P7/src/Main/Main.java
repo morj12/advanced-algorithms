@@ -12,7 +12,7 @@ public class Main implements Notifiable {
     private View view;
     public static final String ALL_FLAGS_DIRECTORY = "src/AllFlags/";
     public static final String EXAMPLE_FLAGS = "src/ExampleFlags/";
-    public static final int SAMPLES_NUMBER = 50000;
+    public static int SAMPLES_NUMBER = 50000;
 
     public static void main(String[] args) {
         try {
@@ -25,7 +25,6 @@ public class Main implements Notifiable {
 
     private void start() {
         controller = new Controller(this);
-
         view = new View(this);
         view.showGui();
     }
@@ -53,6 +52,7 @@ public class Main implements Notifiable {
             case "loaded" -> view.enableButtons(false, true, false, false);
             case "startProgress" -> view.clearAndPrepareProgress((int) arguments[0]);
             case "step" -> view.updateProgress();
+            case "samples" -> SAMPLES_NUMBER = (int) arguments[0];
         }
     }
 }

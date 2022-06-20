@@ -13,10 +13,6 @@ public class ImagePanel extends JPanel {
         this.repaint();
     }
 
-    public BufferedImage getFlag() {
-        return flag;
-    }
-
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(600, 400);

@@ -2,8 +2,8 @@ package Controller;
 
 import Main.Main;
 import Main.Notifiable;
-import Model.Color;
-import Model.ColorDistribution;
+import Model.AbstractColor;
+import Model.DistributionWrapper;
 import Model.Palette;
 
 import javax.imageio.ImageIO;
@@ -13,11 +13,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 public class Controller {
 
     private Notifiable main;
-    private List<ColorDistribution> distributions;
+    private List<DistributionWrapper> distributions;
     private volatile boolean isExecuted;
 
     public Controller(Notifiable main) {
@@ -26,7 +27,6 @@ public class Controller {
         this.isExecuted = false;
     }
 
-
     public void searchFlagAsync(BufferedImage flag) {
         isExecuted = true;
         new Thread(() -> searchFlag(flag)).start();
@@ -34,8 +34,7 @@ public class Controller {
 
     private void searchFlag(BufferedImage flag) {
         Random random = new Random();
-        Color color;
-        double[] colors = new double[Palette.getTotalColours()];
+        double[] distribution = new double[Palette.getTotalColours()];
 
         main.notify("startProgress", Main.SAMPLES_NUMBER);
         for (int i = 0; i < Main.SAMPLES_NUMBER; i++) {
@@ -43,57 +42,51 @@ public class Controller {
             if (isExecuted) {
                 int x = random.nextInt(flag.getWidth());
                 int y = random.nextInt(flag.getHeight());
-
-                int RGB = flag.getRGB(x, y);
-                int red = (RGB & 0x00FF0000) >> 16;
-                int green = (RGB & 0x0000FF00) >> 8;
-                int blue = (RGB & 0x000000FF);
-
-                color = Palette.getColour(red, green, blue);
-                colors[color.getIndex()] += 1.0;
+                chooseColor(flag.getRGB(x, y), distribution);
             } else {
                 main.notify("startProgress", 100);
                 return;
             }
         }
 
-        for (int k = 0; k < colors.length; k++) {
-            colors[k] /= Main.SAMPLES_NUMBER;
+        for (int k = 0; k < distribution.length; k++) {
+            distribution[k] /= Main.SAMPLES_NUMBER;
         }
 
-        ColorDistribution newFlag = new ColorDistribution("New flag");
-        newFlag.setDistribution(colors);
+        DistributionWrapper newFlag = new DistributionWrapper("New flag");
+        newFlag.setDistribution(distribution);
 
-        ColorDistribution similarDistribution = findSimilarColorDistribution(newFlag);
-        if (similarDistribution == null) {
+        DistributionWrapper similarDistribution;
+        if ((similarDistribution = findSimilarColorDistribution(newFlag)) == null) {
             main.notify("finished", "");
         } else {
-            main.notify("finished", similarDistribution.getNameFlag());
+            main.notify("finished", similarDistribution.getName());
         }
 
     }
 
-    private ColorDistribution findSimilarColorDistribution(ColorDistribution flag) {
-        for (ColorDistribution distribution : distributions) {
+    private DistributionWrapper findSimilarColorDistribution(DistributionWrapper flag) {
+        for (DistributionWrapper distribution : distributions) {
             if (similar(flag, distribution)) {
                 return distribution;
             }
         }
         return null;
-
     }
 
-    private boolean similar(ColorDistribution flag, ColorDistribution distribution) {
-        double[] a1 = flag.getDistribution();
-        double[] a2 = distribution.getDistribution();
+    private boolean similar(DistributionWrapper first, DistributionWrapper second) {
+        double[] firstDistribution = first.getDistribution();
+        double[] secondDistribution = second.getDistribution();
 
-        for (int i = 0; i < a1.length; i++) {
-            if (a1[i] < a2[i] - 0.05 || a1[i] > a2[i] + 0.05) {
-                return false;
-            }
-        }
+        return IntStream.range(0, firstDistribution.length)
+                .noneMatch(i ->
+                        tooDifferent(
+                                firstDistribution[i],
+                                secondDistribution[i]));
+    }
 
-        return true;
+    private boolean tooDifferent(double first, double second) {
+        return Math.abs(first - second) > 0.05;
     }
 
     public void stopSearch() {
@@ -107,17 +100,16 @@ public class Controller {
     public void loadDistributions() {
         String[] flags = new File(Main.ALL_FLAGS_DIRECTORY).list();
         BufferedImage flagImage;
-        ColorDistribution flagColorDistribution;
+        DistributionWrapper flagDistributionWrapper;
 
         main.notify("startProgress", flags.length);
 
-        for (int i = 0; i < flags.length; i++) {
-            String flag = flags[i];
+        for (String flag : flags) {
             try {
                 main.notify("step");
                 flagImage = ImageIO.read(new File(Main.ALL_FLAGS_DIRECTORY + flag));
-                flagColorDistribution = createDistribution(flagImage, flag);
-                distributions.add(flagColorDistribution);
+                flagDistributionWrapper = createDistribution(flagImage, flag);
+                distributions.add(flagDistributionWrapper);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -126,27 +118,28 @@ public class Controller {
         main.notify("loaded");
     }
 
-    private ColorDistribution createDistribution(BufferedImage flagImage, String flag) {
-        Color color;
-        double colors[] = new double[Palette.getTotalColours()];
+    private DistributionWrapper createDistribution(BufferedImage flagImage, String flag) {
+        double[] distribution = new double[Palette.getTotalColours()];
 
         for (int j = 0; j < flagImage.getHeight(); j++) {
             for (int i = 0; i < flagImage.getWidth(); i++) {
-
-                int RGB = flagImage.getRGB(i, j);
-                int red = (RGB & 0x00FF0000) >> 16;
-                int green = (RGB & 0x0000FF00) >> 8;
-                int blue = (RGB & 0x000000FF);
-
-                color = Palette.getColour(red, green, blue);
-                colors[color.getIndex()] += 1.0;
+                chooseColor(flagImage.getRGB(i, j), distribution);
             }
         }
 
-        for (int i = 0; i < colors.length; i++) colors[i] /= flagImage.getWidth() * flagImage.getHeight();
+        for (int i = 0; i < distribution.length; i++) distribution[i] /= flagImage.getWidth() * flagImage.getHeight();
 
-        ColorDistribution result = new ColorDistribution(flag);
-        result.setDistribution(colors);
+        DistributionWrapper result = new DistributionWrapper(flag);
+        result.setDistribution(distribution);
         return result;
+    }
+
+    private void chooseColor(int rgb, double[] colors) {
+        int red = (rgb & 0x00FF0000) >> 16;
+        int green = (rgb & 0x0000FF00) >> 8;
+        int blue = (rgb & 0x000000FF);
+
+        AbstractColor color = Palette.getColor(red, green, blue);
+        colors[color.getIndex()] += 1.0;
     }
 }

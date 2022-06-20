@@ -1,16 +1,17 @@
 package Model.Colors;
 
-import Model.Color;
+import Model.AbstractColor;
+import Model.HSVInterval;
 
-public class Blue extends Color {
+public class Blue extends AbstractColor {
     public Blue() {
         super("Blue",
                 6,
-                GREEN_BLUE_BORDER,
-                BLUE_RED_BORDER,
-                MAX_SATURATION_WHITE,
-                100,
-                MAX_BRIGHTNESS_BLACK,
-                100);
+                HSVInterval.GREEN_BLUE_BORDER,
+                HSVInterval.BLUE_RED_BORDER,
+                HSVInterval.MAX_SATURATION_WHITE,
+                HSVInterval.MAX_COLOR,
+                HSVInterval.MAX_BRIGHTNESS_BLACK,
+                HSVInterval.MAX_COLOR);
     }
 }

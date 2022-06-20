@@ -1,26 +1,29 @@
 package Model.Colors;
 
-import Model.Color;
+import Model.AbstractColor;
+import Model.HSVInterval;
 
-public class Red extends Color {
+import java.awt.*;
+
+public class Red extends AbstractColor {
     public Red() {
         super("Red",
                 2,
-                BLUE_RED_BORDER,
-                RED_ORANGE_BORDER,
-                MAX_SATURATION_WHITE,
-                100,
-                MAX_BRIGHTNESS_BLACK,
-                100);
+                HSVInterval.BLUE_RED_BORDER,
+                HSVInterval.RED_ORANGE_BORDER,
+                HSVInterval.MAX_SATURATION_WHITE,
+                HSVInterval.MAX_COLOR,
+                HSVInterval.MAX_BRIGHTNESS_BLACK,
+                HSVInterval.MAX_COLOR);
     }
 
     @Override
-    public boolean isAcceptedColour(int R, int G, int B) {
-        double[] HSV = RGBtoHSV(R, G, B);
+    public boolean matches(int R, int G, int B) {
+        float[] HSV = Color.RGBtoHSB(R, G, B, null);
 
-        boolean v = minV <= HSV[2] && HSV[2] <= maxV;
-        boolean s = minS <= HSV[1] && HSV[1] <= maxS;
-        boolean h = HSV[0] >= 0 && HSV[0] <= maxH || HSV[0] > minH && HSV[0] < MAX_COLOR;
+        boolean v = interval.getMinV() <= HSV[2] && HSV[2] <= interval.getMaxV();
+        boolean s = interval.getMinS() <= HSV[1] && HSV[1] <= interval.getMaxS();
+        boolean h = HSV[0] >= 0 && HSV[0] <= interval.getMaxH() || HSV[0] > interval.getMinH() && HSV[0] < HSVInterval.MAX_COLOR;
         return v && s && h;
     }
 }
