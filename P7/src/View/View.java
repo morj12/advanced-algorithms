@@ -171,8 +171,12 @@ public class View extends JFrame {
     public void showNewFlag(String flagName) {
         if (!flagName.equals("")) {
             statusLabel.setText("Found: " + flagName);
+            JOptionPane.showMessageDialog(this,
+                    "Flag found!! The file name is: " + flagName, "Results found!", JOptionPane.OK_OPTION);
         } else {
             statusLabel.setText("Not found.");
+            JOptionPane.showMessageDialog(this,
+                    "Flag not found. Please, try again.", "Not results found", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
