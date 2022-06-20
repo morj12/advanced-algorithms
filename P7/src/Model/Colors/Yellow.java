@@ -1,17 +1,17 @@
 package Model.Colors;
 
-import Model.AbstractColor;
-import Model.HSVInterval;
+import Model.AbstractHSBColor;
+import Model.HSBInterval;
 
-public class Yellow extends AbstractColor {
+public class Yellow extends AbstractHSBColor {
+
     public Yellow() {
-        super("Yellow",
-                4,
-                HSVInterval.ORANGE_YELLOW_BORDER,
-                HSVInterval.YELLOW_GREEN_BORDER,
-                HSVInterval.MAX_SATURATION_WHITE,
-                HSVInterval.MAX_COLOR,
-                HSVInterval.MAX_BRIGHTNESS_BLACK,
-                HSVInterval.MAX_COLOR);
+        super(
+                HSBInterval.H_ORANGE_LIMIT,
+                HSBInterval.H_YELLOW_LIMIT,
+                HSBInterval.S_WHITE_LIMIT,
+                HSBInterval.MAX_COLOR,
+                HSBInterval.B_BLACK_LIMIT,
+                HSBInterval.MAX_COLOR);
     }
 }

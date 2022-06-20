@@ -2,9 +2,9 @@ package Controller;
 
 import Main.Main;
 import Main.Notifiable;
-import Model.AbstractColor;
+import Model.AbstractHSBColor;
 import Model.DistributionWrapper;
-import Model.Palette;
+import Model.ColorExamples;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -34,7 +34,7 @@ public class Controller {
 
     private void searchFlag(BufferedImage flag) {
         Random random = new Random();
-        double[] distribution = new double[Palette.getTotalColours()];
+        double[] distribution = new double[ColorExamples.getColorsLength()];
 
         main.notify("startProgress", Main.SAMPLES_NUMBER);
         for (int i = 0; i < Main.SAMPLES_NUMBER; i++) {
@@ -119,7 +119,7 @@ public class Controller {
     }
 
     private DistributionWrapper createDistribution(BufferedImage flagImage, String flag) {
-        double[] distribution = new double[Palette.getTotalColours()];
+        double[] distribution = new double[ColorExamples.getColorsLength()];
 
         for (int j = 0; j < flagImage.getHeight(); j++) {
             for (int i = 0; i < flagImage.getWidth(); i++) {
@@ -139,7 +139,7 @@ public class Controller {
         int green = (rgb & 0x0000FF00) >> 8;
         int blue = (rgb & 0x000000FF);
 
-        AbstractColor color = Palette.getColor(red, green, blue);
-        colors[color.getIndex()] += 1.0;
+        AbstractHSBColor color = ColorExamples.getColor(red, green, blue);
+        colors[ColorExamples.findColorIndex(color)] += 1.0;
     }
 }

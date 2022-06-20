@@ -3,11 +3,12 @@ package Model.Colors;
 import Model.AbstractHSBColor;
 import Model.HSBInterval;
 
-public class Orange extends AbstractHSBColor {
-    public Orange() {
+public class Rose extends AbstractHSBColor {
+
+    public Rose() {
         super(
-                HSBInterval.H_RED_LIMIT,
-                HSBInterval.H_ORANGE_LIMIT,
+                HSBInterval.H_VIOLET_LIMIT,
+                HSBInterval.H_ROSE_LIMIT,
                 HSBInterval.S_WHITE_LIMIT,
                 HSBInterval.MAX_COLOR,
                 HSBInterval.B_BLACK_LIMIT,

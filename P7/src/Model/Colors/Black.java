@@ -1,17 +1,17 @@
 package Model.Colors;
 
-import Model.AbstractColor;
-import Model.HSVInterval;
+import Model.AbstractHSBColor;
+import Model.HSBInterval;
 
-public class Black extends AbstractColor {
+public class Black extends AbstractHSBColor {
+
     public Black() {
-        super("Black",
-                1,
+        super(
                 0,
-                HSVInterval.MAX_COLOR,
+                HSBInterval.MAX_COLOR,
                 0,
-                HSVInterval.MAX_COLOR,
+                HSBInterval.MAX_COLOR,
                 0,
-                HSVInterval.MAX_BRIGHTNESS_BLACK);
+                HSBInterval.B_BLACK_LIMIT);
     }
 }
