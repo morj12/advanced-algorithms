@@ -1,6 +1,8 @@
 package Model;
 
-public class DistributionWrapper {
+import java.io.Serializable;
+
+public class DistributionWrapper implements Serializable {
 
     private final String name;
     private double[] distribution;

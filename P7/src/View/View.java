@@ -122,7 +122,7 @@ public class View extends JFrame {
         int result = jFileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             try {
-                 File file = jFileChooser.getSelectedFile();
+                File file = jFileChooser.getSelectedFile();
                 if (isImage(file.getName())) {
                     image = ImageIO.read(file);
                     imagePanel.updateImage(image);
@@ -171,12 +171,30 @@ public class View extends JFrame {
     public void showNewFlag(String flagName) {
         if (!flagName.equals("")) {
             statusLabel.setText("Found: " + flagName);
+            ImageIcon flagIcon = new ImageIcon(Main.ALL_FLAGS_DIRECTORY + flagName);
             JOptionPane.showMessageDialog(this,
-                    "Flag found!! The file name is: " + flagName, "Results found!", JOptionPane.OK_OPTION);
+                    "Flag found. The file name is: " + flagName, "Found", JOptionPane.PLAIN_MESSAGE,
+                    scaleImage(flagIcon, 220, 150));
         } else {
             statusLabel.setText("Not found.");
             JOptionPane.showMessageDialog(this,
-                    "Flag not found. Please, try again.", "Not results found", JOptionPane.ERROR_MESSAGE);
+                    "Flag not found. Please, try again.", "Not found", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public ImageIcon scaleImage(ImageIcon icon, int w, int h) {
+        int nw = icon.getIconWidth();
+        int nh = icon.getIconHeight();
+        if (icon.getIconWidth() > w) {
+            nw = w;
+            nh = (nw * icon.getIconHeight()) / icon.getIconWidth();
+        }
+
+        if (nh > h) {
+            nh = h;
+            nw = (icon.getIconWidth() * nh) / icon.getIconHeight();
+        }
+
+        return new ImageIcon(icon.getImage().getScaledInstance(nw, nh, Image.SCALE_DEFAULT));
     }
 }

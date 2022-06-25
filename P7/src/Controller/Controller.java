@@ -3,13 +3,12 @@ package Controller;
 import Main.Main;
 import Main.Notifiable;
 import Model.AbstractHSBColor;
-import Model.DistributionWrapper;
 import Model.ColorExamples;
+import Model.DistributionWrapper;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -98,24 +97,48 @@ public class Controller {
     }
 
     public void loadDistributions() {
-        String[] flags = new File(Main.ALL_FLAGS_DIRECTORY).list();
-        BufferedImage flagImage;
-        DistributionWrapper flagDistributionWrapper;
-
-        main.notify("startProgress", flags.length);
-
-        for (String flag : flags) {
-            try {
+        File file = new File(Main.DATA_DIRECTORY + "distributions.dat");
+        if (file.exists()) {
+            try (InputStream inputStream = new FileInputStream(file);
+                 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)
+            ) {
+                distributions = (List<DistributionWrapper>) objectInputStream.readObject();
+                main.notify("startProgress", 1);
                 main.notify("step");
-                flagImage = ImageIO.read(new File(Main.ALL_FLAGS_DIRECTORY + flag));
-                flagDistributionWrapper = createDistribution(flagImage, flag);
-                distributions.add(flagDistributionWrapper);
-            } catch (IOException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+            }
+        } else {
+            String[] flags = new File(Main.ALL_FLAGS_DIRECTORY).list();
+            BufferedImage flagImage;
+            DistributionWrapper flagDistributionWrapper;
+
+            main.notify("startProgress", flags.length);
+
+            for (String flag : flags) {
+                try {
+                    main.notify("step");
+                    flagImage = ImageIO.read(new File(Main.ALL_FLAGS_DIRECTORY + flag));
+                    flagDistributionWrapper = createDistribution(flagImage, flag);
+                    distributions.add(flagDistributionWrapper);
+                    writeDistributions();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
         main.notify("loaded");
+    }
+
+    private void writeDistributions() {
+        try (OutputStream outputStream = new FileOutputStream(Main.DATA_DIRECTORY + "distributions.dat");
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
+            objectOutputStream.writeObject(distributions);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private DistributionWrapper createDistribution(BufferedImage flagImage, String flag) {

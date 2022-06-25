@@ -12,6 +12,7 @@ public class Main implements Notifiable {
     private View view;
     public static final String ALL_FLAGS_DIRECTORY = "src/AllFlags/";
     public static final String EXAMPLE_FLAGS = "src/ExampleFlags/";
+    public static final String DATA_DIRECTORY = "src/Data/";
     public static int SAMPLES_NUMBER = 50000;
 
     public static void main(String[] args) {
