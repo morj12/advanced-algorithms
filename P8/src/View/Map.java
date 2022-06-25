@@ -1,5 +1,7 @@
 package View;
 
+import Model.Country;
+import Model.Town;
 import Utils.Constants;
 
 import javax.imageio.ImageIO;
@@ -12,19 +14,15 @@ import java.util.List;
 
 public class Map extends JPanel {
 
-    public static final int HEIGHT = 900;
-    public static final int WIDTH = 1600;
+    private final Country country;
 
     private BufferedImage map;
-    private int selectedCount;
 
-    private boolean[] selectedIndexes;
-    private List<Integer> path;
+    private List<Town> path;
 
 
-    public Map() {
-        selectedCount = 0;
-        selectedIndexes = new boolean[30];
+    public Map(Country country) {
+        this.country = country;
 
         try {
             map = ImageIO.read(new File("src/Img/map.jpg"));
@@ -33,44 +31,31 @@ public class Map extends JPanel {
         }
     }
 
-    public void setPath(List<Integer> path) {
+    public void setPath(List<Town> path) {
         this.path = path;
-        this.repaint();
-    }
-
-    public int getSelectedCount() {
-        return selectedCount;
-    }
-
-    public void select(int i) {
-        selectedIndexes[i] = true;
-        selectedCount++;
-        this.repaint();
-    }
-
-    public void unselect(int i) {
-        selectedIndexes[i] = false;
-        selectedCount--;
         this.repaint();
     }
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(WIDTH, HEIGHT);
+        return new Dimension(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
     }
 
     @Override
     public void paint(Graphics g) {
-        g.drawImage(map, 0, 0, WIDTH, HEIGHT, null);
-        for (int i = 0; i < Constants.cityCoordinates.length; i++) {
-            if (selectedIndexes[i]) {
+        g.drawImage(map, 0, 0, Constants.MAP_WIDTH, Constants.MAP_HEIGHT, null);
+        for (int i = 0; i < country.getTowns().size(); i++) {
+            if (country.isSelected(i)) {
                 g.setColor(Color.BLUE);
-            } else if (path != null && path.contains(i)) {
+            } else if (path != null && path.contains(country.getTown(i))) {
                 g.setColor(Color.GREEN);
             } else {
                 g.setColor(Color.RED);
             }
-            g.fillOval(Constants.cityCoordinates[i][0], Constants.cityCoordinates[i][1], 15, 15);
+            g.fillOval(Constants.cityCoordinates[i][0],
+                    Constants.cityCoordinates[i][1],
+                    Constants.MARKER_SIZE,
+                    Constants.MARKER_SIZE);
         }
     }
 

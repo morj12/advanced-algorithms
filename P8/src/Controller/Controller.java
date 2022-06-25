@@ -1,126 +1,105 @@
 package Controller;
 
 import Main.Notifiable;
-import Model.Edge;
-import Model.Graph;
-import Model.Vertex;
+import Model.Country;
+import Model.Road;
+import Model.Town;
 
 import java.util.*;
 
 public class Controller {
 
-    private Notifiable main;
-    private Thread thread;
+    private final Notifiable main;
     private boolean isExecuted;
+    private final Country country;
 
-    private List<Edge> edges;
-    private Set<Vertex> settledNodes;
-    private Set<Vertex> unSettledNodes;
-    private Map<Vertex, Vertex> predecessors;
-    private Map<Vertex, Integer> distance;
+    private Set<Town> processedTowns;
+    private Set<Town> unprocessedTowns;
+    private Map<Town, Town> predecessors;
+    private Map<Town, Integer> distances;
 
-    private List<Vertex> processedVertices;
-
-    public Controller(Notifiable main, Graph country) {
+    public Controller(Notifiable main, Country country) {
         this.main = main;
-        this.edges = country.getEdges();
-        this.processedVertices = new ArrayList<>();
+        this.country = country;
     }
 
-    public void executeAsync(Vertex source, Vertex dest) {
+    public void executeAsync(Town source, Town dest) {
         if (!isExecuted) {
-            thread = new Thread(() -> execute(source, dest));
-            thread.start();
+            new Thread(() -> execute(source, dest)).start();
         }
     }
 
-    public void execute(Vertex source, Vertex dest) {
-        if (!processedVertices.contains(source)) {
-            isExecuted = true;
-            settledNodes = new HashSet<>();
-            unSettledNodes = new HashSet<>();
-            distance = new HashMap<>();
-            predecessors = new HashMap<>();
-            distance.put(source, 0);
-            unSettledNodes.add(source);
-            while (unSettledNodes.size() > 0) {
-                Vertex node = getMinimum(unSettledNodes);
-                settledNodes.add(node);
-                unSettledNodes.remove(node);
-                findMinimalDistances(node);
-            }
-            processedVertices.add(source);
+    public void execute(Town source, Town dest) {
+        isExecuted = true;
+        processedTowns = new HashSet<>();
+        unprocessedTowns = new HashSet<>();
+        distances = new HashMap<>();
+        predecessors = new HashMap<>();
+        distances.put(source, 0);
+        unprocessedTowns.add(source);
+        while (unprocessedTowns.size() > 0) {
+            Town town = getClosestTown(unprocessedTowns);
+            processedTowns.add(town);
+            unprocessedTowns.remove(town);
+            findMinimalDistances(town);
         }
         isExecuted = false;
         main.notify("pathFound", getPath(dest));
     }
 
-    private void findMinimalDistances(Vertex node) {
-        List<Vertex> adjacentNodes = getNeighbors(node);
-        for (Vertex target : adjacentNodes) {
-            if (getShortestDistance(target) > getShortestDistance(node)
-                    + getDistance(node, target)) {
-                distance.put(target, getShortestDistance(node)
-                        + getDistance(node, target));
-                predecessors.put(target, node);
-                unSettledNodes.add(target);
-            }
-        }
-
-    }
-
-    private int getDistance(Vertex node, Vertex target) {
-        for (Edge edge : edges) {
-            if (edge.getSource().equals(node)
-                    && edge.getDestination().equals(target)) {
-                return edge.getWeight();
-            }
-        }
-        throw new RuntimeException("Should not happen");
-    }
-
-    private List<Vertex> getNeighbors(Vertex node) {
-        List<Vertex> neighbors = new ArrayList<>();
-        for (Edge edge : edges) {
-            if (edge.getSource().equals(node)
-                    && !isSettled(edge.getDestination())) {
-                neighbors.add(edge.getDestination());
-            }
-        }
-        return neighbors;
-    }
-
-    private Vertex getMinimum(Set<Vertex> vertexes) {
-        Vertex minimum = null;
-        for (Vertex vertex : vertexes) {
-            if (minimum == null) {
-                minimum = vertex;
+    private Town getClosestTown(Set<Town> towns) {
+        Town shortest = null;
+        for (Town town : towns) {
+            if (shortest == null) {
+                shortest = town;
             } else {
-                if (getShortestDistance(vertex) < getShortestDistance(minimum)) {
-                    minimum = vertex;
+                if (getShortestDistance(town) < getShortestDistance(shortest)) {
+                    shortest = town;
                 }
             }
         }
-        return minimum;
+        return shortest;
     }
 
-    private boolean isSettled(Vertex vertex) {
-        return settledNodes.contains(vertex);
+    private void findMinimalDistances(Town town) {
+        List<Town> neighbors = getNeighbors(town);
+        neighbors
+                .stream()
+                .filter(neighbor -> getShortestDistance(neighbor) > getShortestDistance(town) + getDistance(town, neighbor))
+                .forEach(neighbor -> {
+                    distances.put(neighbor, getShortestDistance(town) + getDistance(town, neighbor));
+                    predecessors.put(neighbor, town);
+                    unprocessedTowns.add(neighbor);
+                });
     }
 
-    private int getShortestDistance(Vertex destination) {
-        Integer d = distance.get(destination);
+    private List<Town> getNeighbors(Town town) {
+        return country.getRoads()
+                .stream()
+                .filter(road -> road.source().equals(town) && !isSettled(road.dest()))
+                .map(Road::dest) // get the neighbor from dest
+                .toList();
+    }
+
+    private int getShortestDistance(Town destination) {
+        Integer d = distances.get(destination);
         return Objects.requireNonNullElse(d, Integer.MAX_VALUE);
     }
 
-    
-    public LinkedList<Vertex> getPath(Vertex target) {
-        LinkedList<Vertex> path = new LinkedList<>();
-        Vertex step = target;
-
-        if (predecessors.get(step) == null) {
-            return null;
+    private int getDistance(Town town, Town neighbor) {
+        for (Road road : country.getRoads()) {
+            if (road.source().equals(town) && road.dest().equals(neighbor)) return road.distance();
         }
+        return Integer.MAX_VALUE;
+    }
+
+    private boolean isSettled(Town town) {
+        return processedTowns.contains(town);
+    }
+
+    public List<Town> getPath(Town neighbor) {
+        List<Town> path = new ArrayList<>();
+        Town step = neighbor;
         path.add(step);
         while (predecessors.get(step) != null) {
             step = predecessors.get(step);
