@@ -5,7 +5,7 @@
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
       </element>
-      <element id="module-output" name="P1 RIMO" />
+      <element id="module-output" name="P1" />
       <element id="extracted-dir" path="$PROJECT_DIR$/dist/lib/jfreechart-1.0.19-swt.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/dist/lib/hamcrest-core-1.3.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/dist/lib/jfreechart-1.0.19-experimental.jar" path-in-jar="/" />
