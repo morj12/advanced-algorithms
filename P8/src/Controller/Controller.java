@@ -82,8 +82,8 @@ public class Controller {
     }
 
     private int getShortestDistance(Town destination) {
-        Integer d = distances.get(destination);
-        return Objects.requireNonNullElse(d, Integer.MAX_VALUE);
+        int distance = distances.get(destination);
+        return Objects.requireNonNullElse(distance, Integer.MAX_VALUE);
     }
 
     private int getDistance(Town town, Town neighbor) {
