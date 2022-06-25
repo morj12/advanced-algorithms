@@ -38,4 +38,4 @@ To do:
 ## Exercise 8
 To do:
 - [ ] Save calculated paths
-- [ ] Manage order
+- [X] Manage order
