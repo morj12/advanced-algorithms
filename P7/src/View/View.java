@@ -60,6 +60,7 @@ public class View extends JFrame {
         samplesSlider = new JSlider(SwingConstants.HORIZONTAL, 1000, 50000, 25000);
         samplesSlider.addChangeListener(this::sliderChanged);
         samplesNumberLabel = new JLabel("Samples: " + samplesSlider.getValue());
+        samplesSlider.setPreferredSize(new Dimension(100, 20));
         buttonsPanel.add(loadFlagsButton);
         buttonsPanel.add(selectImageButton);
         buttonsPanel.add(startButton);
@@ -128,6 +129,10 @@ public class View extends JFrame {
                     imagePanel.updateImage(image);
                     flagNameLabel.setText(file.getName());
                     startButton.setEnabled(true);
+                    Main.SAMPLES_NUMBER = image.getHeight() * image.getWidth();
+                    samplesSlider.setMaximum(Main.SAMPLES_NUMBER);
+                    samplesSlider.setValue(Main.SAMPLES_NUMBER / 2);
+                    samplesNumberLabel.setText("Samples: " + samplesSlider.getValue());
                 } else {
                     JOptionPane.showMessageDialog(
                             null,
