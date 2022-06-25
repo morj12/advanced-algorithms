@@ -32,8 +32,8 @@ To do:
 
 ## Exercise 7
 To do:
-- [ ] Save color distributions in a file
-- [ ] Allow changing number of points depending on the size of the flag
+- [X] Save color distributions in a file
+- [X] Allow changing number of points depending on the size of the flag
 
 ## Exercise 8
 To do:
