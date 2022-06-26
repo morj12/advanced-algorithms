@@ -90,6 +90,7 @@ public class Controller {
 
     public void stopSearch() {
         isExecuted = false;
+        main.notify("stopped");
     }
 
     public void loadDistributionsAsync() {
