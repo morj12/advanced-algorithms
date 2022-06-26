@@ -122,11 +122,12 @@ public class Controller {
                     flagImage = ImageIO.read(new File(Main.ALL_FLAGS_DIRECTORY + flag));
                     flagDistributionWrapper = createDistribution(flagImage, flag);
                     distributions.add(flagDistributionWrapper);
-                    writeDistributions();
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+            if (distributions.size() > 0) {
+                writeDistributions();
             }
         }
 
