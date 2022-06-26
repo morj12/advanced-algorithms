@@ -54,7 +54,7 @@ public class View extends JFrame {
         startButton.addActionListener(this::startButtonPressed);
         stopButton = new JButton("Stop");
         stopButton.addActionListener(this::stopButtonPressed);
-        samplesSlider = new JSlider(SwingConstants.HORIZONTAL, 1000, 50000, 25000);
+        samplesSlider = new JSlider(SwingConstants.HORIZONTAL, 1000, Main.SAMPLES_NUMBER, Main.SAMPLES_NUMBER / 2);
         samplesSlider.addChangeListener(this::sliderChanged);
         samplesNumberLabel = new JLabel("Samples: " + samplesSlider.getValue());
         samplesSlider.setPreferredSize(new Dimension(100, 20));
