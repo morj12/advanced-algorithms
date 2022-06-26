@@ -36,6 +36,7 @@ public class Main implements Notifiable {
         switch (message) {
             case "start" -> {
                 controller.searchFlagAsync((BufferedImage) arguments[0]);
+                view.changeStatus("Searching...");
                 view.enableButtons(false, false, true);
             }
             case "finished" -> {
@@ -44,7 +45,9 @@ public class Main implements Notifiable {
                 view.repaint();
             }
             case "stop" -> controller.stopSearch();
-            case "stopped" -> view.enableButtons(true, true, false);
+            case "stopped" -> {
+                view.changeStatus("Waiting for user...");
+                view.enableButtons(true, true, false);}
             case "loaded" -> {
                 view.changeStatus("Waiting for user...");
                 view.enableButtons(true, false, false);}
