@@ -76,7 +76,7 @@ public class View extends JFrame {
         rightPanel = new JPanel();
         flagNameLabel = new JLabel("No flag chosen");
         flagNameLabel.setPreferredSize(new Dimension(150, 20));
-        statusLabel = new JLabel("Waiting for user");
+        statusLabel = new JLabel("Loading flags...");
         statusLabel.setPreferredSize(new Dimension(150, 20));
         statusLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         leftPanel.add(flagNameLabel);
@@ -193,5 +193,9 @@ public class View extends JFrame {
         }
 
         return new ImageIcon(icon.getImage().getScaledInstance(nw, nh, Image.SCALE_DEFAULT));
+    }
+
+    public void changeStatus(String s) {
+        statusLabel.setText(s);
     }
 }
