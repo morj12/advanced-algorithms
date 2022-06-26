@@ -24,7 +24,6 @@ public class View extends JFrame {
     private JPanel infoPanel;
     private JPanel leftPanel;
     private JPanel rightPanel;
-    private JButton loadFlagsButton;
     private JButton selectImageButton;
     private JButton startButton;
     private JButton stopButton;
@@ -49,8 +48,6 @@ public class View extends JFrame {
         buttonsPanel = new JPanel();
         buttonsPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 
-        loadFlagsButton = new JButton("Load all flags");
-        loadFlagsButton.addActionListener(this::loadFlagsButtonPressed);
         selectImageButton = new JButton("Select Image");
         selectImageButton.addActionListener(this::selectImageButtonPressed);
         startButton = new JButton("Start");
@@ -61,7 +58,6 @@ public class View extends JFrame {
         samplesSlider.addChangeListener(this::sliderChanged);
         samplesNumberLabel = new JLabel("Samples: " + samplesSlider.getValue());
         samplesSlider.setPreferredSize(new Dimension(100, 20));
-        buttonsPanel.add(loadFlagsButton);
         buttonsPanel.add(selectImageButton);
         buttonsPanel.add(startButton);
         buttonsPanel.add(stopButton);
@@ -93,7 +89,7 @@ public class View extends JFrame {
         this.add(BorderLayout.CENTER, imagePanel);
         this.add(BorderLayout.SOUTH, infoPanel);
 
-        enableButtons(true, false, false, false);
+        enableButtons(false, false, false);
     }
 
     private void sliderChanged(ChangeEvent changeEvent) {
@@ -112,9 +108,6 @@ public class View extends JFrame {
         progressBar.setValue(progressBar.getValue() + 1);
     }
 
-    private void loadFlagsButtonPressed(ActionEvent actionEvent) {
-        main.notify("load");
-    }
 
     private void selectImageButtonPressed(ActionEvent actionEvent) {
         JFileChooser jFileChooser = new JFileChooser(new File(Main.EXAMPLE_FLAGS));
@@ -166,8 +159,7 @@ public class View extends JFrame {
         this.setVisible(true);
     }
 
-    public void enableButtons(boolean load, boolean select, boolean start, boolean stop) {
-        loadFlagsButton.setEnabled(load);
+    public void enableButtons(boolean select, boolean start, boolean stop) {
         selectImageButton.setEnabled(select);
         startButton.setEnabled(start);
         stopButton.setEnabled(stop);
